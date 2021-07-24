@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pessoa extends Model
 {
-    use HasFactory;
-
     public function carteiras()
     {
         return $this->hasMany(Carteira::class);
