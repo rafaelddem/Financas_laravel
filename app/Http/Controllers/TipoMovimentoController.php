@@ -39,7 +39,7 @@ class TipoMovimentoController extends Controller
     {
         $tipoMovimento = new TipoMovimento();
         $tipoMovimento->nome = $request->nome;
-        $tipoMovimento->indispensavel = $request->indispensavel;
+        $tipoMovimento->relevancia = $request->relevancia;
         $tipoMovimento->ativo = boolval($request->ativo);
         $tipoMovimento->save();
         $tiposMovimento = TipoMovimento::all();
@@ -80,7 +80,7 @@ class TipoMovimentoController extends Controller
     {
         $tipoMovimento = TipoMovimento::find($request->id);
         $tipoMovimento->nome = $request->nome;
-        $tipoMovimento->indispensavel = $request->indispensavel;
+        $tipoMovimento->relevancia = $request->relevancia;
         $tipoMovimento->ativo = boolval($request->ativo);
         $tipoMovimento->update();
         $tiposMovimento = TipoMovimento::all();

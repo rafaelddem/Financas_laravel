@@ -19,7 +19,8 @@ Pessoa
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" @if ($pessoa->ativo) checked @endif >
                     <br />
-                    <button class="btn btn-primary mt-2">Atualizar</button>
+                    <input class="btn btn-primary mt-2" type="submit" value="Atualizar">
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='/pessoa';">
                 </div>
             </form>
             @else
@@ -32,7 +33,7 @@ Pessoa
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" checked>
                     <br />
-                    <button class="btn btn-primary mt-2">Adicionar</button>
+                    <input class="btn btn-primary mt-2" type="submit" value="Adicionar">
                 </div>
             </form>
             @endif
@@ -44,7 +45,7 @@ Pessoa
                     {{ $pessoa->nome }}
 
                     <span class="d-flex">
-                        <a class="btn btn-primary" href="/pessoa/{{ $pessoa->id }}" role="button">Editar</a>
+                        <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/pessoa/{{ $pessoa->id }}';">
                         <form method="post" action="/pessoa/{{ $pessoa->id }}/excluir"
                             onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($pessoa->nome) }}?')">
                             @csrf

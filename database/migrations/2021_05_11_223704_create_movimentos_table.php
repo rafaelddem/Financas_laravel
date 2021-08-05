@@ -18,13 +18,11 @@ class CreateMovimentosTable extends Migration
             $table->integer('numeroParcelas');
             $table->dateTime('dataMovimento');
             $table->integer('tipoMovimento')->unsigned();
-            $table->decimal('valorInicial', 8, 2);
-            $table->decimal('valorDesconto', 8, 2);
-            $table->decimal('valorArredondamento', 5, 2);
-            $table->decimal('valorFinal', 8, 2);
-            $table->decimal('valorTributadoTotal', 5, 2);
-            $table->boolean('tributadoOrigem');
-            $table->boolean('indispensavel');
+            $table->decimal('valorInicial', 8, 2)->default(0);
+            $table->decimal('valorDesconto', 6, 2)->nullable()->default(0);
+            $table->decimal('valorArredondamento', 5, 2)->nullable()->default(0);
+            $table->decimal('valorFinal', 8, 2)->default(0);
+            $table->enum('relevancia', [0, 1, 2])->default(0);
             $table->string('descricao');
             $table->timestamps();
 

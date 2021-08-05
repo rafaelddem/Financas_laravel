@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CarteiraController;
 use App\Http\Controllers\FormaPagamentoController;
+use App\Http\Controllers\MovimentoController;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\TipoMovimentoController;
 use Illuminate\Support\Facades\Route;
@@ -40,11 +41,11 @@ Route::prefix('forma')->group(function () {
 });
 
 Route::prefix('movimento')->group(function () {
-    Route::get('/', [PessoaController::class, 'index']);
-    Route::get('/{id}', [PessoaController::class, 'index']);
-    Route::post('/novo', [PessoaController::class, 'store']);
-    Route::post('/{id}/atualizar', [PessoaController::class, 'update']);
-    Route::post('/{id}/excluir', [PessoaController::class, 'destroy']);
+    Route::get('/', [MovimentoController::class, 'index']);
+    // Route::get('/{id}', [MovimentoController::class, 'index']);
+    Route::post('/novo', [MovimentoController::class, 'store']);
+    // Route::post('/{id}/atualizar', [MovimentoController::class, 'update']);
+    // Route::post('/{id}/excluir', [MovimentoController::class, 'destroy']);
 });
 
 Route::prefix('pessoa')->group(function () {

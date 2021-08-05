@@ -23,7 +23,6 @@ class CreateParcelasTable extends Migration
             $table->decimal('valorJuros');
             $table->decimal('valorArredondamento');
             $table->decimal('valorFinal');
-            $table->decimal('valorTributadoParcela');
             $table->integer('formaPagamento')->unsigned();
             $table->integer('carteiraOrigem')->unsigned();
             $table->integer('carteiraDestino')->unsigned();

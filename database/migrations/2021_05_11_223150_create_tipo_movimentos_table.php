@@ -15,8 +15,8 @@ class CreateTipoMovimentosTable extends Migration
     {
         Schema::create('tipo_movimentos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome');
-            $table->char('indispensavel', 1);
+            $table->string('nome', 50);
+            $table->enum('relevancia', [0, 1, 2])->default(0);
             $table->boolean('ativo');
             $table->timestamps();
         });

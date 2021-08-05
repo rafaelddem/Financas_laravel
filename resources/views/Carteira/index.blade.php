@@ -26,7 +26,8 @@ Carteira
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" @if ($carteira->ativo) checked @endif >
                     <br />
-                    <button class="btn btn-primary mt-2">Atualizar</button>
+                    <input class="btn btn-primary mt-2" type="submit" value="Atualizar">
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='/carteira';">
                 </div>
             </form>
             @else
@@ -46,7 +47,7 @@ Carteira
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" checked>
                     <br />
-                    <button class="btn btn-primary mt-2">Adicionar</button>
+                    <input class="btn btn-primary mt-2" type="submit" value="Adicionar">
                 </div>
             </form>
             @endif
@@ -58,7 +59,7 @@ Carteira
                     {{ $carteira->nome }} - {{ $carteira->dono }}
 
                     <span class="d-flex">
-                        <a class="btn btn-primary" href="/carteira/{{ $carteira->id }}" role="button">Editar</a>
+                        <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/carteira/{{ $carteira->id }}';">
                         <form method="post" action="/carteira/{{ $carteira->id }}/excluir"
                             onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($carteira->nome) }}?')">
                             @csrf

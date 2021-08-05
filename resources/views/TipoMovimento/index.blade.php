@@ -16,21 +16,21 @@ Tipo Movimento
                     <label for="nome">Nome</label>
                     <input type="text" class="form-control" name="nome" id="nome" value="{{ $tipoMovimento->nome }}">
                     <br />
-                    <label for="nome">Indispensavel</label>
+                    <label for="nome">Relevância</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="indispensavel" id="radioDispensavel" value="1" @if ($tipoMovimento->indispensavel == 1) checked @endif>
+                        <input class="form-check-input" type="radio" name="relevancia" id="radioDispensavel" value="0" @if ($tipoMovimento->relevancia == 0) checked @endif>
                         <label class="form-check-label" for="radioDispensavel">
                             Dispensável
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="indispensavel" id="radioDesejavel" value="2" @if ($tipoMovimento->indispensavel == 2) checked @endif>
+                        <input class="form-check-input" type="radio" name="relevancia" id="radioDesejavel" value="1" @if ($tipoMovimento->relevancia == 1) checked @endif>
                         <label class="form-check-label" for="radioDesejavel">
                             Desejável
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="indispensavel" id="radioIndispensavel" value="3" @if ($tipoMovimento->indispensavel == 3) checked @endif>
+                        <input class="form-check-input" type="radio" name="relevancia" id="radioIndispensavel" value="2" @if ($tipoMovimento->relevancia == 2) checked @endif>
                         <label class="form-check-label" for="radioIndispensavel">
                             Indispensável
                         </label>
@@ -39,7 +39,8 @@ Tipo Movimento
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" @if ($tipoMovimento->ativo) checked @endif >
                     <br />
-                    <button class="btn btn-primary mt-2">Atualizar</button>
+                    <input class="btn btn-primary mt-2" type="submit" value="Atualizar">
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='/tipo';">
                 </div>
             </form>
             @else
@@ -49,21 +50,21 @@ Tipo Movimento
                     <label for="nome">Nome</label>
                     <input type="text" class="form-control" name="nome" id="nome">
                     <br />
-                    <label for="nome">Indispensavel</label>
+                    <label for="nome">Relevância</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="indispensavel" id="radioDispensavel" value="1" checked>
+                        <input class="form-check-input" type="radio" name="relevancia" id="radioDispensavel" value="0" checked>
                         <label class="form-check-label" for="radioDispensavel">
                             Dispensável
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="indispensavel" id="radioDesejavel" value="2">
+                        <input class="form-check-input" type="radio" name="relevancia" id="radioDesejavel" value="1">
                         <label class="form-check-label" for="radioDesejavel">
                             Desejável
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="indispensavel" id="radioIndispensavel" value="3">
+                        <input class="form-check-input" type="radio" name="relevancia" id="radioIndispensavel" value="2">
                         <label class="form-check-label" for="radioIndispensavel">
                             Indispensável
                         </label>
@@ -72,7 +73,7 @@ Tipo Movimento
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" checked>
                     <br />
-                    <button class="btn btn-primary mt-2">Adicionar</button>
+                    <input class="btn btn-primary mt-2" type="submit" value="Adicionar">
                 </div>
             </form>
             @endif
@@ -84,7 +85,7 @@ Tipo Movimento
                     {{ $tipoMovimento->nome }}
 
                     <span class="d-flex">
-                        <a class="btn btn-primary" href="/tipo/{{ $tipoMovimento->id }}" role="button">Editar</a>
+                        <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/tipo/{{ $tipoMovimento->id }}';">
                         <form method="post" action="/tipo/{{ $tipoMovimento->id }}/excluir"
                             onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($tipoMovimento->nome) }}?')">
                             @csrf

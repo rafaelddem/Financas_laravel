@@ -15,7 +15,7 @@ class CreateCarteirasTable extends Migration
     {
         Schema::create('carteiras', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome');
+            $table->string('nome', 50);
             $table->integer('pessoa')->unsigned();
             $table->boolean('ativo');
             $table->timestamps();

@@ -1,62 +1,215 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+Financas
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+1. Entidades:
 
-## About Laravel
+1.1. Pessoa:
+Representa o próprio usuário, mas também simula outros usuários, uma vez que estes podem não possuir contas no sistema e/ou o usuário não deseje integrar seus movimentos aos movimentos de outros usuários. Desta forma é possível identificar a qual pessoa os movimentos pertencem.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1.1.1. Atributos:
+    - id
+        - tipo integer;
+        - chave primária;
+        - possui auto_increment;
+        - obrigatório.
+    - nome 
+        - tipo string, com número máximo de 50 caracteres;
+        - obrigatório;
+        - Identificador literal do registro, diferente do atributo 'id' este serve apenas para melhor descrever o registro (recomenda-se utilizar o nome da pessoa).
+    - ativo 
+        - tipo boolean;
+        - obrigatório;
+        - Utilizado para definir um registro como ativo/inativo.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1.2. Carteira:
+Similar a entidade pessoa, porém funciona organizando os movimentos para uma mesma pessoa. A ideia é que ele sirva para diferenciar onde o dinheiro se encontra. Por exemplo: Uma entidade pessoa 'Rafael' pode possuir como carteiras 'Banco de Santa Catarina', 'Banco Brasileiro' e 'Dinheiro guardado em casa', e dessa forma será possível saber quais valores se encontram em contas bancárias, quais estão em poupança, e quais estão em mãos.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1.2.1. Atributos:
+    - id
+        - tipo integer;
+        - chave primária;
+        - possui auto_increment;
+        - obrigatório.
+    - nome 
+        - tipo string, com número máximo de 50 caracteres;
+        - obrigatório;
+        - Identificador literal do registro, diferente do atributo 'id' este serve apenas para melhor descrever o registro.
+    - pessoa
+        - tipo integer;
+        - obrigatório;
+        - chave estrangeira com o atributo 'id' da tabela 'pessoas'.
+    - ativo 
+        - tipo boolean;
+        - obrigatório;
+        - Utilizado para definir um registro como ativo/inativo.
 
-## Learning Laravel
+1.3. Forma de Pagamento:
+Idealizado para identificar o tipo de pagamento utilizado, dinheiro (cedulas/moedas), débito, crédito ou transferência (para movimentos como emprestimos).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1.3.1. Atributos:
+    - id
+        - tipo integer;
+        - chave primária;
+        - possui auto_increment;
+        - obrigatório.
+    - nome 
+        - tipo string, com número máximo de 15 caracteres;
+        - obrigatório;
+        - Identificador literal do registro, diferente do atributo 'id' este serve apenas para melhor descrever o registro.
+    - ativo 
+        - tipo boolean;
+        - obrigatório;
+        - Utilizado para definir um registro como ativo/inativo.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1.4. Tipo de Movimento:
+Idealizado para identificar a razão do movimento, se se trata de um movimento de compra, se é uma cobrança recorrente (energia, luz, aluguel...), etc. Também permite pré-definir a relevância de um movimento, embora o movimento possa possuir uma importância diferente da cadastrada no tipo, a relevância cadastrada no tipo será pré informada no cadastro do movimento.
 
-## Laravel Sponsors
+1.4.1. Atributos:
+    - id
+        - tipo integer;
+        - chave primária;
+        - possui auto_increment;
+        - obrigatório.
+    - nome 
+        - tipo string, com número máximo de 50 caracteres;
+        - obrigatório;
+        - Identificador literal do registro, diferente do atributo 'id' este serve apenas para melhor descrever o registro.
+    - relevancia 
+        - tipo char;
+        - valor padrão: 0 (número zero);
+        - Classifica a importancia do movimento em três níveis:
+            - Dispensável: Marca o movimento como algo que poderia ser evitado, um gasto desnecessário (salvo no banco como '0'). Se não informado, este será o valor salvo;
+            - Desejável: Marca o movimento como necessário, porém, pode ser evitado caso sejá necessário poupar dinheiro (salvo no banco como '1');
+            - Indispensável: Marca o movimento como algo que não pode ser evitado ou adiado, como aluguél e conta de luz (salvo no banco como '2').
+    - ativo 
+        - tipo boolean;
+        - Utilizado para definir um registro como ativo/inativo.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+1.5 Movimento:
+Utilizado para salvar os registros de movimentos
 
-### Premium Partners
+1.5.1 Atributos:
+    - id
+        - tipo integer;
+        - chave primária;
+        - possui auto_increment;
+        - obrigatório.
+    - numeroParcelas
+        - tipo integer;
+        - valor padrão: 0 (número zero);
+        - usado para registrar o número de parcelas em que o movimento foi dividido ;
+    - dataMovimento
+        - tipo date;
+        - obrigatório;
+        - utilizado para registrar a data em que o movimento foi feito.
+    - tipoMovimento
+        - tipo integer;
+        - obrigatório;
+        - chave estrangeira com o atributo 'id' da tabela 'tipo_movimento'.
+    - valorInicial
+        - tipo decimal, com tamanho 8 e duas casas decimais;
+        - obrigatório;
+        - utilizado para registrar o valor inicial do movimento.
+    - valorDesconto
+        - tipo decimal, com tamanho 6 e duas casas decimais;
+        - valor padrão: 0.0 (número zero, com casas decimais);
+        - utilizado para registrar o valor do desconto dado ao movimento.
+    - valorArredondamento
+        - tipo decimal, com tamanho 5 e duas casas decimais;
+        - valor padrão: 0.0 (número zero, com casas decimais);
+        - utilizado para registrar o valor do arredondamento dado ao movimento.
+    - valorFinal
+        - tipo decimal, com tamanho 8 e duas casas decimais;
+        - obrigatório;
+        - utilizado para registrar o valor final do movimento (antes da tributação). Deve respeitar o cálculo: valorInicial - valorDesconto - valorArredondamento.
+    - relevancia
+        - tipo char;
+        - valor padrão: 0 (número zero);
+        - Classifica a importancia do movimento. Inicialmente segue o valor cadastrado no tipo de movimento informado, mas pode ser alterado:
+            - Dispensável: Marca o movimento como algo que poderia ser evitado, um gasto desnecessário (salvo no banco como '0'). Se não informado, este será o valor salvo;
+            - Desejável: Marca o movimento como necessário, porém, pode ser evitado caso seja necessário poupar dinheiro (salvo no banco como '1');
+            - Indispensável: Marca o movimento como algo que não pode ser evitado ou adiado, como aluguél e conta de luz (salvo no banco como '2').
+    - descricao
+        - tipo string;
+        - campo para inserir uma descrição para o movimento
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+1.6 Parcela:
 
-## Contributing
+1.6.1 Atributos:
+    - movimento: 
+        - tipo integer;
+        - chave primária (junto ao atributo 'parcela');
+        - obrigatório;
+        - chave estrangeira com o atributo 'id' da tabela 'movimento'.
+    - parcela: 
+        - tipo integer;
+        - chave primária (junto ao atributo 'movimento');
+        - obrigatório.
+    - dataVencimento
+        - tipo date;
+        - obrigatório;
+        - utilizado para registrar a data limite para efetuar o pagamento do movimento.
+    - dataPagamento
+        - tipo date;
+        - utilizado para registrar a data em que o movimento foi pago.
+    - valorInicial
+        - tipo decimal, com tamanho 8 e duas casas decimais;
+        - obrigatório;
+        - utilizado para registrar o valor inicial da parcela.
+    - valorDesconto
+        - tipo decimal, com tamanho 6 e duas casas decimais;
+        - valor padrão: 0.0 (número zero, com casas decimais);
+        - utilizado para registrar o valor do desconto dado a parcela.
+    - valorJuros
+        - tipo decimal, com tamanho 5 e duas casas decimais;
+        - valor padrão: 0.0 (número zero, com casas decimais);
+        - utilizado para registrar o valor do juros aplicado a parcela.
+    - valorArredondamento
+        - tipo decimal, com tamanho 5 e duas casas decimais;
+        - valor padrão: 0.0 (número zero, com casas decimais);
+        - utilizado para registrar o valor do arredondamento aplicado a parcela.
+    - valorFinal
+        - tipo decimal, com tamanho 8 e duas casas decimais;
+        - obrigatório;
+        - utilizado para registrar o valor final do movimento. Deve respeitar o cálculo: valorInicial - valorDesconto - valorArredondamento.
+    - formaPagamento
+        - tipo integer;
+        - obrigatório;
+        - chave estrangeira com o atributo 'id' da tabela 'forma_pagamentos'.
+    - carteiraOrigem
+        - tipo integer;
+        - obrigatório;
+        - chave estrangeira com o atributo 'id' da tabela 'carteiras';
+        - identificará de qual carteira onde o dinheiro será subtraído.
+    - carteiraDestino
+        - tipo integer;
+        - obrigatório;
+        - chave estrangeira com o atributo 'id' da tabela 'carteiras';
+        - identificará em qual carteira onde o dinheiro será somado.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. Dados pré definidos
 
-## Code of Conduct
+2.1. Pessoa:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Eu
 
-## Security Vulnerabilities
+2.2. Carteira:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Casa
 
-## License
+2.3. Forma de Pagamento:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Dinheiro
+- Crédito
+- Débito
+- Transferencia
+
+2.4. Tipo de Movimento:
+
+- Taxa (para saque de crédito)
+- IOF
+- INSS
+
+
+
+Valores
+

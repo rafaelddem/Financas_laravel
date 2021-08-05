@@ -12,9 +12,11 @@ class MovimentoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $movimentos = Movimento::all();
+        $movimento = Movimento::find($request->id);
+        return view('movimento.index', compact('movimentos', 'movimento'));
     }
 
     /**

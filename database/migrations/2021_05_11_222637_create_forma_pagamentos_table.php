@@ -15,7 +15,7 @@ class CreateFormaPagamentosTable extends Migration
     {
         Schema::create('forma_pagamentos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome');
+            $table->string('nome', 15);
             $table->boolean('ativo');
             $table->timestamps();
         });

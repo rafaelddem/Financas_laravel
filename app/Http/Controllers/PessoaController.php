@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PessoaRequest;
 use Illuminate\Http\Request;
 use App\Models\Pessoa;
 
@@ -14,8 +15,9 @@ class PessoaController extends Controller
         return view('pessoa.index', compact('pessoas', 'pessoa'));
     }
 
-    public function store(Request $request)
+    public function store(PessoaRequest $request)
     {
+        $validated = $request->validated();
         $pessoa = new Pessoa();
         $pessoa->nome = $request->nome;
         $pessoa->ativo = boolval($request->ativo);
