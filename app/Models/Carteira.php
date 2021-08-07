@@ -13,9 +13,4 @@ class Carteira extends Model
     {
         return $this->belongsTo(Pessoa::class);
     }
-
-    public function episodios()
-    {
-        return $this->hasMany(Episodio::class);
-    }
 }

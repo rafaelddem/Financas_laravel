@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movimento;
+use App\Models\TipoMovimento;
 use Illuminate\Http\Request;
 
 class MovimentoController extends Controller
@@ -15,8 +16,9 @@ class MovimentoController extends Controller
     public function index(Request $request)
     {
         $movimentos = Movimento::all();
+        $tipoMovimentos = TipoMovimento::query()->where('ativo', true)->get(['id', 'nome']);
         $movimento = Movimento::find($request->id);
-        return view('movimento.index', compact('movimentos', 'movimento'));
+        return view('movimento.index', compact('movimentos', 'tipoMovimentos', 'movimento'));
     }
 
     /**

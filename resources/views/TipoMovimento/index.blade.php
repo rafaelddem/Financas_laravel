@@ -5,6 +5,19 @@ Tipo Movimento
 @endsection
 
 @section('conteudo')
+@if ($errors->any())
+    <div class="alert alert-danger">
+        @foreach ($errors->all() as $error)
+            {{ $error }} <br />
+        @endforeach
+    </div>
+@endif
+@if(!empty($mensagem))
+<div class="alert alert-success">
+    {{ $mensagem }}
+</div>
+@endif
+
 <br />
 <div class="container">
     <div class="row">

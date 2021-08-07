@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PessoaRequest extends FormRequest
+class CarteiraRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,6 +25,7 @@ class PessoaRequest extends FormRequest
     {
         return [
             'nome' => 'required|max:50', 
+            'pessoa' => 'required|integer', 
         ];
     }
 
@@ -32,6 +33,7 @@ class PessoaRequest extends FormRequest
     {
         return [
             'nome.required' => 'O campo \'nome\' é obrigatório', 
+            'pessoa.required' => 'É necessário informa a quem pertence esta carteira', 
             'nome.max' => 'O campo \'nome\' deve se limitar a :max caracteres', 
         ];
     }

@@ -12,22 +12,24 @@ class PessoaController extends Controller
     {
         $pessoas = Pessoa::all();
         $pessoa = Pessoa::find($request->id);
+
         return view('pessoa.index', compact('pessoas', 'pessoa'));
     }
 
     public function store(PessoaRequest $request)
     {
-        $validated = $request->validated();
         $pessoa = new Pessoa();
         $pessoa->nome = $request->nome;
         $pessoa->ativo = boolval($request->ativo);
         $pessoa->save();
         $pessoas = Pessoa::all();
 
-        return view('pessoa.index', compact('pessoas'));
+        $mensagem = 'Registro criado com sucesso';
+
+        return view('pessoa.index', compact('pessoas', 'mensagem'));
     }
 
-    public function update(Request $request)
+    public function update(PessoaRequest $request)
     {
         $pessoa = Pessoa::find($request->id);
         $pessoa->nome = $request->nome;
@@ -35,15 +37,19 @@ class PessoaController extends Controller
         $pessoa->update();
         $pessoas = Pessoa::all();
 
-        return view('pessoa.index', compact('pessoas'));
+        $mensagem = 'Registro atualizado com sucesso';
+
+        return view('pessoa.index', compact('pessoas', 'mensagem'));
     }
 
-    public function destroy(Request $request)
+    public function destroy(int $id)
     {
-        $pessoa = Pessoa::find($request->id);
-        $pessoa->delete($request->id);
+        $pessoa = Pessoa::find($id);
+        $pessoa->delete($id);
         $pessoas = Pessoa::all();
 
-        return view('pessoa.index', compact('pessoas'));
+        $mensagem = 'Registro excluído com sucesso';
+
+        return view('pessoa.index', compact('pessoas', 'mensagem'));
     }
 }

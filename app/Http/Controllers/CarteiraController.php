@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarteiraRequest;
 use App\Models\Carteira;
 use App\Models\Pessoa;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class CarteiraController extends Controller
         return view('carteira.index', compact('carteiras', 'pessoas', 'carteira'));
     }
 
-    public function store(Request $request)
+    public function store(CarteiraRequest $request)
     {
         $carteira = new Carteira();
         $carteira->nome = $request->nome;
@@ -29,10 +30,12 @@ class CarteiraController extends Controller
         $carteiras = Carteira::join('pessoas', 'pessoas.id', 'carteiras.pessoa')->select('carteiras.*', 'pessoas.nome as dono')->get();
         $pessoas = Pessoa::all();
 
-        return view('carteira.index', compact('carteiras', 'pessoas'));
+        $mensagem = 'Registro criado com sucesso';
+
+        return view('carteira.index', compact('carteiras', 'pessoas', 'mensagem'));
     }
 
-    public function update(Request $request)
+    public function update(CarteiraRequest $request)
     {
         $carteira = Carteira::find($request->id);
         $carteira->nome = $request->nome;
@@ -43,17 +46,21 @@ class CarteiraController extends Controller
         $carteiras = Carteira::join('pessoas', 'pessoas.id', 'carteiras.pessoa')->select('carteiras.*', 'pessoas.nome as dono')->get();
         $pessoas = Pessoa::all();
 
-        return view('carteira.index', compact('carteiras', 'pessoas'));
+        $mensagem = 'Registro atualizado com sucesso';
+
+        return view('carteira.index', compact('carteiras', 'pessoas', 'mensagem'));
     }
 
-    public function destroy(Request $request)
+    public function destroy(int $id)
     {
-        $carteira = Carteira::find($request->id);
-        $carteira->delete($request->id);
+        $carteira = Carteira::find($id);
+        $carteira->delete($id);
 
         $carteiras = Carteira::join('pessoas', 'pessoas.id', 'carteiras.pessoa')->select('carteiras.*', 'pessoas.nome as dono')->get();
         $pessoas = Pessoa::all();
 
-        return view('carteira.index', compact('carteiras', 'pessoas'));
+        $mensagem = 'Registro excluído com sucesso';
+
+        return view('carteira.index', compact('carteiras', 'pessoas', 'mensagem'));
     }
 }

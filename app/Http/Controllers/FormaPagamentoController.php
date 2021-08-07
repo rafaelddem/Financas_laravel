@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FormaPagamentoRequest;
 use App\Models\FormaPagamento;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,7 @@ class FormaPagamentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FormaPagamentoRequest $request)
     {
         $formaPagamento = new FormaPagamento();
         $formaPagamento->nome = $request->nome;
@@ -43,7 +44,9 @@ class FormaPagamentoController extends Controller
         $formaPagamento->save();
         $formasPagamento = FormaPagamento::all();
 
-        return view('FormaPagamento.index', compact('formasPagamento'));
+        $mensagem = 'Registro criado com sucesso';
+
+        return view('FormaPagamento.index', compact('formasPagamento', 'mensagem'));
     }
 
     /**
@@ -75,7 +78,7 @@ class FormaPagamentoController extends Controller
      * @param  \App\Models\FormaPagamento  $formaPagamento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FormaPagamento $formaPagamento)
+    public function update(FormaPagamentoRequest $request)
     {
         $formaPagamento = FormaPagamento::find($request->id);
         $formaPagamento->nome = $request->nome;
@@ -83,7 +86,9 @@ class FormaPagamentoController extends Controller
         $formaPagamento->update();
         $formasPagamento = FormaPagamento::all();
 
-        return view('formaPagamento.index', compact('formasPagamento'));
+        $mensagem = 'Registro atualizado com sucesso';
+
+        return view('formaPagamento.index', compact('formasPagamento', 'mensagem'));
     }
 
     /**
@@ -92,12 +97,14 @@ class FormaPagamentoController extends Controller
      * @param  \App\Models\FormaPagamento  $formaPagamento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(int $id)
     {
-        $formaPagamento = FormaPagamento::find($request->id);
-        $formaPagamento->delete($request->id);
+        $formaPagamento = FormaPagamento::find($id);
+        $formaPagamento->delete($id);
         $formasPagamento = FormaPagamento::all();
 
-        return view('formaPagamento.index', compact('formasPagamento'));
+        $mensagem = 'Registro excluído com sucesso';
+
+        return view('formaPagamento.index', compact('formasPagamento', 'mensagem'));
     }
 }
