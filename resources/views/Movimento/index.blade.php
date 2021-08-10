@@ -40,9 +40,6 @@ Movimento
             <form method="post" action="/movimento/novo">
                 @csrf
                 <div class="container">
-                    <label for="nome">Parcelas</label>
-                    <input type="number" class="form-control" name="parcelas" id="parcelas" value="1">
-                    <br />
                     <label for="nome">Data Movimento</label>
                     <input type="date" class="form-control" name="dataMovimento" id="dataMovimento">
                     <br />
@@ -54,56 +51,67 @@ Movimento
                         @endforeach
                     </select>
                     <br />
-                    <label for="nome">Valor Inicial</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">R$</div>
+
+                    <div class="input-group">
+                        <div class="form-group col-md-5">
+                            <label for="nome">Valor Inicial</label>
+                            <div class="input-group col-mb-2">
+                                <div class="input-group-prepend"><div class="input-group-text">R$</div></div>
+                                <input type="text" class="form-control" id="valorInicial">
+                            </div>
                         </div>
-                        <input type="text" class="form-control" id="valorInicial">
+                        <div class="form-group col-md-2"></div>
+                        <div class="form-group col-md-5">
+                            <label for="nome">Valor Desconto</label>
+                            <div class="input-group col-mb-2">
+                                <div class="input-group-prepend"><div class="input-group-text">R$</div></div>
+                                <input type="text" class="form-control" id="valorDesconto">
+                            </div>
+                        </div>
                     </div>
                     <br />
-                    <label for="nome">Valor Desconto</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">R$</div>
+                    <div class="input-group">
+                        <div class="form-group col-md-5">
+                            <label for="nome">Valor Arredondamento</label>
+                            <div class="input-group col-mb-2">
+                                <div class="input-group-prepend"><div class="input-group-text">R$</div></div>
+                                <input type="text" class="form-control" id="valorArredondamento">
+                            </div>
                         </div>
-                        <input type="text" class="form-control" id="valorDesconto">
+                        <div class="form-group col-md-2"></div>
+                        <div class="form-group col-md-5">
+                            <label for="nome">Valor Final</label>
+                            <div class="input-group col-mb-2">
+                                <div class="input-group-prepend"><div class="input-group-text">R$</div></div>
+                                <input type="text" class="form-control" id="valorFinal">
+                            </div>
+                        </div>
                     </div>
                     <br />
-                    <label for="nome">Valor Arredondamento</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">R$</div>
-                        </div>
-                        <input type="text" class="form-control" id="valorArredondamento">
-                    </div>
-                    <br />
-                    <label for="nome">Valor Final</label>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">R$</div>
-                        </div>
-                        <input type="text" class="form-control" id="valorFinal">
-                    </div>
+
+                    <label for="nome">Parcelas</label>
+                    <input type="number" class="form-control" name="parcelas" id="parcelas" value="1">
                     <br />
                     <label for="nome">Relevância</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="relevancia" id="radioDispensavel" value="0" checked>
-                        <label class="form-check-label" for="radioDispensavel">
-                            Dispensável
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="relevancia" id="radioDesejavel" value="1">
-                        <label class="form-check-label" for="radioDesejavel">
-                            Desejável
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="relevancia" id="radioIndispensavel" value="2">
-                        <label class="form-check-label" for="radioIndispensavel">
-                            Indispensável
-                        </label>
+                    <div class="input-group">
+                        <div class="form-check col-md-4">
+                            <input class="form-check-input" type="radio" name="relevancia" id="radioDispensavel" value="0" checked>
+                            <label class="form-check-label" for="radioDispensavel">
+                                Dispensável
+                            </label>
+                        </div>
+                        <div class="form-check col-md-4">
+                            <input class="form-check-input" type="radio" name="relevancia" id="radioDesejavel" value="1">
+                            <label class="form-check-label" for="radioDesejavel">
+                                Desejável
+                            </label>
+                        </div>
+                        <div class="form-check col-md-4">
+                            <input class="form-check-input" type="radio" name="relevancia" id="radioIndispensavel" value="2">
+                            <label class="form-check-label" for="radioIndispensavel">
+                                Indispensável
+                            </label>
+                        </div>
                     </div>
                     <br />
                     <label for="nome">Descrição</label>
