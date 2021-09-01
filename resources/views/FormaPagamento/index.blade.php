@@ -56,6 +56,9 @@ Forma Pagamento
                 @foreach($formasPagamento as $formaPagamento)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ $formaPagamento->nome }}
+                    @if(!$formaPagamento->ativo)
+                        (inativo)
+                    @endif
 
                     <span class="d-flex">
                         <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/forma/{{ $formaPagamento->id }}';">

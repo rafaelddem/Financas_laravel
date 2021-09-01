@@ -36,6 +36,9 @@ Carteira
                         @endforeach
                     </select>
                     <br />
+                    <label for="nome">Carteira Principal</label>
+                    <input type="checkbox" name="principal" id="principal" @if ($carteira->principal) checked @endif >
+                    <br />
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" @if ($carteira->ativo) checked @endif >
                     <br />
@@ -57,6 +60,9 @@ Carteira
                         @endforeach
                     </select>
                     <br />
+                    <label for="nome">Carteira Principal</label>
+                    <input type="checkbox" name="principal" id="principal" >
+                    <br />
                     <label for="nome">Ativo</label>
                     <input type="checkbox" name="ativo" id="ativo" checked>
                     <br />
@@ -70,6 +76,9 @@ Carteira
                 @foreach($carteiras as $carteira)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ $carteira->nome }} - {{ $carteira->dono }}
+                    @if(!$carteira->ativo)
+                        (inativo)
+                    @endif
 
                     <span class="d-flex">
                         <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/carteira/{{ $carteira->id }}';">

@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Parcela extends Model
 {
-    use HasFactory;
-
-    public function temporadas()
+    public function movimento()
     {
-        return $this->hasMany( related: Temporada::class);
+        return $this->belongsTo(Movimento::class);
+    }
+
+    public function carteiras()
+    {
+        return $this->hasOne(Carteira::class);
     }
 }

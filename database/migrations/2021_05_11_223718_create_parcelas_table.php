@@ -17,15 +17,16 @@ class CreateParcelasTable extends Migration
             $table->integer('movimento')->unsigned();
             $table->integer('parcela');
             $table->dateTime('dataVencimento');
-            $table->dateTime('dataPagamento');
+            $table->dateTime('dataPagamento')->nullable();
             $table->decimal('valorInicial');
             $table->decimal('valorDesconto');
             $table->decimal('valorJuros');
             $table->decimal('valorArredondamento');
             $table->decimal('valorFinal');
-            $table->integer('formaPagamento')->unsigned();
-            $table->integer('carteiraOrigem')->unsigned();
+            $table->integer('formaPagamento')->nullable()->unsigned();
+            $table->integer('carteiraOrigem')->nullable()->unsigned();
             $table->integer('carteiraDestino')->unsigned();
+            $table->timestamps();
 
             $table->foreign('movimento')->references('id')->on('movimentos');
             $table->foreign('formaPagamento')->references('id')->on('forma_pagamentos');

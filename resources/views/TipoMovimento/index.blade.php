@@ -96,6 +96,9 @@ Tipo Movimento
                 @foreach($tiposMovimento as $tipoMovimento)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ $tipoMovimento->nome }}
+                    @if(!$tipoMovimento->ativo)
+                        (inativo)
+                    @endif
 
                     <span class="d-flex">
                         <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/tipo/{{ $tipoMovimento->id }}';">

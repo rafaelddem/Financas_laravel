@@ -13,9 +13,15 @@ class CarteiraController extends Controller
     {
         $carteira = Carteira::find($request->id);
 
-        $carteiras = Carteira::join('pessoas', 'pessoas.id', 'carteiras.pessoa')->select('carteiras.*', 'pessoas.nome as dono')->get();
-        $pessoas = Pessoa::all();
+        $carteiras = Carteira::query()
+                            ->select(['carteiras.id', 'carteiras.nome', 'carteiras.ativo', 'pessoas.nome as dono'])
+                            ->join('pessoas', 'pessoas.id', 'carteiras.pessoa')
+                            ->orderby('pessoas.id', 'asc')
+                            ->orderby('carteiras.principal', 'desc')
+                            ->orderby('carteiras.id', 'asc')
+                            ->get();
 
+        $pessoas = Pessoa::all();
         return view('carteira.index', compact('carteiras', 'pessoas', 'carteira'));
     }
 
@@ -24,10 +30,17 @@ class CarteiraController extends Controller
         $carteira = new Carteira();
         $carteira->nome = $request->nome;
         $carteira->pessoa = $request->pessoa;
+        $carteira->principal = boolval($request->principal);
         $carteira->ativo = boolval($request->ativo);
         $carteira->save();
 
-        $carteiras = Carteira::join('pessoas', 'pessoas.id', 'carteiras.pessoa')->select('carteiras.*', 'pessoas.nome as dono')->get();
+        $carteiras = Carteira::query()
+                            ->select(['carteiras.id', 'carteiras.nome', 'carteiras.ativo', 'pessoas.nome as dono'])
+                            ->join('pessoas', 'pessoas.id', 'carteiras.pessoa')
+                            ->orderby('pessoas.id', 'asc')
+                            ->orderby('carteiras.principal', 'desc')
+                            ->orderby('carteiras.id', 'asc')
+                            ->get();
         $pessoas = Pessoa::all();
 
         $mensagem = 'Registro criado com sucesso';
@@ -40,10 +53,17 @@ class CarteiraController extends Controller
         $carteira = Carteira::find($request->id);
         $carteira->nome = $request->nome;
         $carteira->pessoa = $request->pessoa;
+        $carteira->principal = boolval($request->principal);
         $carteira->ativo = boolval($request->ativo);
         $carteira->update();
 
-        $carteiras = Carteira::join('pessoas', 'pessoas.id', 'carteiras.pessoa')->select('carteiras.*', 'pessoas.nome as dono')->get();
+        $carteiras = Carteira::query()
+                            ->select(['carteiras.id', 'carteiras.nome', 'carteiras.ativo', 'pessoas.nome as dono'])
+                            ->join('pessoas', 'pessoas.id', 'carteiras.pessoa')
+                            ->orderby('pessoas.id', 'asc')
+                            ->orderby('carteiras.principal', 'desc')
+                            ->orderby('carteiras.id', 'asc')
+                            ->get();
         $pessoas = Pessoa::all();
 
         $mensagem = 'Registro atualizado com sucesso';

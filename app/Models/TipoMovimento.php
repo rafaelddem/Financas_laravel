@@ -7,5 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoMovimento extends Model
 {
-    use HasFactory;
+    public function movimentos()
+    {
+        return $this->hasMany(Movimento::class);
+    }
 }

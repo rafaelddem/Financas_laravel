@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MovimentoRequest;
 use App\Models\Movimento;
+use App\Models\Parcela;
+use App\Models\Pessoa;
 use App\Models\TipoMovimento;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MovimentoController extends Controller
 {
@@ -15,10 +20,38 @@ class MovimentoController extends Controller
      */
     public function index(Request $request)
     {
-        $movimentos = Movimento::all();
+        // registros
+        $movimentos =  Movimento::query()
+                            ->select([
+                                'movimentos.id as id',
+                                'movimentos.dataMovimento as dataMovimento',
+                                'movimentos.valorFinal as valorFinal',
+                                'tipo_movimentos.nome as tipoMovimento',
+                            ])
+                            ->join('tipo_movimentos', 'tipo_movimentos.id', '=', 'movimentos.tipoMovimento')
+                            ->get();
+
+        // combobox
         $tipoMovimentos = TipoMovimento::query()->where('ativo', true)->get(['id', 'nome']);
-        $movimento = Movimento::find($request->id);
-        return view('movimento.index', compact('movimentos', 'tipoMovimentos', 'movimento'));
+        $pessoas = Pessoa::query()->where('ativo', '=', true)->get();
+        $carteirasSistema = [];
+        $carteirasPessoais = [];
+        $carteirasTerceiros = new Collection();
+        foreach ($pessoas as $pessoa) {
+            switch ($pessoa->usuarioReferente()) {
+                case 0:
+                    $carteirasSistema = $pessoa->carteiras;
+                    break;
+                case 1:
+                    $carteirasPessoais = $pessoa->carteiras;
+                    break;
+                default:
+                    $carteirasTerceiros[$pessoa->carteiraPrincipal()->id] = $pessoa->nome;
+                    break;
+            }
+        }
+
+        return view('movimento.index', compact('movimentos', 'tipoMovimentos', 'carteirasSistema', 'carteirasPessoais', 'carteirasTerceiros'));
     }
 
     /**
@@ -37,9 +70,82 @@ class MovimentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MovimentoRequest $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $movimento = new Movimento();
+            $movimento->numeroParcelas = $request->numeroParcelas;
+            $movimento->dataMovimento = $request->dataMovimento;
+            $movimento->tipoMovimento = $request->tipoMovimento;
+            $movimento->valorInicial = $request->valorInicial;
+            $movimento->valorDesconto = $request->valorDesconto;
+            $movimento->valorArredondamento = $request->valorArredondamento;
+            $movimento->valorFinal = $request->valorFinal;
+            $movimento->relevancia = $request->relevancia;
+            $movimento->descricao = $request->descricao;
+            $movimento->save();
+
+            for ($parcela = 0; $parcela < $request->numeroParcelas; $parcela++) { 
+                $dataVencimentoParcela = $request->dataVencimentoParcela[$parcela]; 
+                $valorInicialParcela = $request->valorInicialParcela[$parcela];
+
+                $novaParcela = new Parcela();
+                $novaParcela->movimento = $movimento->id;
+                $novaParcela->parcela = $parcela + 1;
+                $novaParcela->dataVencimento = $dataVencimentoParcela;
+                // $novaParcela->dataPagamento = $request->dataPagamento;
+                $novaParcela->valorInicial = $valorInicialParcela;
+                $novaParcela->valorDesconto = 0;
+                $novaParcela->valorJuros = 0;
+                $novaParcela->valorArredondamento = 0;
+                $novaParcela->valorFinal = $valorInicialParcela;
+                // $novaParcela->formaPagamento = $request->formaPagamento;
+                $novaParcela->carteiraOrigem = $request->carteiraOrigem;
+                $novaParcela->carteiraDestino = $request->carteiraDestino;
+                $novaParcela->save();
+            }
+
+            DB::commit();
+            $mensagem = 'Registro salvo com sucesso';
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $mensagem = 'Erro ao salvar o movimento'.' | '.$th->getMessage();
+        }
+
+        // registros
+        $movimentos = Movimento::query()
+                            ->select([
+                                'movimentos.id as id',
+                                'movimentos.dataMovimento as dataMovimento',
+                                'movimentos.valorFinal as valorFinal',
+                                'tipo_movimentos.nome as tipoMovimento',
+                            ])
+                            ->join('tipo_movimentos', 'tipo_movimentos.id', '=', 'movimentos.tipoMovimento')
+                            ->get();
+
+        // combobox
+        $tipoMovimentos = TipoMovimento::query()->where('ativo', true)->get(['id', 'nome']);
+        $pessoas = Pessoa::query()->where('ativo', '=', true)->get();
+        $carteirasSistema = [];
+        $carteirasPessoais = [];
+        $carteirasTerceiros = new Collection();
+        foreach ($pessoas as $pessoa) {
+            switch ($pessoa->usuarioReferente()) {
+                case 0:
+                    $carteirasSistema = $pessoa->carteiras;
+                    break;
+                case 1:
+                    $carteirasPessoais = $pessoa->carteiras;
+                    break;
+                default:
+                    $carteirasTerceiros[$pessoa->carteiraPrincipal()->id] = $pessoa->nome;
+                    break;
+            }
+        }
+
+        return view('movimento.index', compact('movimentos', 'tipoMovimentos', 'carteirasSistema', 'carteirasPessoais', 'carteirasTerceiros', 'mensagem'));
     }
 
     /**

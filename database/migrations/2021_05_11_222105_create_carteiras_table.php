@@ -17,6 +17,7 @@ class CreateCarteirasTable extends Migration
             $table->increments('id');
             $table->string('nome', 50);
             $table->integer('pessoa')->unsigned();
+            $table->boolean('principal');
             $table->boolean('ativo');
             $table->timestamps();
 

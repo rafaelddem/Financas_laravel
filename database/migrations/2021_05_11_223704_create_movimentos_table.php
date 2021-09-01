@@ -23,7 +23,7 @@ class CreateMovimentosTable extends Migration
             $table->decimal('valorArredondamento', 5, 2)->nullable()->default(0);
             $table->decimal('valorFinal', 8, 2)->default(0);
             $table->enum('relevancia', [0, 1, 2])->default(0);
-            $table->string('descricao');
+            $table->string('descricao', 255)->nullable();
             $table->timestamps();
 
             $table->foreign('tipoMovimento')->references('id')->on('tipo_movimentos');

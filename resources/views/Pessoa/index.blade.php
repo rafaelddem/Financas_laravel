@@ -55,7 +55,10 @@ Pessoa
             <ul class="list-group">
                 @foreach($pessoas as $pessoa)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $pessoa->nome }}
+                    {{ $pessoa->nome }} 
+                    @if(!$pessoa->ativo)
+                        (inativo)
+                    @endif
 
                     <span class="d-flex">
                         <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/pessoa/{{ $pessoa->id }}';">
