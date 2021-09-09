@@ -15,9 +15,17 @@ class FormaPagamentoController extends Controller
      */
     public function index(Request $request)
     {
-        $formasPagamento = FormaPagamento::all();
         $formaPagamento = FormaPagamento::find($request->id);
-        return view('formaPagamento.index', compact('formasPagamento', 'formaPagamento'));
+
+        $formasPagamento = FormaPagamento::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
+
+            return view('formaPagamento.index', compact('formasPagamento', 'formaPagamento'));
     }
 
     /**
@@ -42,9 +50,16 @@ class FormaPagamentoController extends Controller
         $formaPagamento->nome = $request->nome;
         $formaPagamento->ativo = boolval($request->ativo);
         $formaPagamento->save();
-        $formasPagamento = FormaPagamento::all();
 
         $mensagem = 'Registro criado com sucesso';
+
+        $formasPagamento = FormaPagamento::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         return view('FormaPagamento.index', compact('formasPagamento', 'mensagem'));
     }
@@ -84,9 +99,16 @@ class FormaPagamentoController extends Controller
         $formaPagamento->nome = $request->nome;
         $formaPagamento->ativo = boolval($request->ativo);
         $formaPagamento->update();
-        $formasPagamento = FormaPagamento::all();
 
         $mensagem = 'Registro atualizado com sucesso';
+
+        $formasPagamento = FormaPagamento::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         return view('formaPagamento.index', compact('formasPagamento', 'mensagem'));
     }

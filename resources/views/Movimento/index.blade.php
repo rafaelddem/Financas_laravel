@@ -148,8 +148,8 @@ Movimento
                         @endforeach
                         </optgroup>
                         <optgroup label="Terceiros">
-                        @foreach($carteirasTerceiros as $key => $carteira)
-                            <option value="{{ $key }}">{{ $carteira }}</option>
+                        @foreach($carteirasTerceiros as $carteira)
+                            <option value="{{ $carteira->id }}">{{ $carteira->nome }}</option>
                         @endforeach
                         </optgroup>
                     </select>
@@ -245,7 +245,8 @@ Movimento
             <ul class="list-group">
                 @foreach($movimentos as $movimento)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $movimento }}
+                    {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $movimento->dataMovimento)->format('d/m/Y') }} | R$ {{ $movimento->valorFinal }} - 
+                    {{ $movimento->tipoMovimento()->getResults()->nome }}
 
                     <span class="d-flex">
                         <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='/forma/{{ $movimento->id }}';">

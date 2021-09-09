@@ -10,7 +10,7 @@ class Movimento extends Model
 {
     public function tipoMovimento()
     {
-        return $this->belongsTo('App\Models\TipoMovimento', 'tipoMovimento');
+        return $this->belongsTo(TipoMovimento::class, 'tipoMovimento');
     }
 
     public function carteiraDestino()
@@ -21,13 +21,5 @@ class Movimento extends Model
     public function parcelas()
     {
         return $this->hasMany(Parcela::class);
-    }
-
-    public function __toString()
-    {
-        $data = Carbon::createFromFormat('Y-m-d H:i:s', $this->dataMovimento)->format('d/m/Y');
-        $valor = $this->valorFinal;
-        $tipo = get_class($this->tipoMovimento);//->nome;
-        return $data . ' | ' . $valor . ' - ' . $tipo;
     }
 }

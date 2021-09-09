@@ -75,7 +75,7 @@ Carteira
             <ul class="list-group">
                 @foreach($carteiras as $carteira)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $carteira->nome }} - {{ $carteira->dono }}
+                    {{ $carteira->nome }} - {{ $carteira->pessoa()->getResults()->nome }}
                     @if(!$carteira->ativo)
                         (inativo)
                     @endif

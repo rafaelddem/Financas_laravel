@@ -21,19 +21,25 @@ class MovimentoController extends Controller
     public function index(Request $request)
     {
         // registros
-        $movimentos =  Movimento::query()
-                            ->select([
-                                'movimentos.id as id',
-                                'movimentos.dataMovimento as dataMovimento',
-                                'movimentos.valorFinal as valorFinal',
-                                'tipo_movimentos.nome as tipoMovimento',
-                            ])
-                            ->join('tipo_movimentos', 'tipo_movimentos.id', '=', 'movimentos.tipoMovimento')
-                            ->get();
+        $movimentos = Movimento::query()
+            ->select([
+                'id',
+                'dataMovimento',
+                'valorFinal',
+                'tipoMovimento',
+            ])->get();
 
         // combobox
-        $tipoMovimentos = TipoMovimento::query()->where('ativo', true)->get(['id', 'nome']);
-        $pessoas = Pessoa::query()->where('ativo', '=', true)->get();
+        $tipoMovimentos = TipoMovimento::query()
+            ->select([
+                'id',
+                'nome',
+            ])
+            ->where('ativo', '=', true)
+            ->get();
+        $pessoas = Pessoa::query()
+            ->where('ativo', '=', true)
+            ->get();
         $carteirasSistema = [];
         $carteirasPessoais = [];
         $carteirasTerceiros = new Collection();
@@ -46,7 +52,8 @@ class MovimentoController extends Controller
                     $carteirasPessoais = $pessoa->carteiras;
                     break;
                 default:
-                    $carteirasTerceiros[$pessoa->carteiraPrincipal()->id] = $pessoa->nome;
+                    $carteirasTerceiros = $pessoa->carteiraPrincipal();
+                    // $carteirasTerceiros[$pessoa->carteiraPrincipal()->id] = $pessoa->nome;
                     break;
             }
         }
@@ -115,15 +122,7 @@ class MovimentoController extends Controller
         }
 
         // registros
-        $movimentos = Movimento::query()
-                            ->select([
-                                'movimentos.id as id',
-                                'movimentos.dataMovimento as dataMovimento',
-                                'movimentos.valorFinal as valorFinal',
-                                'tipo_movimentos.nome as tipoMovimento',
-                            ])
-                            ->join('tipo_movimentos', 'tipo_movimentos.id', '=', 'movimentos.tipoMovimento')
-                            ->get();
+        $movimentos = Movimento::query()->with('tipoMovimento')->get();
 
         // combobox
         $tipoMovimentos = TipoMovimento::query()->where('ativo', true)->get(['id', 'nome']);

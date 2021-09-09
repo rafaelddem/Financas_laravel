@@ -12,16 +12,24 @@ class CarteiraController extends Controller
     public function index(Request $request)
     {
         $carteira = Carteira::find($request->id);
-
         $carteiras = Carteira::query()
-                            ->select(['carteiras.id', 'carteiras.nome', 'carteiras.ativo', 'pessoas.nome as dono'])
-                            ->join('pessoas', 'pessoas.id', 'carteiras.pessoa')
-                            ->orderby('pessoas.id', 'asc')
-                            ->orderby('carteiras.principal', 'desc')
-                            ->orderby('carteiras.id', 'asc')
-                            ->get();
-
-        $pessoas = Pessoa::all();
+            ->select([
+                'id',
+                'nome',
+                'pessoa',
+                'ativo',
+            ])
+            ->orderby('pessoa', 'asc')
+            ->orderby('principal', 'desc')
+            ->orderby('id', 'asc')
+            ->get();
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+            ])
+            ->where('ativo', '=', true)
+            ->get();
         return view('carteira.index', compact('carteiras', 'pessoas', 'carteira'));
     }
 
@@ -34,16 +42,26 @@ class CarteiraController extends Controller
         $carteira->ativo = boolval($request->ativo);
         $carteira->save();
 
-        $carteiras = Carteira::query()
-                            ->select(['carteiras.id', 'carteiras.nome', 'carteiras.ativo', 'pessoas.nome as dono'])
-                            ->join('pessoas', 'pessoas.id', 'carteiras.pessoa')
-                            ->orderby('pessoas.id', 'asc')
-                            ->orderby('carteiras.principal', 'desc')
-                            ->orderby('carteiras.id', 'asc')
-                            ->get();
-        $pessoas = Pessoa::all();
-
         $mensagem = 'Registro criado com sucesso';
+
+        $carteiras = Carteira::query()
+            ->select([
+                'id',
+                'nome',
+                'pessoa',
+                'ativo',
+            ])
+            ->orderby('pessoa', 'asc')
+            ->orderby('principal', 'desc')
+            ->orderby('id', 'asc')
+            ->get();
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+            ])
+            ->where('ativo', '=', true)
+            ->get();
 
         return view('carteira.index', compact('carteiras', 'pessoas', 'mensagem'));
     }
@@ -57,16 +75,26 @@ class CarteiraController extends Controller
         $carteira->ativo = boolval($request->ativo);
         $carteira->update();
 
-        $carteiras = Carteira::query()
-                            ->select(['carteiras.id', 'carteiras.nome', 'carteiras.ativo', 'pessoas.nome as dono'])
-                            ->join('pessoas', 'pessoas.id', 'carteiras.pessoa')
-                            ->orderby('pessoas.id', 'asc')
-                            ->orderby('carteiras.principal', 'desc')
-                            ->orderby('carteiras.id', 'asc')
-                            ->get();
-        $pessoas = Pessoa::all();
-
         $mensagem = 'Registro atualizado com sucesso';
+
+        $carteiras = Carteira::query()
+            ->select([
+                'id',
+                'nome',
+                'pessoa',
+                'ativo',
+            ])
+            ->orderby('pessoa', 'asc')
+            ->orderby('principal', 'desc')
+            ->orderby('id', 'asc')
+            ->get();
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+            ])
+            ->where('ativo', '=', true)
+            ->get();
 
         return view('carteira.index', compact('carteiras', 'pessoas', 'mensagem'));
     }
@@ -76,10 +104,26 @@ class CarteiraController extends Controller
         $carteira = Carteira::find($id);
         $carteira->delete($id);
 
-        $carteiras = Carteira::join('pessoas', 'pessoas.id', 'carteiras.pessoa')->select('carteiras.*', 'pessoas.nome as dono')->get();
-        $pessoas = Pessoa::all();
-
         $mensagem = 'Registro excluído com sucesso';
+
+        $carteiras = Carteira::query()
+            ->select([
+                'id',
+                'nome',
+                'pessoa',
+                'ativo',
+            ])
+            ->orderby('pessoa', 'asc')
+            ->orderby('principal', 'desc')
+            ->orderby('id', 'asc')
+            ->get();
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+            ])
+            ->where('ativo', '=', true)
+            ->get();
 
         return view('carteira.index', compact('carteiras', 'pessoas', 'mensagem'));
     }

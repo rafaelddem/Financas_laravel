@@ -9,7 +9,7 @@ class Carteira extends Model
 {
     public function pessoa()
     {
-        return $this->belongsTo(Pessoa::class);
+        return $this->belongsTo(Pessoa::class, 'pessoa');
     }
 
     public function movimentos()

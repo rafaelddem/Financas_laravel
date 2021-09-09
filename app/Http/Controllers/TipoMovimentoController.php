@@ -15,8 +15,15 @@ class TipoMovimentoController extends Controller
      */
     public function index(Request $request)
     {
-        $tiposMovimento = TipoMovimento::all();
         $tipoMovimento = TipoMovimento::find($request->id);
+
+        $tiposMovimento = TipoMovimento::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
         return view('tipoMovimento.index', compact('tiposMovimento', 'tipoMovimento'));
     }
 
@@ -43,9 +50,16 @@ class TipoMovimentoController extends Controller
         $tipoMovimento->relevancia = $request->relevancia;
         $tipoMovimento->ativo = boolval($request->ativo);
         $tipoMovimento->save();
-        $tiposMovimento = TipoMovimento::all();
 
         $mensagem = 'Registro criado com sucesso';
+
+        $tiposMovimento = TipoMovimento::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         return view('tipoMovimento.index', compact('tiposMovimento', 'mensagem'));
     }
@@ -86,9 +100,16 @@ class TipoMovimentoController extends Controller
         $tipoMovimento->relevancia = $request->relevancia;
         $tipoMovimento->ativo = boolval($request->ativo);
         $tipoMovimento->update();
-        $tiposMovimento = TipoMovimento::all();
 
         $mensagem = 'Registro atualizado com sucesso';
+
+        $tiposMovimento = TipoMovimento::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         return view('tipoMovimento.index', compact('tiposMovimento', 'mensagem'));
     }
@@ -103,9 +124,16 @@ class TipoMovimentoController extends Controller
     {
         $tipoMovimento = TipoMovimento::find($id);
         $tipoMovimento->delete($id);
-        $tiposMovimento = TipoMovimento::all();
 
         $mensagem = 'Registro excluído com sucesso';
+
+        $tiposMovimento = TipoMovimento::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         return view('tipoMovimento.index', compact('tiposMovimento', 'mensagem'));
     }

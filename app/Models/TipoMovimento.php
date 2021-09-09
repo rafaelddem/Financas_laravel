@@ -9,6 +9,6 @@ class TipoMovimento extends Model
 {
     public function movimentos()
     {
-        return $this->hasMany(Movimento::class);
+        return $this->hasMany(Movimento::class, 'tipoMovimento');
     }
 }

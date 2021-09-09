@@ -23,6 +23,14 @@ class Pessoa extends Model
         }
 
         return $carteiras;
+
+
+
+
+        // $carteiras = $this->carteiras;
+        // foreach ($carteiras as $carteira) {
+        //     echo $carteira->comment;
+        // }
     }
 
     public function usuarioReferente()

@@ -10,7 +10,13 @@ class PessoaController extends Controller
 {
     public function index(Request $request)
     {
-        $pessoas = Pessoa::all();
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
         $pessoa = Pessoa::find($request->id);
 
         return view('pessoa.index', compact('pessoas', 'pessoa'));
@@ -22,7 +28,14 @@ class PessoaController extends Controller
         $pessoa->nome = $request->nome;
         $pessoa->ativo = boolval($request->ativo);
         $pessoa->save();
-        $pessoas = Pessoa::all();
+
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         $mensagem = 'Registro criado com sucesso';
 
@@ -35,9 +48,16 @@ class PessoaController extends Controller
         $pessoa->nome = $request->nome;
         $pessoa->ativo = boolval($request->ativo);
         $pessoa->update();
-        $pessoas = Pessoa::all();
 
         $mensagem = 'Registro atualizado com sucesso';
+
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         return view('pessoa.index', compact('pessoas', 'mensagem'));
     }
@@ -46,9 +66,16 @@ class PessoaController extends Controller
     {
         $pessoa = Pessoa::find($id);
         $pessoa->delete($id);
-        $pessoas = Pessoa::all();
 
         $mensagem = 'Registro excluído com sucesso';
+
+        $pessoas = Pessoa::query()
+            ->select([
+                'id',
+                'nome',
+                'ativo',
+            ])
+            ->get();
 
         return view('pessoa.index', compact('pessoas', 'mensagem'));
     }
