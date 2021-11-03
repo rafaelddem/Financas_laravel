@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Carteira;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Tasks\Financial\Money;
 use Illuminate\Console\Command;
 
 class Testes extends Command
@@ -40,6 +41,14 @@ class Testes extends Command
      */
     public function handle()
     {
+        $money = new Money();
+        $valor = $money->formatValue(0);
+        echo $valor;
+        // $originalValue = "R$ 1.8123,52";
+        // $valorFinal = preg_replace('/[^0-9]/', '', $originalValue);
+        // dd($valorFinal);
+
+
         // $post = new Post();
         // $post->text = "Texto";
         // $post->save();
@@ -68,7 +77,7 @@ class Testes extends Command
         // $comment = Comment::find(1);
         // echo $comment->post()->getResults()->text;
 
-        $comment = Carteira::find(1);
-        echo $comment->pessoa()->getResults()->nome;
+        // $comment = Carteira::find(1);
+        // echo $comment->pessoa()->getResults()->nome;
     }
 }

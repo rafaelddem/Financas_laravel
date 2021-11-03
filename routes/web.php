@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\CarteiraController;
-use App\Http\Controllers\FormaPagamentoController;
+use App\Http\Controllers\InstallmentController;
+use App\Http\Controllers\MovementController;
+use App\Http\Controllers\MovementTypeController;
 use App\Http\Controllers\MovimentoController;
-use App\Http\Controllers\PessoaController;
-use App\Http\Controllers\TipoMovimentoController;
+use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\ParcelaController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,41 +28,47 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {return view('index');});
 
 Route::prefix('carteira')->group(function () {
-    Route::get('/', [CarteiraController::class, 'index']);
-    Route::get('/{id}', [CarteiraController::class, 'index']);
-    Route::post('/novo', [CarteiraController::class, 'store']);
-    Route::post('/{id}/atualizar', [CarteiraController::class, 'update']);
-    Route::post('/{id}/excluir', [CarteiraController::class, 'destroy']);
+    Route::get('/', [WalletController::class, 'index'])->name('listWallet');
+    Route::get('/{id}', [WalletController::class, 'index'])->name('findWallet');
+    Route::post('/novo', [WalletController::class, 'store'])->name('createWallet');
+    Route::post('/{id}/atualizar', [WalletController::class, 'update'])->name('updateWallet');
+    Route::post('/{id}/excluir', [WalletController::class, 'destroy'])->name('deleteWallet');
 });
 
 Route::prefix('forma')->group(function () {
-    Route::get('/', [FormaPagamentoController::class, 'index']);
-    Route::get('/{id}', [FormaPagamentoController::class, 'index']);
-    Route::post('/novo', [FormaPagamentoController::class, 'store']);
-    Route::post('/{id}/atualizar', [FormaPagamentoController::class, 'update']);
-    Route::post('/{id}/excluir', [FormaPagamentoController::class, 'destroy']);
+    Route::get('/', [PaymentMethodController::class, 'index'])->name('listPaymentMethod');
+    Route::get('/{id}', [PaymentMethodController::class, 'index'])->name('findPaymentMethod');
+    Route::post('/novo', [PaymentMethodController::class, 'store'])->name('createPaymentMethod');
+    Route::post('/{id}/atualizar', [PaymentMethodController::class, 'update'])->name('updatePaymentMethod');
+    Route::post('/{id}/excluir', [PaymentMethodController::class, 'destroy'])->name('deletePaymentMethod');
 });
 
 Route::prefix('movimento')->group(function () {
-    Route::get('/', [MovimentoController::class, 'index']);
-    // Route::get('/{id}', [MovimentoController::class, 'index']);
-    Route::post('/novo', [MovimentoController::class, 'store']);
-    // Route::post('/{id}/atualizar', [MovimentoController::class, 'update']);
-    // Route::post('/{id}/excluir', [MovimentoController::class, 'destroy']);
+    Route::get('/', [MovementController::class, 'index'])->name('listMovement');
+    // Route::get('/{id}', [MovimentoController::class, 'index'])->name('findMovement');
+    Route::post('/novo', [MovementController::class, 'store'])->name('createMovement');
+    // Route::post('/{id}/atualizar', [MovimentoController::class, 'update'])->name('updateMovement');
+    // Route::post('/{id}/excluir', [MovimentoController::class, 'destroy'])->name('deleteMovement');
+});
+
+Route::prefix('pagamento')->group(function () {
+    Route::get('/', [InstallmentController::class, 'index'])->name('listInstallment');
+    Route::get('/{movement}-{installment_number}', [InstallmentController::class, 'index'])->name('findInstallment');
+    Route::get('/12', [InstallmentController::class, 'index'])->name('deleteInstallment');
 });
 
 Route::prefix('pessoa')->group(function () {
-    Route::get('/', [PessoaController::class, 'index']);
-    Route::get('/{id}', [PessoaController::class, 'index']);
-    Route::post('/novo', [PessoaController::class, 'store']);
-    Route::post('/{id}/atualizar', [PessoaController::class, 'update']);
-    Route::post('/{id}/excluir', [PessoaController::class, 'destroy']);
+    Route::get('/', [OwnerController::class, 'index'])->name('listOwner');
+    Route::get('/{id}', [OwnerController::class, 'index'])->name('findOwner');
+    Route::post('/novo', [OwnerController::class, 'store'])->name('createOwner');
+    Route::post('/{id}/atualizar', [OwnerController::class, 'update'])->name('updateOwner');
+    Route::post('/{id}/excluir', [OwnerController::class, 'destroy'])->name('deleteOwner');
 });
 
 Route::prefix('tipo')->group(function () {
-    Route::get('/', [TipoMovimentoController::class, 'index']);
-    Route::get('/{id}', [TipoMovimentoController::class, 'index']);
-    Route::post('/novo', [TipoMovimentoController::class, 'store']);
-    Route::post('/{id}/atualizar', [TipoMovimentoController::class, 'update']);
-    Route::post('/{id}/excluir', [TipoMovimentoController::class, 'destroy']);
+    Route::get('/', [MovementTypeController::class, 'index'])->name('listMovementType');
+    Route::get('/{id}', [MovementTypeController::class, 'index'])->name('findMovementType');
+    Route::post('/novo', [MovementTypeController::class, 'store'])->name('createMovementType');
+    Route::post('/{id}/atualizar', [MovementTypeController::class, 'update'])->name('updateMovementType');
+    Route::post('/{id}/excluir', [MovementTypeController::class, 'destroy'])->name('deleteMovementType');
 });

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Testes\MovementSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,10 +15,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            PessoaSeeder::class, 
-            CarteiraSeeder::class, 
-            FormaPagamentoSeeder::class, 
-            TipoMovimentoSeeder::class, 
+            OwnerSeeder::class, 
+            WalletSeeder::class, 
+            PaymentMethodSeeder::class, 
+            MovementTypeSeeder::class, 
+
+            MovementSeeder::class,
         ]);
     }
 }

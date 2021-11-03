@@ -19,30 +19,39 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Home</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/movimento">Movimento</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Movimento
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/movimento">Registrar Movimento</a></li>
+                        <li><a class="dropdown-item" href="/pagamento">Registrar Pagamento</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/tipo">Tipo de movimento</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/forma">Forma de Pagamento</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/carteira">Carteira</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/pessoa">Pessoa</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Cadastros
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/tipo">Tipo de movimento</a></li>
+                        <li><a class="dropdown-item" href="/forma">Forma de Pagamento</a></li>
+                        <li><a class="dropdown-item" href="/carteira">Carteira</a></li>
+                        <li><a class="dropdown-item" href="/pessoa">Pessoa</a></li>
+                    </ul>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="jumbotron">
-            <h1>@yield('cabecalho')</h1>
+            <h1>@yield('header')</h1>
         </div>
 
-        @yield('conteudo')
+        @yield('content')
     </div>
     <br />
     <br />

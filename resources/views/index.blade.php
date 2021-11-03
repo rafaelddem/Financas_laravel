@@ -1,8 +1,8 @@
 @extends('layout')
 
-@section('cabecalho')
+@section('header')
 Home
 @endsection
 
-@section('conteudo')
+@section('content')
 @endsection
