@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentMethodRequest;
-use App\Models\PaymentMethod;
+use App\Tasks\PaymentMethod\Delete;
+use App\Tasks\PaymentMethod\Insert;
 use App\Tasks\PaymentMethod\LoadPage;
+use App\Tasks\PaymentMethod\Update;
 use Illuminate\Http\Request;
 
 class PaymentMethodController extends Controller
@@ -17,34 +19,39 @@ class PaymentMethodController extends Controller
 
     public function store(PaymentMethodRequest $request)
     {
-        $paymentMethod = new PaymentMethod();
-        $paymentMethod->name = $request->name;
-        $paymentMethod->active = boolval($request->active);
-        $paymentMethod->save();
+        try {
+            (new Insert)->run($request);
 
-        $message = 'Registro criado com sucesso';
+            $message = 'Registro criado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar criar o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }
 
     public function update(PaymentMethodRequest $request)
     {
-        $paymentMethod = PaymentMethod::find($request->id);
-        $paymentMethod->name = $request->name;
-        $paymentMethod->active = boolval($request->active);
-        $paymentMethod->update();
+        try {
+            (new Update)->run($request);
 
-        $message = 'Registro atualizado com sucesso';
+            $message = 'Registro atualizado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar atualizar o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }
 
     public function destroy(int $id)
     {
-        $paymentMethod = PaymentMethod::find($id);
-        $paymentMethod->delete($id);
+        try {
+            (new Delete)->run($id);
 
-        $message = 'Registro excluído com sucesso';
+            $message = 'Registro excluído com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar excluir o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }

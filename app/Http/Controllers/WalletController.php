@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WalletRequest;
-use App\Models\Wallet;
+use App\Tasks\Wallet\Delete;
+use App\Tasks\Wallet\Insert;
 use App\Tasks\Wallet\LoadPage;
+use App\Tasks\Wallet\Update;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
@@ -17,51 +19,40 @@ class WalletController extends Controller
 
     public function store(WalletRequest $request)
     {
-        $wallet = new Wallet();
-        $wallet->name = $request->name;
-        $wallet->owner = $request->owner;
-        $wallet->active = boolval($request->active);
+        try {
+            (new Insert)->run($request);
 
-        if ($wallet->active) {
-            $wallet->main_wallet = boolval($request->main_wallet);
-        } else {
-            $wallet->main_wallet = false;
+            $message = 'Registro criado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar criar o registro';
         }
 
-        $wallet->save();
-
-        $mensagem = 'Registro criado com sucesso';
-
-        return (new LoadPage)->run(0, $mensagem);
+        return (new LoadPage)->run(0, $message);
     }
 
     public function update(WalletRequest $request)
     {
-        $wallet = Wallet::find($request->id);
-        $wallet->name = $request->name;
-        $wallet->owner = $request->owner;
-        $wallet->active = boolval($request->active);
+        try {
+            (new Update)->run($request);
 
-        if ($wallet->active) {
-            $wallet->main_wallet = boolval($request->main_wallet);
-        } else {
-            $wallet->main_wallet = false;
+            $message = 'Registro atualizado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar atualizar o registro';
         }
 
-        $wallet->update();
-
-        $mensagem = 'Registro atualizado com sucesso';
-
-        return (new LoadPage)->run(0, $mensagem);
+        return (new LoadPage)->run(0, $message);
     }
 
     public function destroy(int $id)
     {
-        $wallet = Wallet::find($id);
-        $wallet->delete($id);
+        try {
+            (new Delete)->run($id);
 
-        $mensagem = 'Registro excluído com sucesso';
+            $message = 'Registro excluído com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar excluir o registro';
+        }
 
-        return (new LoadPage)->run(0, $mensagem);
+        return (new LoadPage)->run(0, $message);
     }
 }

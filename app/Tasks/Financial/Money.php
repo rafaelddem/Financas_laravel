@@ -21,4 +21,16 @@ class Money
 
         return $formattedValue;
     }
+
+    public function extractValue($originalValue)
+    {
+        if (!isset($originalValue)) 
+            return 0.00;
+
+        $firstPosition = substr($originalValue, 0, 1);
+
+        $minus = ($firstPosition == '-') ? '-' : '';
+
+        return $minus . (preg_replace('/[^0-9]/', '', $originalValue) / 100);
+    }
 }

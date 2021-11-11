@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MovementTypeRequest;
-use App\Models\MovementType;
+use App\Tasks\MovementType\Delete;
+use App\Tasks\MovementType\Insert;
 use App\Tasks\MovementType\LoadPage;
+use App\Tasks\MovementType\Update;
 use Illuminate\Http\Request;
 
 class MovementTypeController extends Controller
@@ -17,36 +19,39 @@ class MovementTypeController extends Controller
 
     public function store(MovementTypeRequest $request)
     {
-        $movementType = new MovementType();
-        $movementType->name = $request->name;
-        $movementType->relevance = $request->relevance;
-        $movementType->active = boolval($request->active);
-        $movementType->save();
+        try {
+            (new Insert)->run($request);
 
-        $message = 'Registro criado com sucesso';
+            $message = 'Registro criado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar criar o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }
 
     public function update(MovementTypeRequest $request)
     {
-        $movementType = MovementType::find($request->id);
-        $movementType->name = $request->name;
-        $movementType->relevance = $request->relevance;
-        $movementType->active = boolval($request->active);
-        $movementType->update();
+        try {
+            (new Update)->run($request);
 
-        $message = 'Registro atualizado com sucesso';
+            $message = 'Registro atualizado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar atualizar o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }
 
     public function destroy(int $id)
     {
-        $movementType = MovementType::find($id);
-        $movementType->delete($id);
+        try {
+            (new Delete)->run($id);
 
-        $message = 'Registro excluído com sucesso';
+            $message = 'Registro excluído com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar excluir o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }

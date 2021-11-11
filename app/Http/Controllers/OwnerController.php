@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OwnerRequest;
 use Illuminate\Http\Request;
-use App\Models\Owner;
+use App\Tasks\Owner\Delete;
+use App\Tasks\Owner\Insert;
 use App\Tasks\Owner\LoadPage;
+use App\Tasks\Owner\Update;
 
 class OwnerController extends Controller
 {
@@ -17,34 +19,39 @@ class OwnerController extends Controller
 
     public function store(OwnerRequest $request)
     {
-        $owner = new Owner();
-        $owner->name = $request->name;
-        $owner->active = boolval($request->active);
-        $owner->save();
+        try {
+            (new Insert)->run($request);
 
-        $message = 'Registro criado com sucesso';
+            $message = 'Registro criado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar criar o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }
 
     public function update(OwnerRequest $request)
     {
-        $owner = Owner::find($request->id);
-        $owner->name = $request->name;
-        $owner->active = boolval($request->active);
-        $owner->update();
+        try {
+            (new Update)->run($request);
 
-        $message = 'Registro atualizado com sucesso';
+            $message = 'Registro atualizado com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar atualizar o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }
 
     public function destroy(int $id)
     {
-        $owner = Owner::find($id);
-        $owner->delete($id);
+        try {
+            (new Delete)->run($id);
 
-        $message = 'Registro excluído com sucesso';
+            $message = 'Registro excluído com sucesso';
+        } catch (\Throwable $th) {
+            $message = 'Erro ao tentar excluir o registro';
+        }
 
         return (new LoadPage)->run(0, $message);
     }

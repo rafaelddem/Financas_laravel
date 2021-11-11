@@ -259,9 +259,8 @@ Movimento
             <ul class="list-group">
                 @foreach($movements as $movement)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $movement->movement_date)->format('d/m/Y') }} | {{ $movement->getFormattedNetValue() }} - 
+                    {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $movement->movement_date)->format('d/m/Y') }} | {{ $movement->getFormattedNetValue() }} <br />
                     {{ $movement->title }}
-
                     <span class="d-flex">
                         <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='';">
                         <form method="post" action=""
