@@ -17,13 +17,23 @@ class Movement extends Model
         return $this->hasMany(Installment::class, 'movement');
     }
 
-    // public function getValorFinalAttribute($valorFinal)
-    // {
-    //     return (new FormataValor)->run($valorFinal);
-    // }
-
-    public function getFormattedNetValue()
+    public function getGross_ValueAttribute($gross_value)
     {
-        return (new Money)->formatValue($this->net_value);
+        return new Money($gross_value);
+    }
+
+    public function getDescount_ValueAttribute($descount_value)
+    {
+        return new Money($descount_value);
+    }
+
+    public function getRounding_ValueAttribute($rounding_value)
+    {
+        return new Money($rounding_value);
+    }
+
+    public function getNetValueAttribute($net_value)
+    {
+        return new Money($net_value);
     }
 }

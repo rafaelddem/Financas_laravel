@@ -7,7 +7,7 @@ use App\Models\MovementType;
 use App\Models\Owner;
 use Illuminate\Database\Eloquent\Collection;
 
-class LoadPage
+class ListPage
 {
     public function run(int $id, string $message)
     {
@@ -22,9 +22,8 @@ class LoadPage
                 'movement_type',
                 'title',
             ])
-            ->limit(20)
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate(50);
 
         // combobox
         $movementTypes = MovementType::query()

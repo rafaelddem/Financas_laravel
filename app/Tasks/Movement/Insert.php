@@ -21,10 +21,10 @@ class Insert
         $movement->installments = $request->installments;
         $movement->movement_date = $request->movement_date;
         $movement->movement_type = $request->movement_type;
-        $movement->gross_value = (new Money)->extractValue($request->gross_value);
-        $movement->descount_value = (new Money)->extractValue($request->descount_value);
-        $movement->rounding_value = (new Money)->extractValue($request->rounding_value);
-        $movement->net_value = (new Money)->extractValue($request->net_value);
+        $movement->gross_value = (new Money($request->gross_value))->getValue();
+        $movement->descount_value = (new Money($request->descount_value))->getValue();
+        $movement->rounding_value = (new Money($request->rounding_value))->getValue();
+        $movement->net_value = (new Money($request->net_value))->getValue();
         $movement->relevance = $request->relevance;
         $movement->description = $request->description;
         $movement->save();

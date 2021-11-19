@@ -3,9 +3,7 @@
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\MovementTypeController;
-use App\Http\Controllers\MovimentoController;
 use App\Http\Controllers\OwnerController;
-use App\Http\Controllers\ParcelaController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -44,9 +42,10 @@ Route::prefix('forma')->group(function () {
 });
 
 Route::prefix('movimento')->group(function () {
-    Route::get('/', [MovementController::class, 'index'])->name('listMovement');
+    Route::get('/', [MovementController::class, 'index'])->name('listMovements');
+    Route::get('/cadastro', [MovementController::class, 'create'])->name('createMovements');
     // Route::get('/{id}', [MovimentoController::class, 'index'])->name('findMovement');
-    Route::post('/novo', [MovementController::class, 'store'])->name('createMovement');
+    Route::post('/novo', [MovementController::class, 'store'])->name('storeMovement');
     // Route::post('/{id}/atualizar', [MovimentoController::class, 'update'])->name('updateMovement');
     // Route::post('/{id}/excluir', [MovimentoController::class, 'destroy'])->name('deleteMovement');
 });
