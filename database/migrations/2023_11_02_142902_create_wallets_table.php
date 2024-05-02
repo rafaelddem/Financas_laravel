@@ -15,13 +15,14 @@ class CreateWalletsTable extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 50);
-            $table->integer('owner')->unsigned();
-            $table->boolean('main_wallet');
-            $table->boolean('active');
+            $table->string('name', 30)->nullable(false);
+            $table->integer('owner_id')->unsigned();
+            $table->boolean('main_wallet')->default(false);
+            $table->string('description', 255)->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
 
-            $table->foreign('owner')->references('id')->on('owners');
+            $table->foreign('owner_id')->references('id')->on('owners');
         });
     }
 

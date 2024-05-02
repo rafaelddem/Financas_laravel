@@ -3,56 +3,80 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OwnerRequest;
+use App\Models\Owner;
+use App\Models\Wallet;
+use App\Services\Owner\OwnerService;
+use App\Services\Wallet\WalletService;
 use Illuminate\Http\Request;
-use App\Tasks\Owner\Delete;
-use App\Tasks\Owner\Insert;
-use App\Tasks\Owner\LoadPage;
-use App\Tasks\Owner\Update;
+use Illuminate\Support\Facades\DB;
 
 class OwnerController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        $codigoOwner = isset($request->id) ? $request->id : 0;
-        return (new LoadPage)->run($codigoOwner, "");
+        return app(OwnerService::class)->loadPage($request->get('id', 0), "");
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(OwnerRequest $request)
     {
         try {
-            (new Insert)->run($request);
+            DB::beginTransaction();
+
+            $owner = app(OwnerService::class)->create($request->all());
+
+            $wallet = app(WalletService::class)->create([
+                'name' => 'Carteira de ' . $owner->name,
+                'owner_id' => $owner->id,
+                'main_wallet' => true,
+                'active' => true,
+                'description' => 'Carteira padrão de ' . $owner->name,
+            ]);
 
             $message = 'Registro criado com sucesso';
+            DB::commit();
         } catch (\Throwable $th) {
             $message = 'Erro ao tentar criar o registro';
+            DB::rollBack();
         }
 
-        return (new LoadPage)->run(0, $message);
+        return app(OwnerService::class)->loadPage(0, $message);
     }
 
-    public function update(OwnerRequest $request)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
     {
         try {
-            (new Update)->run($request);
+            DB::beginTransaction();
+
+            app(OwnerService::class)->update($request->only(['active', 'id']));
 
             $message = 'Registro atualizado com sucesso';
+            DB::commit();
+        } catch (\Exception $ex) {
+            $message = $ex->getMessage();
+            DB::rollBack();
         } catch (\Throwable $th) {
             $message = 'Erro ao tentar atualizar o registro';
+            DB::rollBack();
         }
 
-        return (new LoadPage)->run(0, $message);
-    }
-
-    public function destroy(int $id)
-    {
-        try {
-            (new Delete)->run($id);
-
-            $message = 'Registro excluído com sucesso';
-        } catch (\Throwable $th) {
-            $message = 'Erro ao tentar excluir o registro';
-        }
-
-        return (new LoadPage)->run(0, $message);
+        return app(OwnerService::class)->loadPage(0, $message);
     }
 }

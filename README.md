@@ -68,11 +68,13 @@ Nome da tabela: owner.
 
 - Característica #2: Não é permitido que duas *Pessoa*s possuam o mesmo nome;
 
-- Característica #3: Não é permitido a inativação de uma *Pessoa* que possua pendências (Tarefa #1, item 1.1.1.5);
+- Característica #3: Não é permitido a inativação de uma *Pessoa* que possua pendências, uma vez que isso impediria ela de lançar movimentos para quitar suas pendências (Tarefa #1, item 1.1.1.5);
 
 - Característica #4: É exigido a existência de pelo menos uma *Carteira* (mais sobre a entidade *Carteira* no item 1.1.2) para cada *Pessoa* (Tarefa #2, item 1.1.1.5).
 
 - Característica #5: Quando uma *Pessoa* é inativada, suas *Carteira*s também deverão ser inativadas. Mesmo que uma *Pessoa* esteja inativa, os registros referentes a ela ainda serão mantidos
+
+- Característica #6: Quando uma *Pessoa* é ativada, o registro de *Carteira* relacionado a ela que estiver marcado como sendo sua carteira pricipal, também deve ser reativado
 
 
 #### 1.1.1.5. Tarefas
@@ -91,10 +93,10 @@ Tarefa #3: Identificar a *Carteira* principal de uma *Pessoa*.
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (owner):
 
-| Registro | id  | name              | active | Objetivo                                                                   |
-| :------: | :-: | :---------------- | :----: | :------------------------------------------------------------------------- |
-|       #1 |  1  | Sistema           |      1 | Será o "Dono" utilizado em movimentações de destino indefinido (ou origem) |
-|       #2 |  2  | (Nome do usuário) |      1 | Será o "Dono" relacionado o usuário do sistema                             |
+| Registro | id  | name              | active | Objetivo                                                                     |
+| :------: | :-: | :---------------- | :----: | :--------------------------------------------------------------------------- |
+|       #1 |  1  | Sistema           |      1 | Será a "Pessoa" utilizada em movimentações de destino indefinido (ou origem) |
+|       #2 |  2  | (Nome do usuário) |      1 | Será a "Pessoa" relacionada ao usuário do sistema                            |
 
 > Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores, o valor aqui definido seja respeitado;
 
@@ -130,8 +132,8 @@ A entidade *Carteira* (internamente ao sistema, identificada como "wallet") é a
     - alteração:            Permitida em algumas circunstâncias (ver característica #3).
 - descrição (description): 
     - objetivo:             Salvar uma pequena descrição sobre o registro;
-    - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - obrigatório:          Não;
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, vírgulas e espaços);
     - tamanho:              Entre 0 e 255 caracteres;
     - alteração:            Permitida.
 - ativo (active):
@@ -189,7 +191,15 @@ Nome da tabela: wallet
 
 - Característica #4: Não é permitida a inativação de uma *Carteira* que esteja marcada como principal (como quando esta for a única), que tenha valores (Tarefa #3, item 1.1.2.5) ou que possua pendências (Tarefa #4, item 1.1.2.5);
 
-- Característica #5: Não é permitida a reativação de uma *Carteira* cujo dono (*Pessoa*) estiver inativo (Tarefa #5, item 1.1.2.5).
+- Característica #5: Não é permitida a reativação de uma *Carteira* cujo Dono (*Pessoa*) estiver inativo (Tarefa #5, item 1.1.2.5).
+
+- Característica #6: Não é permitido que mais de uma *Carteira* (de um mesmo Dono) esteja marcada como principal.
+
+- Característica #7: Não é permitido que uma *Carteira* seja desmarcada como sendo a principal.
+
+- Característica #8: Não é permitido que uma *Carteira* tenha seu Dono alterado.
+
+- Característica #9: Não é permitido que uma *Carteira* tenha seu nome alterado.
 
 
 #### 1.1.2.5. Tarefas
@@ -223,9 +233,9 @@ Na implantação do sistema, os seguintes registros devem ser cadastrados nesta 
 
 > Obs. 2: O valor do atributo *active* pode ser **1** ou **true**, dependendo do banco de dados utilizado;
 
-> Obs. 3: Como se trata de uma referência a uma entidade Dono, o valor do atributo *owner_id* do registro #1 deve ser o mesmo do atributo *id* do registro #1 na tabela owner.
+> Obs. 3: Como se trata de uma referência a uma entidade *Pessoa*, o valor do atributo *owner_id* do registro #1 deve ser o mesmo do atributo *id* do registro #1 na tabela owner.
 
-> Obs. 4: Como se trata de uma referência a uma entidade Dono, o valor do atributo *owner_id* do registro #2 deve ser o mesmo do atributo *id* do registro #2 na tabela owner.
+> Obs. 4: Como se trata de uma referência a uma entidade *Pessoa*, o valor do atributo *owner_id* do registro #2 deve ser o mesmo do atributo *id* do registro #2 na tabela owner.
 
 
 #### 1.1.3. Cartão (Card)
@@ -1062,3 +1072,5 @@ Mantive um padrão de formatação para os valores de duas casas decimais (000.0
 Rever o bloqueio na alteração dos valores das parcelas. Uma alternativa seria distribuir a diferença no valor entre as parcelas ainda não quitadas
 
 Considerar manter Transação e Parcela como uma entidade só, mas manter elas separadas no banco. Poderia ser mais fácil de manusear os dados no sistema, garantindo sua integridade, mas devo considerar o aumento no tamanho dos dados
+
+Ao invés de fazer apenas a inativição, utilizar também o softdelete, dessa forma a inativação seria apenas para organização dos dados, e o softdelete para quando não for mais necessário o registro

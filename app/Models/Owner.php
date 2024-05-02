@@ -3,41 +3,35 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Owner extends Model
 {
-    public function wallets()
+    protected $fillable = ['name', 'active'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function wallets(): HasMany
     {
-        return $this->hasMany(Wallet::class, 'owner');
+        return $this->hasMany(Wallet::class);
     }
 
-    public function mainWallet()
+    public function haveAmountsToPayOrReceive()
     {
-        $wallets = $this->wallets;
-
-        foreach ($wallets as $wallet) {
-            if ($wallet->ifMainWallet()) {
+        return $this->wallets->filter(function ($wallet) {
+            if ($wallet->haveAmountsToPayOrReceive()) {
                 return $wallet;
             }
-        }
-
-        return $wallets;
+        })->isNotEmpty();
     }
 
-    public function referentOwner()
+    public function getMainWallet()
     {
-        $name = $this->name;
-
-        switch ($name) {
-            case 'Não definida':
-                return 0;
-                break;
-            case 'Rafael':
-                return 1;
-                break;
-            default:
-                return 2;
-                break;
+        return $this->wallets->filter(function ($wallet) {
+            if ($wallet->main_wallet) {
+                return $wallet;
             }
+        })->first();
     }
 }

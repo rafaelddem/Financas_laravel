@@ -2,57 +2,87 @@
 
 namespace App\Http\Controllers;
 
+use \DB;
+use App\Exceptions\ActivationException;
+use App\Exceptions\InactivationException;
 use App\Http\Requests\WalletRequest;
-use App\Tasks\Wallet\Delete;
-use App\Tasks\Wallet\Insert;
-use App\Tasks\Wallet\LoadPage;
-use App\Tasks\Wallet\Update;
+use App\Models\Wallet;
+use App\Services\Wallet\WalletService;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        $id = isset($request->id) ? $request->id : 0;
-        return (new LoadPage)->run($id, "");
+        return app(WalletService::class)->loadPage($request->get('id', 0), "");
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(WalletRequest $request)
     {
         try {
-            (new Insert)->run($request);
+            DB::beginTransaction();
+
+            app(WalletService::class)->create($request->only('name', 'owner_id', 'main_wallet', 'active', 'description'));
 
             $message = 'Registro criado com sucesso';
+            DB::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             $message = 'Erro ao tentar criar o registro';
         }
 
-        return (new LoadPage)->run(0, $message);
+        return app(WalletService::class)->loadPage(0, $message);
     }
 
-    public function update(WalletRequest $request)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        return app(WalletService::class)->loadPage($request->get('id', $id), "");
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
     {
         try {
-            (new Update)->run($request);
+            DB::beginTransaction();
+
+            app(WalletService::class)->update($request->only('id', 'main_wallet', 'active', 'description'));
 
             $message = 'Registro atualizado com sucesso';
+            DB::commit();
+        } catch (ActivationException $inactivationException) {
+            DB::rollBack();
+            $message = 'Ativação de registro não permitida';
+        } catch (InactivationException $inactivationException) {
+            DB::rollBack();
+            $message = 'Inativação de registro não permitida';
         } catch (\Throwable $th) {
+            DB::rollBack();
             $message = 'Erro ao tentar atualizar o registro';
         }
 
-        return (new LoadPage)->run(0, $message);
-    }
-
-    public function destroy(int $id)
-    {
-        try {
-            (new Delete)->run($id);
-
-            $message = 'Registro excluído com sucesso';
-        } catch (\Throwable $th) {
-            $message = 'Erro ao tentar excluir o registro';
-        }
-
-        return (new LoadPage)->run(0, $message);
+        return app(WalletService::class)->loadPage(0, $message);
     }
 }

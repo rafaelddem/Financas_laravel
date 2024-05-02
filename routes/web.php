@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Owner;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\MovementTypeController;
@@ -27,11 +28,18 @@ Route::get('/', function () {return view('index');});
 
 Route::prefix('carteira')->group(function () {
     Route::get('/', [WalletController::class, 'index'])->name('listWallet');
-    Route::get('/{id}', [WalletController::class, 'index'])->name('findWallet');
-    Route::post('/novo', [WalletController::class, 'store'])->name('createWallet');
-    Route::post('/{id}/atualizar', [WalletController::class, 'update'])->name('updateWallet');
-    Route::post('/{id}/excluir', [WalletController::class, 'destroy'])->name('deleteWallet');
+    Route::post('/', [WalletController::class, 'store'])->name('createWallet');
+    Route::put('/', [WalletController::class, 'update'])->name('updateWallet');
+    Route::delete('/', [WalletController::class, 'destroy'])->name('deleteWallet');
 });
+
+Route::prefix('pessoa')->group(function () {
+    Route::get('/', [OwnerController::class, 'index'])->name('listOwner');
+    Route::post('/', [OwnerController::class, 'store'])->name('createOwner');
+    Route::put('/', [OwnerController::class, 'update'])->name('updateOwner');
+});
+
+
 
 Route::prefix('forma')->group(function () {
     Route::get('/', [PaymentMethodController::class, 'index'])->name('listPaymentMethod');
@@ -54,14 +62,6 @@ Route::prefix('pagamento')->group(function () {
     Route::get('/', [InstallmentController::class, 'index'])->name('listInstallment');
     Route::get('/{movement}-{installment_number}', [InstallmentController::class, 'index'])->name('findInstallment');
     Route::get('/12', [InstallmentController::class, 'index'])->name('deleteInstallment');
-});
-
-Route::prefix('pessoa')->group(function () {
-    Route::get('/', [OwnerController::class, 'index'])->name('listOwner');
-    Route::get('/{id}', [OwnerController::class, 'index'])->name('findOwner');
-    Route::post('/novo', [OwnerController::class, 'store'])->name('createOwner');
-    Route::post('/{id}/atualizar', [OwnerController::class, 'update'])->name('updateOwner');
-    Route::post('/{id}/excluir', [OwnerController::class, 'destroy'])->name('deleteOwner');
 });
 
 Route::prefix('tipo')->group(function () {

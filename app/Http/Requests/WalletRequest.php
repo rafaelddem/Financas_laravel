@@ -24,17 +24,22 @@ class WalletRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:50', 
-            'owner' => 'required|integer', 
+            'name' => 'required|min:3|max:30|regex:/^[a-zA-Z0-9 ,]+$/',
+            'owner_id' => 'required|integer',
+            'description' => 'max:255|regex:/^[a-zA-Z0-9 ,]+$/',
+            'active' => 'required_if:main_wallet,1|integer',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'O campo \'nome\' é obrigatório', 
-            'owner.required' => 'É necessário informa a quem pertence esta carteira', 
-            'name.max' => 'O campo \'nome\' deve se limitar a :max caracteres', 
+            'name.required' => 'O campo \'nome\' é obrigatório',
+            'name.min' => 'O campo \'nome\' deve contem pelo menos :min caracteres',
+            'name.max' => 'O campo \'nome\' deve se limitar a :max caracteres',
+            'owner_id.required' => 'É necessário informa a quem pertence esta carteira',
+            'name.regex' => 'O campo \'nome\' deve se limitar letras, números e espaços',
+            'active.required_if' => 'Não é possível inativar uma carteira que esteja marcada como sendo a principal',
         ];
     }
 }

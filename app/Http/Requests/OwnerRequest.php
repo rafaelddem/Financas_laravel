@@ -24,15 +24,18 @@ class OwnerRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:50', 
+            'name' => 'required|unique:owners|min:3|max:30|regex:/^[a-zA-Z 0-9]+$/',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'O campo \'nome\' é obrigatório', 
-            'name.max' => 'O campo \'nome\' deve se limitar a :max caracteres', 
+            'name.required' => 'O campo \'nome\' é obrigatório',
+            'name.unique' => 'O \'nome\' informado já está sendo utilizado por outra pessoa',
+            'name.min' => 'O campo \'nome\' deve contem pelo menos :min caracteres',
+            'name.max' => 'O campo \'nome\' deve se limitar a :max caracteres',
+            'name.regex' => 'O campo \'nome\' deve se limitar letras, números e espaços',
         ];
     }
 }
