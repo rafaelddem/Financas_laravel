@@ -39,7 +39,7 @@ A entidade *Pessoa* (internamente ao sistema, identificada como "owner") é a en
 
 #### 1.1.1.3. Banco de dados
 
-Nome da tabela: owner.
+Nome da tabela: owners.
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -145,7 +145,7 @@ A entidade *Carteira* (internamente ao sistema, identificada como "wallet") é a
 
 #### 1.1.2.3. Banco de dados
 
-Nome da tabela: wallet
+Nome da tabela: wallets
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -178,7 +178,7 @@ Nome da tabela: wallet
 - chave primária: 
     - id
 - chave estrangeira: 
-    - owner_id faz referência ao atributo "id" da tabela "owner"
+    - owner_id faz referência ao atributo "id" da tabela "owners"
 
 
 #### 1.1.2.4. Características da entidade
@@ -286,7 +286,7 @@ A entidade *Cartão* (internamente ao sistema, identificada como "card") é a en
 
 #### 1.1.3.3. Banco de dados
 
-Nome da tabela: card
+Nome da tabela: cards
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -325,7 +325,7 @@ Nome da tabela: card
 - chave primária: 
     - id
 - chave estrangeira: 
-    - wallet_id faz referência ao atributo "id" da tabela "wallet"
+    - wallet_id faz referência ao atributo "id" da tabela "wallets"
 
 
 #### 1.1.3.4. Características da entidade
@@ -425,7 +425,7 @@ Nome da tabela: credit_card_dates
 
 - Característica #1: Os registros das *Fatura*s serão gerados exclusivamente pelo sistema. Uma rotina diária verificará a necessidade de fechamento e criação de *Fatura*s;
 
-- Característica #2: Somente registros das *Fatura*s antigas e da atual serão mantidos, *Fatura*s futuras não devem ser salvas, uma vez que não a garantia sobre suas datas;
+- Característica #2: Somente registros das *Fatura*s antigas e da atual serão mantidos, *Fatura*s futuras não devem ser salvas, uma vez que não ha garantia sobre suas datas;
 
 - Característica #3: As *Fatura*s terão quatro "estados": Aberta, Fechada, Quitada e Vencida. Mais detalhes sobre estes estados na Tarefa #1 (item 1.1.4.5);
 
