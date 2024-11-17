@@ -43,7 +43,9 @@ Carteira
                             @csrf @method('PUT')
                             <input type="hidden" name="id" value={{$wallet->id}}>
                             <input type="hidden" name="active" @if ($wallet->active) value="0" @else value="1" @endif>
-                            <input class="btn btn-primary" type="submit" @if ($wallet->active) value="Inativar" @else value="Ativar" @endif >
+                            @if (!$wallet->main_wallet)
+                                <input class="btn btn-primary" type="submit" @if ($wallet->active) value="Inativar" @else value="Ativar" @endif >
+                            @endif
                         </form>
                     </span>
                 </li>

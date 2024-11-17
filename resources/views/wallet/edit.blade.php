@@ -12,7 +12,7 @@
                     <input type="checkbox" name="main_wallet" id="main_wallet" value=1 @if ($wallet->main_wallet) checked @endif @if ($wallet->main_wallet) disabled @endif >
                     <br />
                     <label for="nome">Ativo</label>
-                    <input type="checkbox" name="active" id="active" value=1 @if ($wallet->active) checked @endif >
+                    <input type="checkbox" name="active" id="active" value=1 @if ($wallet->active) checked @endif @if ($wallet->main_wallet) disabled @endif >
                     <br />
                     <input class="btn btn-primary mt-2" type="submit" value="Atualizar">
                     <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{route('listWallet')}}';">
