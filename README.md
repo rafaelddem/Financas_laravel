@@ -606,9 +606,9 @@ Nome da tabela: payment_method.
 
 - Característica #2: Não é permitido a alteração dos atributos da entidade, exceto o atributo *ativo* (ver característica #3 para mais detalhe);
 
-- Característica #3: Não é permitido a exclusão de um registro de *Método de Pagamento*, apenas sua inativação. Sendo que a inativação de um registro só poderá ser feita se o mesmo não estiver relacionado a nenhum outro registro.
+- Característica #3: É permitido a exclusão de um registro de *Método de Pagamento* apenas se o mesmo não estiver relacionado a nenhum outro registro.
 
-- Característica #4: Caso seja necessário inativar um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento* ativo, que tenha o mesmo valor para o atributo "tipo".
+- Característica #4: Caso seja necessário excluir um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento* ativo, que tenha o mesmo valor para o atributo "tipo".
 
 
 #### 1.1.5.5. Valores pré cadastrados
@@ -834,9 +834,9 @@ Nome da tabela: transaction.
 
 - Característica #1: A exclusão de uma *Transação*, ou a alteração de seus atributos, está condicionada ao estado da(s) *Fatura*(s) a que sua(s) *Parcela*(s) pertence(m) (Tarefa #2, item 1.1.7.5);
 
-- Característica #2: O valor informado nos atributos "data de processamento* e *data da transação*, por padrão, será igual. Caso sejam diferentes, o valor informado no atributo *data de processamento* deve ser maior que o valor informado no atributo *data da transação*, e a diferença entre os dois valores não deve ser maior que 2 dias.
+- Característica #2: O valor informado nos atributos "data de processamento* e *data da transação*, por padrão, será igual. Caso sejam diferentes, o valor informado no atributo *data de processamento* deve ser maior que o valor informado no atributo *data da transação*, e a diferença entre os dois valores não deve ser maior que 3 dias.
 
-- Característica #3: O valor informado no atributo *data de processamento* deve pertencer a uma *Fatura* marcada como "Aberta" ou "Fechada" (Tarefa #1, item 1.1.7.5).
+- Característica #3: O valor informado no atributo *data de processamento*, quando o *Método de Pagamento* for "crédito", deve pertencer a uma *Fatura* marcada como "Aberta" ou "Fechada" (Tarefa #1, item 1.1.7.5).
 
 - Característica #4: O valor da *Transação* deve ser igual a soma dos valores das suas *Parcela*s (Tarefa #3, item 1.1.7.5).
 
@@ -845,6 +845,8 @@ Nome da tabela: transaction.
 - Característica #6: O *valor líquido* da *Transação* não será mantido no sistema, ao invés disso, será calculado no momento que for solicitado. Seu cálculo será feito somando o *valor líquido* de cada uma das *Parcela*s da *Transação* em questão.
 
 - Característica #7: Por padrão, o valor do atributo *relevância* será igual ao valor do mesmo atributo da entidade *Tipo de Transação* selecionado, porém, esse valor pode ser alterado a qualquer momento.
+
+- Característica #8: Quando feita uma exclusão de uma *Transação* (rever Característica #1), sua(s) *Parcela*(s) serão excluídas também, bem como será feito o recalculo da(s) *Fatura*(s) relacionada(s);
 
 
 #### 1.1.7.5. Tarefas

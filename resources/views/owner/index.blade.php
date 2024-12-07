@@ -22,7 +22,7 @@ Pessoa
 <div class="container">
     <div class="row">
         <div class="col">
-            <form method="post" action="{{route('createOwner')}}">
+            <form method="post" action="{{route('owner.create')}}">
                 @csrf
                 <div class="container">
                     <label for="name">Nome</label>
@@ -45,7 +45,7 @@ Pessoa
                     @endif
 
                     <span class="d-flex">
-                        <form method="post" action="{{route('updateOwner')}}">
+                        <form method="post" action="{{route('owner.update')}}">
                             @csrf @method('PUT')
                             <input type="hidden" name="id" value={{$itemOwner->id}}>
                             <input type="hidden" name="active" @if ($itemOwner->active) value="0" @else value="1" @endif>

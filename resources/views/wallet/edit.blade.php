@@ -1,4 +1,4 @@
-            <form method="post" action="{{route('updateWallet', ['id' => $wallet->id])}}">
+            <form method="post" action="{{route('wallet.update', ['id' => $wallet->id])}}">
                 @csrf
                 @method('PUT')
                 <div class="container">
@@ -15,6 +15,6 @@
                     <input type="checkbox" name="active" id="active" value=1 @if ($wallet->active) checked @endif @if ($wallet->main_wallet) disabled @endif >
                     <br />
                     <input class="btn btn-primary mt-2" type="submit" value="Atualizar">
-                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{route('listWallet')}}';">
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{route('wallet.list')}}';">
                 </div>
             </form>

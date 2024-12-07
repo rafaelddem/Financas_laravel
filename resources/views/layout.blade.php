@@ -37,10 +37,9 @@
                         Cadastros
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/tipo">Tipo de movimento</a></li>
-                        <li><a class="dropdown-item" href="/forma">Forma de Pagamento</a></li>
-                        <li><a class="dropdown-item" href="/carteira">Carteira</a></li>
-                        <li><a class="dropdown-item" href="/pessoa">Pessoa</a></li>
+                        <li><a class="dropdown-item" href="{{route('owner.list')}}">Pessoa</a></li>
+                        <li><a class="dropdown-item" href="{{route('wallet.list')}}">Carteira</a></li>
+                        <li><a class="dropdown-item" href="{{route('transaction-type.list')}}">Tipo de Transação</a></li>
                     </ul>
                 </li>
             </ul>

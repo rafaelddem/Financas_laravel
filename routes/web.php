@@ -1,12 +1,13 @@
 <?php
 
 use App\Models\Owner;
-use App\Http\Controllers\InstallmentController;
-use App\Http\Controllers\MovementController;
-use App\Http\Controllers\MovementTypeController;
 use App\Http\Controllers\OwnerController;
-use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\TransactionTypeController;
 use App\Http\Controllers\WalletController;
+
+use App\Http\Controllers\InstallmentController;
+use App\Http\Controllers\MovementTypeController;
+use App\Http\Controllers\PaymentMethodController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,17 +27,25 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return view('index');});
 
-Route::prefix('carteira')->group(function () {
-    Route::get('/', [WalletController::class, 'index'])->name('listWallet');
-    Route::post('/', [WalletController::class, 'store'])->name('createWallet');
-    Route::put('/', [WalletController::class, 'update'])->name('updateWallet');
-    Route::delete('/', [WalletController::class, 'destroy'])->name('deleteWallet');
+Route::group(['prefix' => 'carteira', 'as' => 'wallet.'], function () {
+    Route::get('/', [WalletController::class, 'index'])->name('list');
+    Route::post('/', [WalletController::class, 'store'])->name('create');
+    Route::put('/', [WalletController::class, 'update'])->name('update');
+    Route::delete('/', [WalletController::class, 'destroy'])->name('delete');
 });
 
-Route::prefix('pessoa')->group(function () {
-    Route::get('/', [OwnerController::class, 'index'])->name('listOwner');
-    Route::post('/', [OwnerController::class, 'store'])->name('createOwner');
-    Route::put('/', [OwnerController::class, 'update'])->name('updateOwner');
+Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
+    Route::get('/', [OwnerController::class, 'index'])->name('list');
+    Route::post('/', [OwnerController::class, 'store'])->name('create');
+    Route::put('/', [OwnerController::class, 'update'])->name('update');
+});
+
+Route::group(['prefix' => 'tipo-de-transacao', 'as' => 'transaction-type.'], function () {
+    Route::get('/', [TransactionTypeController::class, 'index'])->name('list');
+    // Route::get('/{id}', [MovementTypeController::class, 'index'])->name('findMovementType');
+    // Route::post('/novo', [MovementTypeController::class, 'store'])->name('createMovementType');
+    // Route::post('/{id}/atualizar', [MovementTypeController::class, 'update'])->name('updateMovementType');
+    // Route::post('/{id}/excluir', [MovementTypeController::class, 'destroy'])->name('deleteMovementType');
 });
 
 
@@ -62,12 +71,4 @@ Route::prefix('pagamento')->group(function () {
     Route::get('/', [InstallmentController::class, 'index'])->name('listInstallment');
     Route::get('/{movement}-{installment_number}', [InstallmentController::class, 'index'])->name('findInstallment');
     Route::get('/12', [InstallmentController::class, 'index'])->name('deleteInstallment');
-});
-
-Route::prefix('tipo')->group(function () {
-    Route::get('/', [MovementTypeController::class, 'index'])->name('listMovementType');
-    Route::get('/{id}', [MovementTypeController::class, 'index'])->name('findMovementType');
-    Route::post('/novo', [MovementTypeController::class, 'store'])->name('createMovementType');
-    Route::post('/{id}/atualizar', [MovementTypeController::class, 'update'])->name('updateMovementType');
-    Route::post('/{id}/excluir', [MovementTypeController::class, 'destroy'])->name('deleteMovementType');
 });

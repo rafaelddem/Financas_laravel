@@ -1,4 +1,4 @@
-            <form method="post" action=" {{route('createWallet')}} ">
+            <form method="post" action=" {{route('wallet.create')}} ">
                 @csrf
                 <div class="container">
                     <label for="name">Nome</label>

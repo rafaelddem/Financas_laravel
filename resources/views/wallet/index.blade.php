@@ -38,8 +38,8 @@ Carteira
                     @endif
 
                     <span class="d-flex">
-                        <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='{{route('listWallet', ['id' => $wallet->id])}}';">
-                        <form method="post" action="{{route('updateWallet')}}">
+                        <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='{{route('wallet.list', ['id' => $wallet->id])}}';">
+                        <form method="post" action="{{route('wallet.update')}}">
                             @csrf @method('PUT')
                             <input type="hidden" name="id" value={{$wallet->id}}>
                             <input type="hidden" name="active" @if ($wallet->active) value="0" @else value="1" @endif>
