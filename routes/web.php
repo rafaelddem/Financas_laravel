@@ -2,12 +2,12 @@
 
 use App\Models\Owner;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionTypeController;
 use App\Http\Controllers\WalletController;
 
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\MovementTypeController;
-use App\Http\Controllers\PaymentMethodController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/', function () {return view('index');});
 
@@ -42,21 +38,21 @@ Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
 
 Route::group(['prefix' => 'tipo-de-transacao', 'as' => 'transaction-type.'], function () {
     Route::get('/', [TransactionTypeController::class, 'index'])->name('list');
-    // Route::get('/{id}', [MovementTypeController::class, 'index'])->name('findMovementType');
-    // Route::post('/novo', [MovementTypeController::class, 'store'])->name('createMovementType');
-    // Route::post('/{id}/atualizar', [MovementTypeController::class, 'update'])->name('updateMovementType');
-    // Route::post('/{id}/excluir', [MovementTypeController::class, 'destroy'])->name('deleteMovementType');
+    Route::post('/', [TransactionTypeController::class, 'store'])->name('store');
+    Route::put('/', [TransactionTypeController::class, 'update'])->name('update');
+    Route::delete('/', [TransactionTypeController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['prefix' => 'metodo-de-pagamento', 'as' => 'payment-method.'], function () {
+    Route::get('/', [PaymentMethodController::class, 'index'])->name('list');
+    Route::post('/', [PaymentMethodController::class, 'store'])->name('store');
+    Route::put('/', [PaymentMethodController::class, 'update'])->name('update');
+    Route::delete('/', [PaymentMethodController::class, 'destroy'])->name('destroy');
 });
 
 
 
-Route::prefix('forma')->group(function () {
-    Route::get('/', [PaymentMethodController::class, 'index'])->name('listPaymentMethod');
-    Route::get('/{id}', [PaymentMethodController::class, 'index'])->name('findPaymentMethod');
-    Route::post('/novo', [PaymentMethodController::class, 'store'])->name('createPaymentMethod');
-    Route::post('/{id}/atualizar', [PaymentMethodController::class, 'update'])->name('updatePaymentMethod');
-    Route::post('/{id}/excluir', [PaymentMethodController::class, 'destroy'])->name('deletePaymentMethod');
-});
+
 
 Route::prefix('movimento')->group(function () {
     Route::get('/', [MovementController::class, 'index'])->name('listMovements');

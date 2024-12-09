@@ -40,6 +40,7 @@
                         <li><a class="dropdown-item" href="{{route('owner.list')}}">Pessoa</a></li>
                         <li><a class="dropdown-item" href="{{route('wallet.list')}}">Carteira</a></li>
                         <li><a class="dropdown-item" href="{{route('transaction-type.list')}}">Tipo de Transação</a></li>
+                        <li><a class="dropdown-item" href="{{route('payment-method.list')}}">Método de Pagamento</a></li>
                     </ul>
                 </li>
             </ul>
