@@ -16,7 +16,8 @@ class CreateTransactionTypesTable extends Migration
         Schema::create('transaction_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 45)->unique()->nullable(false);
-            $table->integer('relevance');
+            $table->enum('relevance', ['banal', 'relevant', 'indispensable'])->nullable(false);
+            $table->boolean('active')->default(true);
         });
     }
 

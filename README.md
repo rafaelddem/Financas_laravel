@@ -561,9 +561,15 @@ A entidade *Método de Pagamento* (internamente ao sistema, identificada como "p
 - tipo (type):
     - objetivo:             Definir se a entidade se refere a transações feitas por dinheiro físico (cédulas e/ou moedas), transações bancárias, débito ou crédito;
     - obrigatório:          Sim;
-    - tipo dado:            Numérico;
-    - valores aceitos:      0 (para cédulas e/ou moedas), 1 (para transações bancárias), 2 (para débito) ou 3 (para crédito);
+    - tipo dado:            Enum;
+    - valores aceitos:      'notes' (para cédulas e/ou moedas), 'transfer' (para transações bancárias), 'debit' (para débito) ou 'credit' (para crédito);
     - alteração:            Não permitida.
+- ativo (active):
+    - objetivo:             Permitir que um registro seja ocultado dos resultados, mas sem excluí-lo;
+    - obrigatório:          Sim;
+    - tipo dado:            Boleano;
+    - valor default:        true;
+    - alteração:            Permitida.
 
 
 #### 1.1.5.3. Banco de dados
@@ -582,9 +588,12 @@ Nome da tabela: payment_method.
     - não permite valor nulo;
     - valor único.
 - type: Referente ao atributo "tipo". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
+    - tipo: enum;
+    - valores aceitos: 'notes', 'transfer', 'debit' ou 'credit';
     - não permite valor nulo.
+- active: Referente ao atributo "ativo". Terá as seguintes características:
+    - tipo: boolean;
+    - valor default: true.
 
 - chave primária:
     - id
@@ -600,21 +609,19 @@ Nome da tabela: payment_method.
 
 - Característica #4: Caso seja necessário excluir um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento*, que tenha o mesmo valor para o atributo "tipo".
 
-- Característica #5: Os valores aceitos para o campo 'type' são: '0' para cédulas e/ou moedas, '1' para transações bancárias, '2' para débito e '3' para crédito;
-
 
 #### 1.1.5.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (payment_method):
 
-| Registro | id  | name            | type | Objetivo                                                                             |
-| :------: | :-: | :-------------- | :--: | :----------------------------------------------------------------------------------- |
-| #1       | 1   | Dinheiro físico | 0    | Método padrão para movimentações feitas em dinheiro físico, como cédulas e moedas    |
-| #2       | 2   | Transação       | 1    | Método padrão para movimentações feitas com transações bancárias como PIX, TED e DOC |
-| #3       | 3   | Cartão crédito  | 2    | Método padrão para movimentações pagas com cartão de crédito                         |
-| #4       | 4   | Cartão débito   | 3    | Método padrão para movimentações pagas com cartão de débito                          |
+| Registro | id  | name            | type     | active | Objetivo                                                                             |
+| :------: | :-: | :-------------: | :------: | :----: | :----------------------------------------------------------------------------------: |
+| #1       | 1   | Dinheiro físico | notes    | true   | Método padrão para movimentações feitas em dinheiro físico, como cédulas e moedas    |
+| #2       | 2   | Transação       | transfer | true   | Método padrão para movimentações feitas com transações bancárias como PIX, TED e DOC |
+| #3       | 3   | Cartão débito   | debit    | true   | Método padrão para movimentações pagas com cartão de débito                          |
+| #4       | 4   | Cartão crédito  | credit   | true   | Método padrão para movimentações pagas com cartão de crédito                         |
 
-> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores, o valor aqui definido seja respeitado;
+> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores o valor aqui definido seja respeitado, além de atualizar o auto incremento para a partir do maior 'id'.
 
 > Obs. 2: O valor do atributo *active* pode ser **1** ou **true**, dependendo do banco de dados utilizado.
 
@@ -639,9 +646,14 @@ A entidade *Tipo de Transação* (internamente ao sistema, identificada como "tr
     - objetivo:             Definir a relevância padrão da transação ao qual esse registro é relacionado;
     - obrigatório:          Sim;
     - tipo dado:            Numérico;
-    - valores aceitos:      0 (Banal), 1 (Relevante) ou 2 (Indispensável);
+    - valores aceitos:      banal (Banal), relevant (Relevante) ou indispensable (Indispensável);
     - alteração:            Permitida.
-
+- ativo (active):
+    - objetivo:             Permitir que um registro seja ocultado dos resultados, mas sem excluí-lo;
+    - obrigatório:          Sim;
+    - tipo dado:            Boleano;
+    - valor default:        true;
+    - alteração:            Permitida.
 
 #### 1.1.6.3. Banco de dados
 
@@ -659,9 +671,12 @@ Nome da tabela: transaction_type.
     - não permite valor nulo;
     - valor único.
 - relevance: Referente ao atributo "relevância". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
+    - tipo: enum;
+    - valores aceitos: 'banal', 'relevant' ou 'indispensable';
     - não permite valor nulo.
+- active: Referente ao atributo "ativo". Terá as seguintes características:
+    - tipo: boolean;
+    - valor default: true.
 
 - chave primária:
     - id
@@ -675,7 +690,7 @@ Nome da tabela: transaction_type.
 
 - Característica #3: Caso seja necessário a exclusão de algum *Tipo de Transação*, ela somente será permitida se o registro em questão não tiver referência em nenhuma *Transação*. Se for o caso, a *Transação* terá que ter seu *Tipo de Transação* alterado para outro registro ativo para liberar a exclusão do *Tipo de Transação* antigo (Tarefa #1, item 1.1.6.5);
 
-- Característica #4: Os valores aceitos para o campo 'relevância' são: '0' para 'Banal', '1' para 'Relevante' ou '2' para 'Indispensável'.
+- Característica #4: Os valores aceitos para o campo 'relevância' são: 'banal' para 'Banal', 'relevant' para 'Relevante' ou 'indispensable' para 'Indispensável'.
 
 
 #### 1.1.6.5. Tarefas
@@ -690,13 +705,15 @@ Tarefa #1: Alterar o *Tipo de Transação* de todas os registros de *Transação
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (transaction_type):
 
-| Registro | id  | name                         | relevance | Objetivo                                                                                                                                                                  |
-| :------: | :-: | :--------------------------- | :-------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| #1       | 1   | Entradas diversas            | 1         | Tipo de Transação padrão para movimentações que transferem valores de entrada, (considerando o usuário como recebedor), como recebimento de salário e empréstimos                                                                                                                                      |
-| #2       | 2   | Saídas diversas              | 1         | Tipo de Transação padrão para movimentações que transferem valores de saída, (considerando o usuário como quem paga), como pagamento de contas e devolução de empréstimos                                                                                                                            |
-| #3       | 3   | Movimentação entre carteiras | 1         | Tipo de Transação padrão para movimentações que transferem valores de uma carteira para outra, de um mesmo dono                                                                                                                                                                      |
+| Registro | id  | name                         | relevance | active | Objetivo                                                                                                                                                                  |
+| :------: | :-: | :--------------------------- | :-------: | :----: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| #1       | 1   | Entradas diversas            | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de entrada, (considerando o usuário como recebedor), como recebimento de salário e empréstimos                                                                                                                                      |
+| #2       | 2   | Saídas diversas              | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de saída, (considerando o usuário como quem paga), como pagamento de contas e devolução de empréstimos                                                                                                                            |
+| #3       | 3   | Movimentação entre carteiras | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de uma carteira para outra, de um mesmo dono                                                                                                                                                                      |
 
-> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores, o valor aqui definido seja respeitado;
+> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores o valor aqui definido seja respeitado, além de atualizar o auto incremento para a partir do maior 'id'.
+
+> Obs. 2: O valor do atributo *active* pode ser **1** ou **true**, dependendo do banco de dados utilizado.
 
 
 #### 1.1.7. Transação (Transaction)
@@ -1047,13 +1064,15 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 Possíveis alterações no projeto:
 
+Alterar para que Metodos de Pagamento e Tipos de Transação permitam inativações, e dessa forma, possa 'esconder' um cadastro não utilizado, mas sem excluí-lo
+
 Alterar os campos char para enum.
 
 No tipo de transações, ver a necessidade de um ca po 'descrição' e um campo 'nome abreviado'.
 
 No tipo de transações, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
 
-Bloqueei a alterações dos nomes ṕor que creio que isso cria a possibilidade de que o usuário fique trocando o nome de uma determinada entidade, e depois de algum tempo o histórico de movimentos da entidade tenha valores misturados. Por exemplo: Nomear um Cartão como "Banco A" e depois renomear para "Banco B". Tal alteração faria com que os movimentos relativos ao primeiro cartão "se misturassem" com os movimentos do segundo, já que para o sistema, os dois cartões sempre foram o mesmo cartão, apenas com nomes diferentes. No entanto, isso cria um cenário onde o usuário não pode corrigir erros de digitação, depois de a entidade salva, sendo necessário (para a correção) a exclusão e recriação da entidade. Uma alternativa de correção seria criar uma tabela adicional, com o registro dos nomes das entidades, antigos e o atual. Nesse caso, a tabela não teria o registro do nome da entidade, mas sim, uma referência a um registro na tabela "Nomes".
+Bloqueei a alterações dos nomes por que creio que isso cria a possibilidade de que o usuário fique trocando o nome de uma determinada entidade, e depois de algum tempo o histórico de movimentos da entidade tenha valores misturados. Por exemplo: Nomear um Cartão como "Banco A" e depois renomear para "Banco B". Tal alteração faria com que os movimentos relativos ao primeiro cartão "se misturassem" com os movimentos do segundo, já que para o sistema, os dois cartões sempre foram o mesmo cartão, apenas com nomes diferentes. No entanto, isso cria um cenário onde o usuário não pode corrigir erros de digitação, depois de a entidade salva, sendo necessário (para a correção) a exclusão e recriação da entidade. Uma alternativa de correção seria criar uma tabela adicional, com o registro dos nomes das entidades, antigos e o atual. Nesse caso, a tabela não teria o registro do nome da entidade, mas sim, uma referência a um registro na tabela "Nomes".
 
 Mantive um padrão de formatação para os valores de duas casas decimais (000.00), mas tenho receio de que isso crie problemas de arredondamento em algum cálculo. Uma possível alternativa seria manter o valor, mas ignorar a marcação de casas decimais, por exemplo, nesse caso o número "123.45" se tornaria "12345". Preciso ver se isso realmente soluciona o problema, uma vez que adiciona mais uma camada de tratamento dos valores.
 

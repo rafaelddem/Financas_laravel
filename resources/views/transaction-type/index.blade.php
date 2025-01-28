@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('header')
-Tipo de Transação
+{{__('Transaction Type')}}
 @endsection
 
 @section('content')
@@ -21,26 +21,24 @@ Tipo de Transação
 <br />
 <div class="container">
     <div class="row">
-        <div class="col">
-            @if (isset($transactionType))
-                @include('transaction-type.edit', ['transactionType' => $transactionType])
-            @else
-                @include('transaction-type.create')
-            @endif
-        </div>
+        <a href="{{ route('transaction-type.create') }}" class="btn btn-primary">Novo</a>
+    </div>
+    <br>
+    <div class="row">
         <div class="col">
             <ul class="list-group">
                 @foreach($transactionTypes as $transactionType)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ $transactionType->name }}
                     @switch($transactionType->relevance)
-                        @case(0) (Banal) @break
-                        @case(1) (Relevante) @break
-                        @case(2) (Importante) @break
+                        @case('banal') ({{__('Banal')}}) @break
+                        @case('relevant') ({{__('Relevant')}}) @break
+                        @case('indispensable') ({{__('Indispensable')}}) @break
                     @endswitch
 
                     <span class="d-flex">
-                        <form method="get" action="{{route('transaction-type.list', ['id' => $transactionType->id])}}">
+                        <form method="post" action="{{route('transaction-type.edit')}}">
+                            @csrf
                             <input type="hidden" name="id" value={{$transactionType->id}}>
                             <button type="submit" class="btn btn-primary">Editar</button>
                         </form>

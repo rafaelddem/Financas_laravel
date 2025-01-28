@@ -18,17 +18,17 @@ class TransactionTypeSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Entradas diversas',
-                'relevance' => 1,
+                'relevance' => 'banal',
             ],
             [
                 'id' => 2,
                 'name' => 'Saídas diversas',
-                'relevance' => 1,
+                'relevance' => 'banal',
             ],
             [
                 'id' => 3,
                 'name' => 'Movimentação entre carteiras',
-                'relevance' => 1,
+                'relevance' => 'banal',
             ],
         ]);
     }

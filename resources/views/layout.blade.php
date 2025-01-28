@@ -25,10 +25,10 @@
                         Movimento
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{route('createMovements')}}">Cadastrar novo</a></li>
+                        <li><a class="dropdown-item" href="{{route('owner.list')}}">Cadastrar novo</a></li>
                         <li><a class="dropdown-item" href="/pagamento">Efetuar pagamento</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{route('listMovements')}}">Movimentos</a></li>
+                        <li><a class="dropdown-item" href="{{route('owner.list')}}">Movimentos</a></li>
                     </ul>
                 </li>
 
@@ -37,10 +37,10 @@
                         Cadastros
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{route('owner.list')}}">Pessoa</a></li>
-                        <li><a class="dropdown-item" href="{{route('wallet.list')}}">Carteira</a></li>
-                        <li><a class="dropdown-item" href="{{route('transaction-type.list')}}">Tipo de Transação</a></li>
-                        <li><a class="dropdown-item" href="{{route('payment-method.list')}}">Método de Pagamento</a></li>
+                        <li><a class="dropdown-item" href="{{route('owner.list')}}">{{__('Owner')}}</a></li>
+                        <li><a class="dropdown-item" href="{{route('wallet.list')}}">{{__('Wallet')}}</a></li>
+                        <li><a class="dropdown-item" href="{{route('transaction-type.list')}}">{{__('Transaction Type')}}</a></li>
+                        <li><a class="dropdown-item" href="{{route('payment-method.list')}}">{{__('Payment Method')}}</a></li>
                     </ul>
                 </li>
             </ul>

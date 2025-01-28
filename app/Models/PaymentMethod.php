@@ -11,5 +11,5 @@ class PaymentMethod extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'type'];
+    protected $fillable = ['name', 'type', 'active'];
 }

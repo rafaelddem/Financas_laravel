@@ -2,96 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PaymentMethod\PaymentMethodService;
+use App\Exceptions\BaseException;
+use App\Http\Requests\PaymentMethodRequest;
+use App\Services\PaymentMethodService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PaymentMethodController extends Controller
 {
     private PaymentMethodService $service;
 
-    public function __contruct()
+    public function __construct()
     {
         $this->service = app(PaymentMethodService::class);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
-        return $this->service->loadPage($request->get('id', 0), "");
+        $paymentMethods = [];
+
+        try {
+            $paymentMethods = $this->service->list();
+            $message = $request->get('message');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return view('payment-method.index', compact('paymentMethods', 'message'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function create()
+    {
+        return view('payment-method.create');
+    }
+
+    public function store(PaymentMethodRequest $request)
     {
         try {
-            DB::beginTransaction();
-
             $this->service->create($request->all());
 
-            $message = 'Registro criado com sucesso';
-            DB::commit();
+            $message = __('Data created successfully');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            $message = 'Erro ao tentar criar o registro';
-            DB::rollBack();
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return $this->service->loadPage(0, $message);
+        return redirect(route('payment-method.list', compact('message')));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
+    public function update(PaymentMethodRequest $request)
     {
+        $message = '';
+
         try {
-            DB::beginTransaction();
+            $this->service->update($request->get('id'), $request->only(['active']));
 
-            $this->service->update($request['id'], $request->only('type'));
-
-            $message = 'Registro atualizado com sucesso';
-            DB::commit();
+            $message = __('Data updated successfully');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            DB::rollBack();
-            $message = 'Erro ao tentar atualizar o registro';
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return $this->service->loadPage(0, $message);
+        return redirect(route('payment-method.list', compact('message')));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request)
     {
-        try {
-            DB::beginTransaction();
-
-            $this->service->destroy($request['id'], $request->only('type'));
-
-            $message = 'Registro removido com sucesso';
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            $message = 'Erro ao tentar remover o registro';
-        }
-
-        return $this->service->loadPage(0, $message);
+        // $message = __('Data deleted successfully');
+        $message = __('Função ainda não implementada');
+        return redirect(route('payment-method.list', compact('message')));
     }
 }

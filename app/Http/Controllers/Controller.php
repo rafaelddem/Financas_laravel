@@ -10,4 +10,6 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    const DEFAULT_CONTROLLER_ERROR = 'An error occurred while performing the action. Please try again or contact support.';
 }

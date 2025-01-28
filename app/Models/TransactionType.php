@@ -11,5 +11,5 @@ class TransactionType extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'relevance'];
+    protected $fillable = ['name', 'relevance', 'active'];
 }

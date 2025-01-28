@@ -1,3 +1,27 @@
+@extends('layout')
+
+@section('header')
+{{__('Transaction Type')}}
+@endsection
+
+@section('content')
+@if ($errors->any())
+    <div class="alert alert-danger">
+        @foreach ($errors->all() as $error)
+            {{ $error }}<br />
+        @endforeach
+    </div>
+@endif
+@if(!empty($message))
+<div class="alert alert-success">
+    {{ $message }}
+</div>
+@endif
+
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col">
             <form method="post" action=" {{route('transaction-type.store')}} ">
                 @csrf
                 <div class="container">
@@ -6,11 +30,19 @@
                     <br />
                     <label for="relevance">Relevância:</label>
                     <select class="form-select" aria-label=".form-select-sm example" name="relevance" id="relevance">
-                        <option value="0">Banal</option>
-                        <option value="1">Relevante</option>
-                        <option value="2">Importante</option>
+                        <option value='banal'>{{__('Banal')}}</option>
+                        <option value='relevant'>{{__('Relevant')}}</option>
+                        <option value='indispensable'>{{__('Indispensable')}}</option>
                     </select>
+                    <br />
+                    <label for="active">Ativo</label>
+                    <input type="hidden" name="active" value=false>
+                    <input type="checkbox" name="active" value=true checked>
                     <br />
                     <button type="submit" class="btn btn-primary mt-2">Adicionar</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+@endsection

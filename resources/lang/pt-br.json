@@ -1,0 +1,28 @@
+{
+    "An error occurred while performing the action. Please try again or contact support.": "Ocorreu um erro ao executar a ação. Tente novamente ou entre em contato com o suporte.",
+    "An error was encountered while trying to apply the rules required for the action. Please try again or contact support.": "Foi encontrado um erro ao tentar aplicar as regras necessárias para a ação. Tente novamente ou entre em contato com o suporte.",
+    "An error occurred while trying to perform the action on the database. Please try again or contact support.": "Ocorreu um erro ao tentar executar a ação na base de dados. Tente novamente ou entre em contato com o suporte.",
+
+    "The reported record was not found.": "O registro relatado não foi encontrado.",
+
+    "Function not yet implemented": "Função ainda não implementada",
+    "Data created successfully": "Registro criado com sucesso",
+    "Data updated successfully": "Registro atualizado com sucesso",
+    "Data deleted successfully": "Registro removido com sucesso",
+
+    "Owner": "Dono",
+    "Wallet": "Carteira",
+
+    "Payment Method": "Método de Pagamento",
+    "Notes": "Cédulas e/ou Moedas",
+    "Transfer": "Transações Bancárias",
+    "Debit": "Débito",
+    "Credit": "Crédito",
+
+    "Transaction Type": "Tipo de Transação",
+    "Banal": "Banal",
+    "Relevant": "Relevante",
+    "Indispensable": "Importante",
+
+    "": ""
+}

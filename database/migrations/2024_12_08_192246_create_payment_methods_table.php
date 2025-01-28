@@ -16,7 +16,8 @@ class CreatePaymentMethodsTable extends Migration
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 30)->unique()->nullable(false);
-            $table->integer('type');
+            $table->enum('type', ['notes', 'transfer', 'debit', 'credit'])->nullable(false);
+            $table->boolean('active')->default(true);
         });
     }
 
