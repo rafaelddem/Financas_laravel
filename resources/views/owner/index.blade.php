@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('header')
-Pessoa
+{{__('Owner')}}
 @endsection
 
 @section('content')
@@ -37,7 +37,7 @@ Pessoa
         </div>
         <div class="col">
             <ul class="list-group">
-                @foreach($listOwners as $itemOwner)
+                @foreach($owners as $itemOwner)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ $itemOwner->name }}
                     @if(!$itemOwner->active)
@@ -48,8 +48,8 @@ Pessoa
                         <form method="post" action="{{route('owner.update')}}">
                             @csrf @method('PUT')
                             <input type="hidden" name="id" value={{$itemOwner->id}}>
-                            <input type="hidden" name="active" @if ($itemOwner->active) value="0" @else value="1" @endif>
-                            <input class="btn btn-primary" type="submit" @if ($itemOwner->active) value="Inativar" @else value="Ativar" @endif >
+                            <input type="hidden" name="active" value={{!$itemOwner->active}}>
+                            <button type="submit" class="btn btn-primary">@if ($itemOwner->active) Inativar @else Ativar @endif</button>
                         </form>
                     </span>
                 </li>

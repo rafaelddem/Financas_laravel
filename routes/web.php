@@ -1,14 +1,10 @@
 <?php
 
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionTypeController;
-use Illuminate\Support\Facades\Route;
-
-
-use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\WalletController;
-use App\Http\Controllers\InstallmentController;
-use App\Http\Controllers\MovementTypeController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +18,21 @@ use App\Http\Controllers\MovementTypeController;
 */
 
 Route::get('/', function () {return view('index');});
+
+Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
+    Route::get('/', [OwnerController::class, 'index'])->name('list');
+    Route::post('/', [OwnerController::class, 'store'])->name('create');
+    Route::put('/', [OwnerController::class, 'update'])->name('update');
+});
+
+Route::group(['prefix' => 'carteira', 'as' => 'wallet.'], function () {
+    Route::get('/', [WalletController::class, 'index'])->name('list');
+    Route::get('/novo', [WalletController::class, 'create'])->name('create');
+    Route::post('/', [WalletController::class, 'store'])->name('store');
+    Route::post('/atualizar', [WalletController::class, 'edit'])->name('edit');
+    Route::put('/', [WalletController::class, 'update'])->name('update');
+    Route::delete('/', [WalletController::class, 'destroy'])->name('destroy');
+});
 
 Route::group(['prefix' => 'metodo-de-pagamento', 'as' => 'payment-method.'], function () {
     Route::get('/', [PaymentMethodController::class, 'index'])->name('list');
@@ -45,19 +56,6 @@ Route::group(['prefix' => 'tipo-de-transacao', 'as' => 'transaction-type.'], fun
 
 
 
-
-Route::group(['prefix' => 'carteira', 'as' => 'wallet.'], function () {
-    Route::get('/', [WalletController::class, 'index'])->name('list');
-    Route::post('/', [WalletController::class, 'store'])->name('create');
-    Route::put('/', [WalletController::class, 'update'])->name('update');
-    Route::delete('/', [WalletController::class, 'destroy'])->name('delete');
-});
-
-Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
-    Route::get('/', [OwnerController::class, 'index'])->name('list');
-    Route::post('/', [OwnerController::class, 'store'])->name('create');
-    Route::put('/', [OwnerController::class, 'update'])->name('update');
-});
 
 
 

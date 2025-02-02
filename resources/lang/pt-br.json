@@ -11,7 +11,10 @@
     "Data deleted successfully": "Registro removido com sucesso",
 
     "Owner": "Dono",
+
     "Wallet": "Carteira",
+    "Standard Owner's Wallet": "Carteira padrão de :owner",
+    "Welcome :name": "Bom dia :name",
 
     "Payment Method": "Método de Pagamento",
     "Notes": "Cédulas e/ou Moedas",

@@ -6,36 +6,29 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class OwnerRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    // public function authorize()
-    // {
-    //     return false;
-    // }
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'active' => filter_var($this->active, FILTER_VALIDATE_BOOLEAN),
+        ]);
+    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            'name' => 'required|unique:owners|min:3|max:30|regex:/^[a-zA-Z 0-9]+$/',
+            'name' => 'required_without:_method|unique:owners|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ]+$"',
+            'active' => 'required|boolean',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'O campo \'nome\' é obrigatório',
-            'name.unique' => 'O \'nome\' informado já está sendo utilizado por outra pessoa',
-            'name.min' => 'O campo \'nome\' deve contem pelo menos :min caracteres',
-            'name.max' => 'O campo \'nome\' deve se limitar a :max caracteres',
-            'name.regex' => 'O campo \'nome\' deve se limitar letras, números e espaços',
+            'name.required_without' => 'O campo \'Nome\' é obrigatório',
+            'name.unique' => 'O \'Nome\' informado já está sendo utilizado por outra pessoa',
+            'name.min' => 'O campo \'Nome\' deve contem pelo menos :min caracteres',
+            'name.max' => 'O campo \'Nome\' deve se limitar a :max caracteres',
+            'name.regex' => 'O campo \'Nome\' deve se limitar letras, números e espaços',
         ];
     }
 }

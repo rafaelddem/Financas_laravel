@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('header')
-Carteira
+{{__('Wallet')}}
 @endsection
 
 @section('content')
@@ -21,31 +21,29 @@ Carteira
 <br />
 <div class="container">
     <div class="row">
-        <div class="col">
-            @if (isset($wallet))
-                @include('wallet.edit', ['wallet' => $wallet, 'owners' => $owners])
-            @else
-                @include('wallet.create', ['owners' => $owners])
-            @endif
-        </div>
+        <a href="{{ route('wallet.create') }}" class="btn btn-primary">Novo</a>
+    </div>
+    <br>
+    <div class="row">
         <div class="col">
             <ul class="list-group">
                 @foreach($wallets as $wallet)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $wallet->name }} - {{ $wallet->owner->name }}
+                {{ $wallet->owner->name }} - {{ $wallet->name }}
                     @if(!$wallet->active)
                         (inativo)
                     @endif
 
                     <span class="d-flex">
-                        <input class="btn btn-primary" type="button" value="Editar" onclick="window.location='{{route('wallet.list', ['id' => $wallet->id])}}';">
-                        <form method="post" action="{{route('wallet.update')}}">
-                            @csrf @method('PUT')
+                        <form method="post" action="{{route('wallet.edit')}}">
+                            @csrf
                             <input type="hidden" name="id" value={{$wallet->id}}>
-                            <input type="hidden" name="active" @if ($wallet->active) value="0" @else value="1" @endif>
-                            @if (!$wallet->main_wallet)
-                                <input class="btn btn-primary" type="submit" @if ($wallet->active) value="Inativar" @else value="Ativar" @endif >
-                            @endif
+                            <button type="submit" class="btn btn-primary">Editar</button>
+                        </form>
+                        <form method="post" action="{{route('wallet.destroy')}}">
+                            @csrf @method('DELETE')
+                            <input type="hidden" name="id" value={{$wallet->id}}>
+                            <button type="submit" class="btn btn-primary">Remover</button>
                         </form>
                     </span>
                 </li>

@@ -1,4 +1,28 @@
-            <form method="post" action=" {{route('wallet.create')}} ">
+@extends('layout')
+
+@section('header')
+{{__('Wallet')}}
+@endsection
+
+@section('content')
+@if ($errors->any())
+    <div class="alert alert-danger">
+        @foreach ($errors->all() as $error)
+            {{ $error }}<br />
+        @endforeach
+    </div>
+@endif
+@if(!empty($message))
+<div class="alert alert-success">
+    {{ $message }}
+</div>
+@endif
+
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post" action=" {{route('wallet.store')}} ">
                 @csrf
                 <div class="container">
                     <label for="name">Nome</label>
@@ -20,3 +44,7 @@
                     <input class="btn btn-primary mt-2" type="submit" value="Adicionar">
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+@endsection

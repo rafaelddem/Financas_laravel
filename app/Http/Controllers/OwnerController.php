@@ -2,81 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\BaseException;
 use App\Http\Requests\OwnerRequest;
-use App\Models\Owner;
-use App\Models\Wallet;
-use App\Services\Owner\OwnerService;
-use App\Services\Wallet\WalletService;
+use App\Services\OwnerService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class OwnerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    private OwnerService $service;
+
+    public function __construct()
     {
-        return app(OwnerService::class)->loadPage($request->get('id', 0), "");
+        $this->service = app(OwnerService::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+    public function index(Request $request)
+    {
+        $owners = [];
+
+        try {
+            $owners = $this->service->list();
+            $message = $request->get('message');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return view('owner.index', compact('owners', 'message'));
+    }
+
     public function store(OwnerRequest $request)
     {
         try {
-            DB::beginTransaction();
+            $this->service->create($request->all());
 
-            $owner = app(OwnerService::class)->create($request->all());
-
-            $wallet = app(WalletService::class)->create([
-                'name' => 'Carteira de ' . $owner->name,
-                'owner_id' => $owner->id,
-                'main_wallet' => true,
-                'active' => true,
-                'description' => 'Carteira padrão de ' . $owner->name,
-            ]);
-
-            $message = 'Registro criado com sucesso';
-            DB::commit();
+            $message = __('Data created successfully');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            $message = 'Erro ao tentar criar o registro';
-            DB::rollBack();
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return app(OwnerService::class)->loadPage(0, $message);
+        return redirect(route('owner.list', compact('message')));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
+    public function update(OwnerRequest $request)
     {
+        $message = '';
+
         try {
-            DB::beginTransaction();
+            $this->service->update($request->get('id'), $request->only(['active']));
 
-            app(OwnerService::class)->update($request->only(['active', 'id']));
-
-            $message = 'Registro atualizado com sucesso';
-            DB::commit();
-        } catch (\Exception $ex) {
-            $message = $ex->getMessage();
-            DB::rollBack();
+            $message = __('Data updated successfully');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            $message = 'Erro ao tentar atualizar o registro';
-            DB::rollBack();
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return app(OwnerService::class)->loadPage(0, $message);
+        return redirect(route('owner.list', compact('message')));
     }
 }

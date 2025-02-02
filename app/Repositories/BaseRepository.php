@@ -15,7 +15,7 @@ abstract class BaseRepository
         $this->model = app($model);
     }
 
-    public function get()
+    public function list()
     {
         return $this->model->get();
     }

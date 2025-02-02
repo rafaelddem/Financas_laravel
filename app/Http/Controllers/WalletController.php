@@ -2,87 +2,115 @@
 
 namespace App\Http\Controllers;
 
-use \DB;
-use App\Exceptions\ActivationException;
-use App\Exceptions\InactivationException;
+use App\Exceptions\BaseException;
 use App\Http\Requests\WalletRequest;
-use App\Models\Wallet;
-use App\Services\Wallet\WalletService;
+use App\Repositories\OwnerRepository;
+use App\Services\WalletService;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    private WalletService $service;
+
+    public function __construct()
     {
-        return app(WalletService::class)->loadPage($request->get('id', 0), "");
+        $this->service = app(WalletService::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+    public function index(Request $request)
+    {
+        $wallets = [];
+
+        try {
+            $wallets = $this->service->list();
+            $message = $request->get('message');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return view('wallet.index', compact('wallets', 'message'));
+    }
+
+    public function create()
+    {
+        try {
+            $owners = app(OwnerRepository::class)->list();
+
+            return view('wallet.create', compact('owners'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return view('wallet.index', compact('message'));
+    }
+
     public function store(WalletRequest $request)
     {
         try {
-            DB::beginTransaction();
+            /**
+             * Regra a seguir pode ser contornada com uma validação no Request
+             * Entretanto a validação não está funcionando, e não consegui identificar o motivo
+             * Uma vez corrigido, remover a linha a seguir
+             */
+            $request->merge([ 'active' => $request->get('main_wallet') ? true : $request->get('active') ]);
 
-            app(WalletService::class)->create($request->only('name', 'owner_id', 'main_wallet', 'active', 'description'));
+            $this->service->create($request->all());
 
-            $message = 'Registro criado com sucesso';
-            DB::commit();
+            $message = __('Data created successfully');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            DB::rollBack();
-            $message = 'Erro ao tentar criar o registro';
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return app(WalletService::class)->loadPage(0, $message);
+        return redirect(route('wallet.list', compact('message')));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        return app(WalletService::class)->loadPage($request->get('id', $id), "");
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
+    public function edit(Request $request)
     {
         try {
-            DB::beginTransaction();
+            $wallet = $this->service->find($request->get('id'));
 
-            app(WalletService::class)->update($request->only('id', 'main_wallet', 'active', 'description'));
-
-            $message = 'Registro atualizado com sucesso';
-            DB::commit();
-        } catch (ActivationException $inactivationException) {
-            DB::rollBack();
-            $message = 'Ativação de registro não permitida';
-        } catch (InactivationException $inactivationException) {
-            DB::rollBack();
-            $message = 'Inativação de registro não permitida';
+            return view('wallet.edit', compact('wallet'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            DB::rollBack();
-            $message = 'Erro ao tentar atualizar o registro';
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return app(WalletService::class)->loadPage(0, $message);
+        return view('wallet.index', compact('message'));
+    }
+
+    public function update(WalletRequest $request)
+    {
+        try {
+            /**
+             * Regra a seguir pode ser contornada com uma validação no Request
+             * Entretanto a validação não está funcionando, e não consegui identificar o motivo
+             * Uma vez corrigido, remover a linha a seguir
+             */
+            $request->merge([ 'active' => $request->get('main_wallet') ? true : $request->get('active') ]);
+
+            $this->service->update($request->get('id'), $request->all());
+
+            $message = __('Data updated successfully');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('wallet.list', compact('message')));
+    }
+
+    public function destroy(Request $request)
+    {
+        // $message = __('Data deleted successfully');
+        $message = __('Função ainda não implementada');
+        return redirect(route('wallet.list', compact('message')));
     }
 }
