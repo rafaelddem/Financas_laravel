@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\BaseException;
-use App\Http\Requests\WalletRequest;
+use App\Http\Requests\Wallet\CreateRequest;
+use App\Http\Requests\Wallet\UpdateRequest;
 use App\Repositories\OwnerRepository;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
@@ -45,22 +46,15 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('wallet.index', compact('message'));
+        return redirect(route('wallet.list', compact('message')));
     }
 
-    public function store(WalletRequest $request)
+    public function store(CreateRequest $request)
     {
         try {
-            /**
-             * Regra a seguir pode ser contornada com uma validação no Request
-             * Entretanto a validação não está funcionando, e não consegui identificar o motivo
-             * Uma vez corrigido, remover a linha a seguir
-             */
-            $request->merge([ 'active' => $request->get('main_wallet') ? true : $request->get('active') ]);
-
             $this->service->create($request->all());
 
-            $message = __('Data created successfully');
+            $message = __('Data created successfully.');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -70,10 +64,10 @@ class WalletController extends Controller
         return redirect(route('wallet.list', compact('message')));
     }
 
-    public function edit(Request $request)
+    public function edit(int $id, Request $request)
     {
         try {
-            $wallet = $this->service->find($request->get('id'));
+            $wallet = $this->service->find($id);
 
             return view('wallet.edit', compact('wallet'));
         } catch (BaseException $exception) {
@@ -82,22 +76,15 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('wallet.index', compact('message'));
+        return redirect(route('wallet.list', compact('message')));
     }
 
-    public function update(WalletRequest $request)
+    public function update(UpdateRequest $request)
     {
         try {
-            /**
-             * Regra a seguir pode ser contornada com uma validação no Request
-             * Entretanto a validação não está funcionando, e não consegui identificar o motivo
-             * Uma vez corrigido, remover a linha a seguir
-             */
-            $request->merge([ 'active' => $request->get('main_wallet') ? true : $request->get('active') ]);
+            $this->service->update($request->get('id'), $request->only('main_wallet', 'active', 'description'));
 
-            $this->service->update($request->get('id'), $request->all());
-
-            $message = __('Data updated successfully');
+            $message = __('Data updated successfully.');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -109,8 +96,16 @@ class WalletController extends Controller
 
     public function destroy(Request $request)
     {
-        // $message = __('Data deleted successfully');
-        $message = __('Função ainda não implementada');
+        try {
+            $this->service->delete($request->get('id'));
+
+            $message = __('Data deleted successfully.');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
         return redirect(route('wallet.list', compact('message')));
     }
 }

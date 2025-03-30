@@ -20,10 +20,10 @@ abstract class BaseRepository
         return $this->model->get();
     }
 
-    public function find(int $id)
+    public function find(int $id, array $with = [])
     {
         try {
-            return $this->model->findOrFail($id);
+            return $this->model->with($with)->findOrFail($id);
         } catch (ModelNotFoundException $exception) {
             throw new RepositoryException('The reported record was not found.', $exception->getCode(), $exception);
         } catch (\Throwable $th) {
@@ -47,6 +47,18 @@ abstract class BaseRepository
             $model->update($attributes);
 
             return $model;
+        } catch (ModelNotFoundException $exception) {
+            throw new RepositoryException('The reported record was not found.', $exception->getCode(), $exception);
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function delete(int $id)
+    {
+        try {
+            $model = $this->model->findOrFail($id);
+            $model->delete($id);
         } catch (ModelNotFoundException $exception) {
             throw new RepositoryException('The reported record was not found.', $exception->getCode(), $exception);
         } catch (\Throwable $th) {

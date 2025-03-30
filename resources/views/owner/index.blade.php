@@ -22,7 +22,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <form method="post" action="{{route('owner.create')}}">
+            <form method="post" action="{{route('owner.store')}}">
                 @csrf
                 <div class="container">
                     <label for="name">Nome</label>

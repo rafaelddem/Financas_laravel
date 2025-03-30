@@ -10,4 +10,12 @@ class OwnerRepository extends BaseRepository
     {
         parent::__construct(Owner::class);
     }
+
+    /**
+     * Implementar função após implementação da Transação
+     */
+    public function hasOutstandingMonetaryBalancesOnOwner(int $ownerId)
+    {
+        return false;
+    }
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Wallet extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['name', 'owner_id', 'main_wallet', 'active', 'description'];
 
     protected $casts = ['active' => 'boolean'];
@@ -18,10 +20,5 @@ class Wallet extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Owner::class);
-    }
-
-    public function haveAmountsToPayOrReceive()
-    {
-        return false;
     }
 }

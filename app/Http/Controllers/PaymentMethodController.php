@@ -42,7 +42,7 @@ class PaymentMethodController extends Controller
         try {
             $this->service->create($request->all());
 
-            $message = __('Data created successfully');
+            $message = __('Data created successfully.');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -59,7 +59,7 @@ class PaymentMethodController extends Controller
         try {
             $this->service->update($request->get('id'), $request->only(['active']));
 
-            $message = __('Data updated successfully');
+            $message = __('Data updated successfully.');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -71,7 +71,7 @@ class PaymentMethodController extends Controller
 
     public function destroy(Request $request)
     {
-        // $message = __('Data deleted successfully');
+        // $message = __('Data deleted successfully.');
         $message = __('Função ainda não implementada');
         return redirect(route('payment-method.list', compact('message')));
     }

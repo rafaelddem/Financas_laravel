@@ -35,9 +35,7 @@
                     @endif
 
                     <span class="d-flex">
-                        <form method="post" action="{{route('wallet.edit')}}">
-                            @csrf
-                            <input type="hidden" name="id" value={{$wallet->id}}>
+                        <form method="get" action="{{route('wallet.edit', ['id' => $wallet->id])}}">
                             <button type="submit" class="btn btn-primary">Editar</button>
                         </form>
                         <form method="post" action="{{route('wallet.destroy')}}">

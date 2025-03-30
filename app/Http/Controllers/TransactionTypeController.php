@@ -42,7 +42,7 @@ class TransactionTypeController extends Controller
         try {
             $this->service->create($request->all());
 
-            $message = __('Data created successfully');
+            $message = __('Data created successfully.');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -78,7 +78,7 @@ class TransactionTypeController extends Controller
                 'relevance', 'active'
             ]));
 
-            $message = __('Data updated successfully');
+            $message = __('Data updated successfully.');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -90,7 +90,7 @@ class TransactionTypeController extends Controller
 
     public function destroy(Request $request)
     {
-        // $message = __('Data deleted successfully');
+        // $message = __('Data deleted successfully.');
         $message = __('Função ainda não implementada');
         return redirect(route('transaction-type.list', compact('message')));
     }

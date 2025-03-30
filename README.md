@@ -68,28 +68,16 @@ Nome da tabela: owners.
 
 - Característica #2: Não é permitido que duas *Pessoa*s possuam o mesmo nome;
 
-- Característica #3: Não é permitido a inativação de uma *Pessoa* que possua pendências, uma vez que isso impediria ela de lançar movimentos para quitar suas pendências (Tarefa #1, item 1.1.1.5);
+- Característica #3: Não é permitido a inativação de uma *Pessoa* que possua pendências, uma vez que isso impediria ela de lançar movimentos para quitar suas pendências;
 
-- Característica #4: É exigido a existência de pelo menos uma *Carteira* (mais sobre a entidade *Carteira* no item 1.1.2) para cada *Pessoa* (Tarefa #2, item 1.1.1.5).
+- Característica #4: É exigido que cada *Pessoa* possua exatamente uma *Carteira* (mais sobre a entidade *Carteira* no item 1.1.2) marcada como sendo sua principal. A mesma deve ser criada com o mesmo status (ativa ou inativa) que sua *Pessoa*;
 
-- Característica #5: Quando uma *Pessoa* é inativada, suas *Carteira*s também deverão ser inativadas. Mesmo que uma *Pessoa* esteja inativa, os registros referentes a ela ainda serão mantidos
+- Característica #5: Quando uma *Pessoa* é inativada, suas *Carteira*s também deverão ser inativadas. Mesmo que uma *Pessoa* esteja inativa, os registros referentes a ela ainda serão mantidos;
 
-- Característica #6: Quando uma *Pessoa* é ativada, o registro de *Carteira* relacionado a ela que estiver marcado como sendo sua carteira pricipal, também deve ser reativado
-
-
-#### 1.1.1.5. Tarefas
-
-Tarefa #1: Validar se existem "pendências" para uma determinada *Pessoa*.
-> Buscar por todas as transações que estão em aberto para esta *Pessoa*, como débitos e empréstimos não devolvidos.
-
-Tarefa #2: Garantir que toda *Pessoa* possua pelo menos uma *Carteira* (ver o item 1.1.2 para mais detalhes).
-> Criar uma *Carteira* automaticamente quando uma *Pessoa* é criada. A *Carteira* deve ser marcada como de posse da *Pessoa* em questão.
-
-Tarefa #3: Identificar a *Carteira* principal de uma *Pessoa*.
-> Buscar a *Carteira* relacionada a *Pessoa* em questão, que esteja marcada como a principal.
+- Característica #6: Quando uma *Pessoa* é ativada, o registro de *Carteira* relacionado a ela que estiver marcado como sendo sua carteira pricipal, também deve ser reativado.
 
 
-#### 1.1.1.6. Valores pré cadastrados
+#### 1.1.1.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (owner):
 
@@ -183,44 +171,26 @@ Nome da tabela: wallets
 
 #### 1.1.2.4. Características da entidade
 
-- Característica #1: Não é permitida a exclusão de um registro de *Carteira*, apenas sua inativação;
+- Característica #1: Quando for a única *Carteira* de uma *Pessoa*, ela será obrigatoriamente marcada como a carteira principal;
 
-- Característica #2: Quando for a única *Carteira* de uma *Pessoa*, ela será obrigatoriamente marcada como a carteira principal (Tarefa #1, item 1.1.2.5);
+- Característica #2: Não é permitido que mais de uma *Carteira* (de um mesmo Dono) esteja marcada como principal;
 
-- Característica #3: Quando uma *Carteira* é marcada como principal, as demais *Carteira*s (da mesma *Pessoa*) são automaticamente desmarcadas como tal (Tarefa #2, item 1.1.2.5);
+- Característica #3: Quando uma *Carteira* é marcada como principal, as demais *Carteira*s (da mesma *Pessoa*) são automaticamente desmarcadas como tal;
 
-- Característica #4: Não é permitida a inativação de uma *Carteira* que esteja marcada como principal (como quando esta for a única), que tenha valores (Tarefa #3, item 1.1.2.5) ou que possua pendências (Tarefa #4, item 1.1.2.5);
+- Característica #4: Não é permitida a inativação de uma *Carteira* que esteja marcada como principal (como quando esta for a única), que tenha valores ou que possua pendências;
 
-- Característica #5: Não é permitida a reativação de uma *Carteira* cujo Dono (*Pessoa*) estiver inativo (Tarefa #5, item 1.1.2.5).
+- Característica #5: Não é permitida a reativação de uma *Carteira* cujo Dono (*Pessoa*) estiver inativo;
 
-- Característica #6: Não é permitido que mais de uma *Carteira* (de um mesmo Dono) esteja marcada como principal.
+- Característica #6: Não é permitido que uma *Carteira* seja desmarcada como sendo a principal;
 
-- Característica #7: Não é permitido que uma *Carteira* seja desmarcada como sendo a principal.
+- Característica #7: Não é permitido que uma *Carteira* tenha seu Dono alterado;
 
-- Característica #8: Não é permitido que uma *Carteira* tenha seu Dono alterado.
+- Característica #8: Não é permitido que uma *Carteira* tenha seu Nome alterado;
 
-- Característica #9: Não é permitido que uma *Carteira* tenha seu nome alterado.
-
-
-#### 1.1.2.5. Tarefas
-
-Tarefa #1: Garantir a existência de pelo menos uma *Carteira* principal para cada *Pessoa*.
-> Buscar todas as *Carteira*s relacionadas a *Pessoa* em questão, caso não existe nenhuma, a *Carteira* que estiver sendo salva será marcada como sendo a principal.
-
-Tarefa #2: Garantir a existência de uma única *Carteira* principal para cada *Pessoa*.
-> Buscar todas as *Carteira*s relacionadas a *Pessoa* em questão, que estejam marcadas como principal. Caso seja encontrado alguma *Carteira*, a mesma será desmarcada como principal. Esse procedimento será executado antes de se salvar um registro novo de *Carteira*, ou ao marcar um registro antigo como principal.
-
-Tarefa #3: Buscar o valor total presente em uma determinada *Carteira*.
-> Buscar por todas as transações (já quitadas) relacionadas a uma *Carteira*, e efetuar o somatório destes valores (valores de entradas menos valores de saída).
-
-Tarefa #4: Verificar a existência de valores pendentes (crédito, empréstimos e transações agendadas) para uma determinada *Carteira*.
-> Buscar por todas as transações pendentes (crédito, empréstimos e transações agendadas...) relacionadas a uma *Carteira*.
-
-Tarefa #5: Garantir que uma *Carteira* não seja ativada quando seu usuário estiver desativado.
-> Confirmar se o dono (*Pessoa*) da *Carteira* em questão está ativo.
+- Característica #9: A remoção de um registro não será feita em definitivo. Quando um cliente optar por remover uma *Carteira*, a mesma será marcada como removida, e não aparecerá mais para o usuário. Porém, os dados da mesma ainda existirão no sistema, o que garantirá a permanência de dados necessários em relatórios futuros.
 
 
-#### 1.1.2.6. Valores pré cadastrados
+#### 1.1.2.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (wallet):
 
@@ -330,7 +300,7 @@ Nome da tabela: cards
 
 #### 1.1.3.4. Características da entidade
 
-- Característica #1: Não é permitida a exclusão de um registro de *Carteira*, apenas sua inativação;
+- Característica #1: Não é permitida a exclusão de um registro de *Cartão*, apenas sua inativação;
 
 - Característica #2: É permitida a inativação de um *Cartão*, porém, isso não afeta suas fatura, que permanecerão em aberto até que sejam quitadas;
 

@@ -17,6 +17,20 @@ class WalletRepository extends BaseRepository
             ->with('owner')
             ->orderby('owner_id', 'asc')
             ->orderby('main_wallet', 'desc')
+            ->orderby('active', 'desc')
+            ->orderby('name', 'asc')
+            ->get();
+    }
+
+    public function listWalletsFromOwner(int $ownerId)
+    {
+        return $this->model
+            ->with('owner')
+            ->when($ownerId, function ($query, $ownerId) {
+                $query->where('owner_id', $ownerId);
+            })
+            ->orderby('owner_id', 'asc')
+            ->orderby('main_wallet', 'desc')
             ->orderby('name', 'asc')
             ->get();
     }
@@ -29,5 +43,28 @@ class WalletRepository extends BaseRepository
                 ->where('id', '!=', $wallet->id)
                 ->update([ 'main_wallet' => false ]);
         }
+    }
+
+    public function activateMainWalletFromOwner(int $ownerId)
+    {
+        Wallet::query()
+            ->where('owner_id', $ownerId)
+            ->where('main_wallet', true)
+            ->update([ 'active' => true ]);
+    }
+
+    public function inactivateWalletsByOwner(int $ownerId)
+    {
+        Wallet::query()
+            ->where('owner_id', $ownerId)
+            ->update([ 'active' => false ]);
+    }
+
+    /**
+     * Implementar função após implementação da Transação
+     */
+    public function hasOutstandingMonetaryBalancesOnWallet(int $walletId)
+    {
+        return false;
     }
 }

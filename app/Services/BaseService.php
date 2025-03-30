@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\RepositoryException;
+use App\Exceptions\BaseException;
 use App\Exceptions\ServiceException;
 use App\Repositories\BaseRepository;
 
@@ -14,7 +14,7 @@ class BaseService
     {
         try {
             return $this->repository->create($input);
-        } catch (RepositoryException $exception) {
+        } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
             throw new ServiceException();
@@ -25,7 +25,7 @@ class BaseService
     {
         try {
             return $this->repository->find($id);
-        } catch (RepositoryException $exception) {
+        } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
             throw new ServiceException();
@@ -36,7 +36,7 @@ class BaseService
     {
         try {
             return $this->repository->update($id, $input);
-        } catch (RepositoryException $exception) {
+        } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
             throw new ServiceException();
@@ -47,7 +47,7 @@ class BaseService
     {
         try {
             return $this->repository->list();
-        } catch (RepositoryException $exception) {
+        } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
             throw new ServiceException();
