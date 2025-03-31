@@ -33,6 +33,7 @@
     "Transfer": "Transações Bancárias",
     "Debit": "Débito",
     "Credit": "Crédito",
+    "It is not allowed to remove a payment method that is linked to a transaction.": "Não é permitido remover um Método de Pagamento que esteja vinculado a uma Transação.",
 
     "Transaction Type": "Tipo de Transação",
     "Banal": "Banal",

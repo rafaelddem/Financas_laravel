@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\BaseException;
-use App\Http\Requests\PaymentMethodRequest;
+use App\Http\Requests\PaymentMethod\CreateRequest;
+use App\Http\Requests\PaymentMethod\UpdateRequest;
 use App\Services\PaymentMethodService;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,7 @@ class PaymentMethodController extends Controller
         return view('payment-method.create');
     }
 
-    public function store(PaymentMethodRequest $request)
+    public function store(CreateRequest $request)
     {
         try {
             $this->service->create($request->all());
@@ -52,7 +53,7 @@ class PaymentMethodController extends Controller
         return redirect(route('payment-method.list', compact('message')));
     }
 
-    public function update(PaymentMethodRequest $request)
+    public function update(UpdateRequest $request)
     {
         $message = '';
 
@@ -71,8 +72,16 @@ class PaymentMethodController extends Controller
 
     public function destroy(Request $request)
     {
-        // $message = __('Data deleted successfully.');
-        $message = __('Função ainda não implementada');
+        try {
+            $this->service->delete($request->get('id'));
+
+            $message = __('Data deleted successfully.');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
         return redirect(route('payment-method.list', compact('message')));
     }
 }

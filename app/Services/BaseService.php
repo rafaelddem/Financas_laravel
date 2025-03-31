@@ -55,4 +55,15 @@ class BaseService
 
         return [];
     }
+
+    public function delete(int $id)
+    {
+        try {
+            return $this->repository->delete($id);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+    }
 }

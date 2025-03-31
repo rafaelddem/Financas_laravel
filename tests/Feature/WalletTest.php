@@ -27,7 +27,7 @@ class WalletTest extends TestCase
             'active' => true,
         ]);
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertRedirect(route('wallet.list', ['message' => __('Data created successfully.')]));
 
         $this->assertDatabaseHas('wallets', $dataWallet->toArray());
@@ -42,7 +42,7 @@ class WalletTest extends TestCase
             'active' => false,
         ]);
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertRedirect(route('wallet.list', ['message' => __('Data created successfully.')]));
 
         $this->assertDatabaseHas('wallets', $dataWallet->toArray());
@@ -53,7 +53,7 @@ class WalletTest extends TestCase
         $dataWallet = Wallet::factory()->make();
         unset($dataWallet['name']);
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
     }
 
@@ -61,7 +61,7 @@ class WalletTest extends TestCase
     {
         $dataWallet = Wallet::factory()->create();
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
     }
 
@@ -71,7 +71,7 @@ class WalletTest extends TestCase
             'name' => 'Na'
         ]);
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 45])]);
     }
 
@@ -81,7 +81,7 @@ class WalletTest extends TestCase
             'name' => '1234567890123456789012345678901234567890123456'
         ]);
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 45])]);
     }
 
@@ -90,7 +90,7 @@ class WalletTest extends TestCase
         $dataWallet = Wallet::factory()->make();
         unset($dataWallet['owner_id']);
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertSessionHasErrors(['owner_id' => __('It is necessary to inform who this wallet belongs to.')]);
     }
 
@@ -101,7 +101,7 @@ class WalletTest extends TestCase
             'active' => false,
         ]);
 
-        $this->post(route('wallet.list'), $dataWallet->toArray())
+        $this->post(route('wallet.store'), $dataWallet->toArray())
             ->assertSessionHasErrors(['active' => __('A wallet marked as main cannot be inactive.')]);
     }
 

@@ -177,17 +177,21 @@ Nome da tabela: wallets
 
 - Característica #3: Quando uma *Carteira* é marcada como principal, as demais *Carteira*s (da mesma *Pessoa*) são automaticamente desmarcadas como tal;
 
-- Característica #4: Não é permitida a inativação de uma *Carteira* que esteja marcada como principal (como quando esta for a única), que tenha valores ou que possua pendências;
+- Característica #4: Uma *Carteira* recém criada pode ser marcada como principal, mas nesse caso, ela precisa obrigatóriamente ser marcada como ativa;
 
-- Característica #5: Não é permitida a reativação de uma *Carteira* cujo Dono (*Pessoa*) estiver inativo;
+- Característica #5: Não é permitida a inativação de uma *Carteira* que esteja marcada como principal (como quando esta for a única), que tenha valores ou que possua pendências;
 
-- Característica #6: Não é permitido que uma *Carteira* seja desmarcada como sendo a principal;
+- Característica #6: Não é permitida a reativação de uma *Carteira* cujo Dono (*Pessoa*) estiver inativo;
 
-- Característica #7: Não é permitido que uma *Carteira* tenha seu Dono alterado;
+- Característica #7: Não é permitido que uma *Carteira* seja desmarcada como sendo a principal;
 
-- Característica #8: Não é permitido que uma *Carteira* tenha seu Nome alterado;
+- Característica #8: Não é permitido que uma *Carteira* tenha seu Dono alterado;
 
-- Característica #9: A remoção de um registro não será feita em definitivo. Quando um cliente optar por remover uma *Carteira*, a mesma será marcada como removida, e não aparecerá mais para o usuário. Porém, os dados da mesma ainda existirão no sistema, o que garantirá a permanência de dados necessários em relatórios futuros.
+- Característica #9: Não é permitido que uma *Carteira* tenha seu Nome alterado;
+
+- Característica #10: A remoção de um registro não será feita em definitivo. Quando um cliente optar por remover uma *Carteira*, a mesma será marcada como removida, e não aparecerá mais para o usuário. Porém, os dados da mesma ainda existirão no sistema, o que garantirá a permanência de dados necessários em relatórios futuros.
+
+- Característica #11: A remoção de um registro não será permitida quando o mesmo possuir valores ou pendências;
 
 
 #### 1.1.2.5. Valores pré cadastrados
@@ -573,11 +577,13 @@ Nome da tabela: payment_method.
 
 - Característica #1: Não é permitido que duas entidades *Método de Pagamento* possuam o mesmo nome;
 
-- Característica #2: Não é permitido a alteração dos atributos da entidade;
+- Característica #2: Não é permitido a alteração dos atributos da entidade, exceto sua ativação/inativação;
 
-- Característica #3: É permitido a exclusão de um registro de *Método de Pagamento* apenas se o mesmo não estiver relacionado a nenhum outro registro.
+- Característica #3: É permitido a inativação de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro.
 
-- Característica #4: Caso seja necessário excluir um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento*, que tenha o mesmo valor para o atributo "tipo".
+- Característica #4: É permitido a exclusão de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro.
+
+- Característica #5: Caso seja necessário excluir um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento*, que tenha o mesmo valor para o atributo "tipo".
 
 
 #### 1.1.5.5. Valores pré cadastrados

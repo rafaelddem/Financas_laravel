@@ -63,7 +63,7 @@ class OwnerTest extends TestCase
     {
         $dataOwner = Owner::factory()->make();
 
-        $this->post(route('owner.list'), $dataOwner->toArray())
+        $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertRedirect(route('owner.list', ['message' => __('Data created successfully.')]));
 
         $this->assertDatabaseHas('owners', $dataOwner->toArray());
@@ -73,7 +73,7 @@ class OwnerTest extends TestCase
     {
         $dataOwner = Owner::factory()->make();
 
-        $this->post(route('owner.list'), $dataOwner->toArray())
+        $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertRedirect(route('owner.list', ['message' => __('Data created successfully.')]));
         
         $owner = Owner::where('name', $dataOwner['name'])->with('wallets')->first();
@@ -86,7 +86,7 @@ class OwnerTest extends TestCase
     {
         $dataOwner = Owner::factory()->make([ 'active' => false ]);
 
-        $this->post(route('owner.list'), $dataOwner->toArray())
+        $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertRedirect(route('owner.list', ['message' => __('Data created successfully.')]));
 
         $owner = Owner::where('name', $dataOwner['name'])->with('wallets')->first();
@@ -101,7 +101,7 @@ class OwnerTest extends TestCase
     //     $dataOwner = Owner::factory()->make();
     //     $dataOwner['name'] .= $char;
 
-    //     $this->post(route('owner.list'), $dataOwner->toArray())
+    //     $this->post(route('owner.store'), $dataOwner->toArray())
     //         ->assertRedirect(route('owner.list', ['message' => __('Data created successfully.')]));
 
     //     $this->assertDatabaseHas('owners', $dataOwner->toArray());
@@ -112,7 +112,7 @@ class OwnerTest extends TestCase
         $dataOwner = Owner::factory()->make();
         unset($dataOwner['name']);
 
-        $this->post(route('owner.list'), $dataOwner->toArray())
+        $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
     }
 
@@ -120,7 +120,7 @@ class OwnerTest extends TestCase
     {
         $dataOwner = Owner::factory()->create();
 
-        $this->post(route('owner.list'), $dataOwner->toArray())
+        $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
     }
 
@@ -130,7 +130,7 @@ class OwnerTest extends TestCase
             'name' => 'Na'
         ]);
 
-        $this->post(route('owner.list'), $dataOwner->toArray())
+        $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
     }
 
@@ -140,7 +140,7 @@ class OwnerTest extends TestCase
             'name' => '1234567890123456789012345678901'
         ]);
 
-        $this->post(route('owner.list'), $dataOwner->toArray())
+        $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
     }
 
@@ -150,7 +150,7 @@ class OwnerTest extends TestCase
     //     $dataOwner = Owner::factory()->make();
     //     $dataOwner['name'] .= $char;
 
-    //     $this->post(route('owner.list'), $dataOwner->toArray())
+    //     $this->post(route('owner.store'), $dataOwner->toArray())
     //         ->assertSessionHasErrors(['name' => 'O campo Nome deve se limitar letras, números, pontos, traços e espaços']);
     // }
 
@@ -160,7 +160,7 @@ class OwnerTest extends TestCase
         $updateOwner = Owner::factory()->make([ 'active' => true ])->toArray();
         $updateOwner['id'] = $originOwner['id'];
 
-        $this->put(route('owner.list'), $updateOwner)
+        $this->put(route('owner.update'), $updateOwner)
             ->assertRedirect(route('owner.list', ['message' => __('Data updated successfully.')]));
 
         $updatedOwner = Owner::find($originOwner['id']);
@@ -174,7 +174,7 @@ class OwnerTest extends TestCase
         $updateOwner = Owner::factory()->make([ 'active' => true ])->toArray();
         $updateOwner['id'] = $originOwner['id'];
 
-        $this->put(route('owner.list'), $updateOwner)
+        $this->put(route('owner.update'), $updateOwner)
             ->assertRedirect(route('owner.list', ['message' => __('Data updated successfully.')]));
 
         $wallets = Wallet::query()->where('owner_id', $originOwner['id'])->where('active', true)->get();
@@ -188,7 +188,7 @@ class OwnerTest extends TestCase
         $updateOwner = Owner::factory()->make([ 'active' => false ])->toArray();
         $updateOwner['id'] = $originOwner['id'];
 
-        $this->put(route('owner.list'), $updateOwner)
+        $this->put(route('owner.update'), $updateOwner)
             ->assertRedirect(route('owner.list', ['message' => __('Data updated successfully.')]));
 
         $updatedOwner = Owner::find($originOwner['id']);
@@ -202,7 +202,7 @@ class OwnerTest extends TestCase
         $updateOwner = Owner::factory()->make([ 'active' => false ])->toArray();
         $updateOwner['id'] = $originOwner['id'];
 
-        $this->put(route('owner.list'), $updateOwner)
+        $this->put(route('owner.update'), $updateOwner)
             ->assertRedirect(route('owner.list', ['message' => __('Data updated successfully.')]));
 
         $wallets = Wallet::query()->where('owner_id', $originOwner['id'])->get();
