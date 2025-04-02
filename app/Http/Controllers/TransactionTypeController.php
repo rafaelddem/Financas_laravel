@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\BaseException;
-use App\Http\Requests\TransactionTypeRequest;
+use App\Http\Requests\TransactionType\CreateRequest;
+use App\Http\Requests\TransactionType\UpdateRequest;
 use App\Services\TransactionTypeService;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,7 @@ class TransactionTypeController extends Controller
         return view('transaction-type.create');
     }
 
-    public function store(TransactionTypeRequest $request)
+    public function store(CreateRequest $request)
     {
         try {
             $this->service->create($request->all());
@@ -52,12 +53,12 @@ class TransactionTypeController extends Controller
         return redirect(route('transaction-type.list', compact('message')));
     }
 
-    public function edit(Request $request)
+    public function edit(int $id, Request $request)
     {
         $message = '';
 
         try {
-            $transactionType = $this->service->find($request->get('id'));
+            $transactionType = $this->service->find($id);
 
             return view('transaction-type.edit', compact('transactionType'));
         } catch (BaseException $exception) {
@@ -69,7 +70,7 @@ class TransactionTypeController extends Controller
         return redirect(route('transaction-type.list', compact('message')));
     }
 
-    public function update(TransactionTypeRequest $request)
+    public function update(UpdateRequest $request)
     {
         $message = '';
 
@@ -90,8 +91,16 @@ class TransactionTypeController extends Controller
 
     public function destroy(Request $request)
     {
-        // $message = __('Data deleted successfully.');
-        $message = __('Função ainda não implementada');
+        try {
+            $this->service->delete($request->get('id'));
+
+            $message = __('Data deleted successfully.');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
         return redirect(route('transaction-type.list', compact('message')));
     }
 

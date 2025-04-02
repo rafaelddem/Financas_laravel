@@ -37,9 +37,7 @@
                     @endswitch
 
                     <span class="d-flex">
-                        <form method="post" action="{{route('transaction-type.edit')}}">
-                            @csrf
-                            <input type="hidden" name="id" value={{$transactionType->id}}>
+                        <form method="get" action="{{route('transaction-type.edit', ['id' => $transactionType->id])}}">
                             <button type="submit" class="btn btn-primary">Editar</button>
                         </form>
                         <form method="post" action="{{route('transaction-type.destroy')}}">

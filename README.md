@@ -579,9 +579,9 @@ Nome da tabela: payment_method.
 
 - Característica #2: Não é permitido a alteração dos atributos da entidade, exceto sua ativação/inativação;
 
-- Característica #3: É permitido a inativação de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro.
+- Característica #3: É permitido a inativação de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro;
 
-- Característica #4: É permitido a exclusão de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro.
+- Característica #4: É permitido a exclusão de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro;
 
 - Característica #5: Caso seja necessário excluir um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento*, que tenha o mesmo valor para o atributo "tipo".
 
@@ -662,22 +662,14 @@ Nome da tabela: transaction_type.
 
 - Característica #1: Não é permitido que duas entidades *Tipo de Transação* possuam o mesmo nome;
 
-- Característica #2: Somente será permitida a alteração do atributo 'relevance';
+- Característica #2: Os valores aceitos para o campo 'relevância' são: 'banal' para 'Banal', 'relevant' para 'Relevante' ou 'indispensable' para 'Indispensável';
 
-- Característica #3: Caso seja necessário a exclusão de algum *Tipo de Transação*, ela somente será permitida se o registro em questão não tiver referência em nenhuma *Transação*. Se for o caso, a *Transação* terá que ter seu *Tipo de Transação* alterado para outro registro ativo para liberar a exclusão do *Tipo de Transação* antigo (Tarefa #1, item 1.1.6.5);
+- Característica #3: Não será permitida a alteração do atributo 'name';
 
-- Característica #4: Os valores aceitos para o campo 'relevância' são: 'banal' para 'Banal', 'relevant' para 'Relevante' ou 'indispensable' para 'Indispensável'.
-
-
-#### 1.1.6.5. Tarefas
-
-Tarefa #1: Alterar o *Tipo de Transação* de todas os registros de *Transação*.
-> Deve-se informar um *Tipo de Transação* alvo, e então buscar todas os registros de *Transação* com tal *Tipo de Transação*.
-> <br>Com a lista de registros encontrada, deve-se efetuar a troca do *Tipo de Transação* antigo para o novo (informado pelo usuário) em cada um dos registros de *Transação* encontrados.
-> 
+- Característica #4: Caso seja necessário a exclusão de algum *Tipo de Transação*, ela somente será permitida se o registro em questão não tiver referência em nenhuma *Transação*. Se for o caso, a *Transação* terá que ter seu *Tipo de Transação* alterado para outro registro ativo para liberar a exclusão do *Tipo de Transação* antigo.
 
 
-#### 1.1.6.6. Valores pré cadastrados
+#### 1.1.6.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (transaction_type):
 

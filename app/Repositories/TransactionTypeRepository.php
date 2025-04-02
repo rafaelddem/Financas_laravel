@@ -10,4 +10,12 @@ class TransactionTypeRepository extends BaseRepository
     {
         parent::__construct(TransactionType::class);
     }
+
+    /**
+     * Implementar função após implementação da Transação
+     */
+    public function hasRelatedTransactions(int $transactionTypeId)
+    {
+        return false;
+    }
 }

@@ -18,7 +18,7 @@ class WalletFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => substr($this->faker->name(), 0, 30),
             'owner_id' => 1,
             'main_wallet' => true,
             'active' => true,

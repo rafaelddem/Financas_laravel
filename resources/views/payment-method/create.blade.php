@@ -38,6 +38,7 @@
                     </select>
                     <br />
                     <button type="submit" class="btn btn-primary mt-2">Adicionar</button>
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('payment-method.list')}}'">
                 </div>
             </form>
         </div>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\BaseException;
 use App\Http\Requests\Wallet\CreateRequest;
 use App\Http\Requests\Wallet\UpdateRequest;
-use App\Repositories\OwnerRepository;
+use App\Services\OwnerService;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
 
@@ -37,7 +37,7 @@ class WalletController extends Controller
     public function create()
     {
         try {
-            $owners = app(OwnerRepository::class)->list();
+            $owners = app(OwnerService::class)->list();
 
             return view('wallet.create', compact('owners'));
         } catch (BaseException $exception) {

@@ -42,6 +42,7 @@
                     <input type="checkbox" name="active" id="active" value=1 checked>
                     <br />
                     <input class="btn btn-primary mt-2" type="submit" value="Adicionar">
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('wallet.list')}}'">
                 </div>
             </form>
         </div>

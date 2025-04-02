@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PaymentMethod>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TransactionType>
  */
-class PaymentMethodFactory extends Factory
+class TransactionTypeFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,8 @@ class PaymentMethodFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => substr($this->faker->name(), 0, 30),
-            'type' => $this->faker->randomElement(['notes', 'transfer', 'debit', 'credit']),
+            'name' => substr($this->faker->name(), 0, 45),
+            'relevance' => $this->faker->randomElement(['banal', 'relevant', 'indispensable']),
             'active' => true,
         ];
     }

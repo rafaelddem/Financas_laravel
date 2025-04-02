@@ -65,6 +65,15 @@ class PaymentMethodTest extends TestCase
             ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
     }
 
+    public function test_create_fail_without_type(): void
+    {
+        $paymentMethodData = PaymentMethod::factory()->make();
+        unset($paymentMethodData['type']);
+
+        $this->post(route('payment-method.store'), $paymentMethodData->toArray())
+            ->assertSessionHasErrors(['type' => __('validation.required', ['attribute' => 'Tipo'])]);
+    }
+
     public function test_create_fail_invalid_type(): void
     {
         $paymentMethodData = PaymentMethod::factory()->make([

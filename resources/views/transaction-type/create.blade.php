@@ -40,6 +40,7 @@
                     <input type="checkbox" name="active" value=true checked>
                     <br />
                     <button type="submit" class="btn btn-primary mt-2">Adicionar</button>
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('transaction-type.list')}}'">
                 </div>
             </form>
         </div>

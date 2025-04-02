@@ -46,7 +46,7 @@ Route::group(['prefix' => 'tipo-de-transacao', 'as' => 'transaction-type.'], fun
     Route::get('/', [TransactionTypeController::class, 'index'])->name('list');
     Route::get('/novo', [TransactionTypeController::class, 'create'])->name('create');
     Route::post('/', [TransactionTypeController::class, 'store'])->name('store');
-    Route::post('/atualizar', [TransactionTypeController::class, 'edit'])->name('edit');
+    Route::get('/{id}', [TransactionTypeController::class, 'edit'])->name('edit');
     Route::put('/', [TransactionTypeController::class, 'update'])->name('update');
     Route::delete('/', [TransactionTypeController::class, 'destroy'])->name('destroy');
 });

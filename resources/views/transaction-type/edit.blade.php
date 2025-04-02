@@ -41,6 +41,7 @@
                     <input type="checkbox" name="active" value=true @if ($transactionType->active) checked @endif>
                     <br />
                     <button type="submit" class="btn btn-primary mt-2">Atualizar</button>
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('transaction-type.list')}}'">
                 </div>
             </form>
         </div>
