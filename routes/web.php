@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionTypeController;
@@ -23,15 +24,15 @@ Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
     Route::get('/', [OwnerController::class, 'index'])->name('list');
     Route::post('/', [OwnerController::class, 'store'])->name('store');
     Route::put('/', [OwnerController::class, 'update'])->name('update');
-});
 
-Route::group(['prefix' => 'carteira', 'as' => 'wallet.'], function () {
-    Route::get('/', [WalletController::class, 'index'])->name('list');
-    Route::get('/novo', [WalletController::class, 'create'])->name('create');
-    Route::post('/', [WalletController::class, 'store'])->name('store');
-    Route::get('/{id}', [WalletController::class, 'edit'])->name('edit');
-    Route::put('/', [WalletController::class, 'update'])->name('update');
-    Route::delete('/', [WalletController::class, 'destroy'])->name('destroy');
+    Route::group(['prefix' => '{owner_id}/carteira', 'as' => 'wallet.'], function () {
+        Route::get('/', [WalletController::class, 'index'])->name('list');
+        Route::get('/novo', [WalletController::class, 'create'])->name('create');
+        Route::post('/', [WalletController::class, 'store'])->name('store');
+        Route::get('/{id}', [WalletController::class, 'edit'])->name('edit');
+        Route::put('/', [WalletController::class, 'update'])->name('update');
+        Route::delete('/', [WalletController::class, 'destroy'])->name('destroy');
+    });
 });
 
 Route::group(['prefix' => 'metodo-de-pagamento', 'as' => 'payment-method.'], function () {

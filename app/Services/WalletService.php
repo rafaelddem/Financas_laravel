@@ -55,6 +55,19 @@ class WalletService extends BaseService
         }
     }
 
+    public function listWalletsFromOwner(int $owner_id)
+    {
+        try {
+            return $this->repository->listWalletsFromOwner($owner_id);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return [];
+    }
+
     public function delete(int $id)
     {
         try {

@@ -94,8 +94,8 @@ class PaymentMethodTest extends TestCase
 
         $paymentMethodDataOriginalData = $paymentMethodData->toArray();
         $paymentMethodUpdatedData = $paymentMethodData->refresh();
-        $this->assertEquals($paymentMethodUpdatedData['name'], $paymentMethodDataOriginalData['name']);         // Não pode ser modificado
-        $this->assertEquals($paymentMethodUpdatedData['type'], $paymentMethodDataOriginalData['type']);         // Não pode ser modificado
+        $this->assertEquals($paymentMethodUpdatedData['name'], $paymentMethodDataOriginalData['name']);         // Atributo não pode ser modificado
+        $this->assertEquals($paymentMethodUpdatedData['type'], $paymentMethodDataOriginalData['type']);         // Atributo não pode ser modificado
 
         $this->assertEquals($paymentMethodUpdatedData['active'], $paymentMethodUpdateData['active']);
     }
@@ -110,8 +110,8 @@ class PaymentMethodTest extends TestCase
 
         $paymentMethodDataOriginalData = $paymentMethodData->toArray();
         $paymentMethodUpdatedData = $paymentMethodData->refresh();
-        $this->assertEquals($paymentMethodUpdatedData['name'], $paymentMethodDataOriginalData['name']);         // Não pode ser modificado
-        $this->assertEquals($paymentMethodUpdatedData['type'], $paymentMethodDataOriginalData['type']);         // Não pode ser modificado
+        $this->assertEquals($paymentMethodUpdatedData['name'], $paymentMethodDataOriginalData['name']);         // Atributo não pode ser modificado
+        $this->assertEquals($paymentMethodUpdatedData['type'], $paymentMethodDataOriginalData['type']);         // Atributo não pode ser modificado
 
         $this->assertEquals($paymentMethodUpdatedData['active'], $paymentMethodUpdateData['active']);
     }

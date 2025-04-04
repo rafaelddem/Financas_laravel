@@ -12,47 +12,51 @@ use Illuminate\Http\Request;
 class WalletController extends Controller
 {
     private WalletService $service;
+    private OwnerService $ownerService;
 
     public function __construct()
     {
         $this->service = app(WalletService::class);
+        $this->ownerService = app(OwnerService::class);
     }
 
-    public function index(Request $request)
+    public function index(int $owner_id, Request $request)
     {
         $wallets = [];
 
         try {
-            $wallets = $this->service->list();
+            $owner = $this->ownerService->find($owner_id, ['wallets']);
+            $wallets = $owner->wallets->sortBy('main_wallet', SORT_REGULAR, true);
+
             $message = $request->get('message');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
-        } catch (\Throwable $th) {
+        } catch (\Throwable $th) {dd($th);
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('wallet.index', compact('wallets', 'message'));
+        return view('wallet.index', compact('wallets', 'owner', 'message'));
     }
 
-    public function create()
+    public function create(int $owner_id, Request $request)
     {
         try {
-            $owners = app(OwnerService::class)->list();
+            $owner = $this->ownerService->find($owner_id);
 
-            return view('wallet.create', compact('owners'));
+            return view('wallet.create', compact('owner'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('wallet.list', compact('message')));
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
     }
 
-    public function store(CreateRequest $request)
+    public function store(int $owner_id, CreateRequest $request)
     {
         try {
-            $this->service->create($request->all());
+            $this->service->create(array_merge($request->all(), ['owner_id' => $owner_id]));
 
             $message = __('Data created successfully.');
         } catch (BaseException $exception) {
@@ -61,13 +65,13 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('wallet.list', compact('message')));
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
     }
 
-    public function edit(int $id, Request $request)
+    public function edit(int $owner_id, int $id, Request $request)
     {
         try {
-            $wallet = $this->service->find($id);
+            $wallet = $this->service->find($id, ['owner']);
 
             return view('wallet.edit', compact('wallet'));
         } catch (BaseException $exception) {
@@ -76,10 +80,10 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('wallet.list', compact('message')));
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
     }
 
-    public function update(UpdateRequest $request)
+    public function update(int $owner_id, UpdateRequest $request)
     {
         try {
             $this->service->update($request->get('id'), $request->only('main_wallet', 'active', 'description'));
@@ -91,10 +95,10 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('wallet.list', compact('message')));
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
     }
 
-    public function destroy(Request $request)
+    public function destroy(int $owner_id, Request $request)
     {
         try {
             $this->service->delete($request->get('id'));
@@ -106,6 +110,6 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('wallet.list', compact('message')));
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
     }
 }

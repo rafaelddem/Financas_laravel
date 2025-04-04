@@ -38,7 +38,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{{route('owner.list')}}">{{__('Owner')}}</a></li>
-                        <li><a class="dropdown-item" href="{{route('wallet.list')}}">{{__('Wallet')}}</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{route('payment-method.list')}}">{{__('Payment Method')}}</a></li>
                         <li><a class="dropdown-item" href="{{route('transaction-type.list')}}">{{__('Transaction Type')}}</a></li>
                     </ul>
@@ -48,6 +48,7 @@
     </nav>
     <div class="container">
         <div class="jumbotron">
+            <br />
             <h1>@yield('header')</h1>
         </div>
 

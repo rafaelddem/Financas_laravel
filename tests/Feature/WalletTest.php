@@ -13,7 +13,8 @@ class WalletTest extends TestCase
 
     public function test_index(): void
     {
-        $response = $this->get(route('wallet.list'));
+        $owner = Owner::factory()->create(['active' => true]);
+        $response = $this->get(route('owner.wallet.list', ['owner_id' => $owner->id]));
 
         $response->assertStatus(200);
         $this->assertArrayHasKey('wallets', $response->original);
@@ -27,8 +28,8 @@ class WalletTest extends TestCase
             'active' => true,
         ]);
 
-        $this->post(route('wallet.store'), $dataWallet->toArray())
-            ->assertRedirect(route('wallet.list', ['message' => __('Data created successfully.')]));
+        $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('Data created successfully.')]));
 
         $this->assertDatabaseHas('wallets', $dataWallet->toArray());
         $this->assertEquals(1, $owner->wallets()->where('main_wallet', true)->count());
@@ -42,66 +43,62 @@ class WalletTest extends TestCase
             'active' => false,
         ]);
 
-        $this->post(route('wallet.store'), $dataWallet->toArray())
-            ->assertRedirect(route('wallet.list', ['message' => __('Data created successfully.')]));
+        $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('Data created successfully.')]));
 
         $this->assertDatabaseHas('wallets', $dataWallet->toArray());
     }
 
     public function test_create_fail_without_name(): void
     {
+        $owner = Owner::factory()->create(['active' => true]);
         $dataWallet = Wallet::factory()->make();
         unset($dataWallet['name']);
 
-        $this->post(route('wallet.store'), $dataWallet->toArray())
+        $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
     }
 
     public function test_create_fail_duplicate_name(): void
     {
+        $owner = Owner::factory()->create(['active' => true]);
         $dataWallet = Wallet::factory()->create();
 
-        $this->post(route('wallet.store'), $dataWallet->toArray())
+        $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
     }
 
     public function test_create_fail_very_short_name(): void
     {
+        $owner = Owner::factory()->create(['active' => true]);
         $dataWallet = Wallet::factory()->make([
             'name' => 'Na'
         ]);
 
-        $this->post(route('wallet.store'), $dataWallet->toArray())
+        $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 45])]);
     }
 
     public function test_create_fail_very_long_name(): void
     {
+        $owner = Owner::factory()->create(['active' => true]);
         $dataWallet = Wallet::factory()->make([
             'name' => '1234567890123456789012345678901234567890123456'
         ]);
 
-        $this->post(route('wallet.store'), $dataWallet->toArray())
+        $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
             ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 45])]);
-    }
-
-    public function test_create_fail_without_owner(): void
-    {
-        $dataWallet = Wallet::factory()->make();
-        unset($dataWallet['owner_id']);
-
-        $this->post(route('wallet.store'), $dataWallet->toArray())
-            ->assertSessionHasErrors(['owner_id' => __('It is necessary to inform who this wallet belongs to.')]);
     }
 
     public function test_create_fail_inactivate_main_wallet(): void
     {
+        $owner = Owner::factory()->create(['active' => true]);
         $dataWallet = Wallet::factory()->make([
             'main_wallet' => true,
             'active' => false,
         ]);
 
-        $this->post(route('wallet.store'), $dataWallet->toArray())
+        $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
             ->assertSessionHasErrors(['active' => __('A wallet marked as main cannot be inactive.')]);
     }
 
@@ -117,8 +114,8 @@ class WalletTest extends TestCase
             'active' => true,
         ])->toArray();
 
-        $this->put(route('wallet.update', ['id' => $secondaryWallet->id]), $secondaryWalletNewData)
-            ->assertRedirect(route('wallet.list', ['message' => __('Data updated successfully.')]));
+        $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $secondaryWallet->id]), $secondaryWalletNewData)
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('Data updated successfully.')]));
 
         $secondaryWalletOriginalData = $secondaryWallet->toArray();
         $secondaryWalletUpdatedData = $secondaryWallet->refresh();
@@ -138,7 +135,7 @@ class WalletTest extends TestCase
         $newDataWallet = $wallet->toArray();
         $newDataWallet['active'] = false;
 
-        $this->put(route('wallet.update', ['id' => $wallet->id]), $newDataWallet)
+        $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $wallet->id]), $newDataWallet)
             ->assertSessionHasErrors(['active' => __('A wallet marked as main cannot be inactive.')]);
     }
 
@@ -149,8 +146,8 @@ class WalletTest extends TestCase
         $newDataWallet = $wallet->toArray();
         $newDataWallet['main_wallet'] = false;
 
-        $this->put(route('wallet.update', ['id' => $wallet->id]), $newDataWallet)
-            ->assertRedirect(route('wallet.list', ['message' => __('The main wallet of an account cannot be unmarked as such.')]));
+        $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $wallet->id]), $newDataWallet)
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('The main wallet of an account cannot be unmarked as such.')]));
     }
 
     public function test_update_inactivate_secondary_wallet(): void
@@ -163,8 +160,8 @@ class WalletTest extends TestCase
         $newDataWallet = $wallet->toArray();
         $newDataWallet['active'] = false;
 
-        $this->put(route('wallet.update', ['id' => $wallet->id]), $newDataWallet)
-            ->assertRedirect(route('wallet.list', ['message' => __('Data updated successfully.')]));
+        $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $wallet->id]), $newDataWallet)
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('Data updated successfully.')]));
     }
 
     public function test_update_activate_secondary_wallet(): void
@@ -177,8 +174,8 @@ class WalletTest extends TestCase
         $newDataWallet = $wallet->toArray();
         $newDataWallet['active'] = true;
 
-        $this->put(route('wallet.update', ['id' => $wallet->id]), $newDataWallet)
-            ->assertRedirect(route('wallet.list', ['message' => __('Data updated successfully.')]));
+        $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $wallet->id]), $newDataWallet)
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('Data updated successfully.')]));
 
         unset($newDataWallet['created_at'], $newDataWallet['updated_at']);
         $this->assertDatabaseHas('wallets', $newDataWallet);
@@ -191,8 +188,8 @@ class WalletTest extends TestCase
         $newDataWallet = $wallet->toArray();
         $newDataWallet['active'] = true;
 
-        $this->put(route('wallet.update', ['id' => $wallet->id]), $newDataWallet)
-            ->assertRedirect(route('wallet.list', ['message' => __('It is not allowed to activate a Wallet whose Owner is inactive.')]));
+        $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $wallet->id]), $newDataWallet)
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('It is not allowed to activate a Wallet whose Owner is inactive.')]));
     }
 
     /**

@@ -94,7 +94,7 @@ class TransactionTypeTest extends TestCase
 
         $transactionTypeDataOriginalData = $transactionTypeData->toArray();
         $transactionTypeUpdatedData = $transactionTypeData->refresh();
-        $this->assertEquals($transactionTypeUpdatedData['name'], $transactionTypeDataOriginalData['name']);         // Não pode ser modificado
+        $this->assertEquals($transactionTypeUpdatedData['name'], $transactionTypeDataOriginalData['name']);         // Atributo não pode ser modificado
         
         $this->assertEquals($transactionTypeUpdatedData['relevance'], $transactionTypeUpdateData['relevance']);
         $this->assertEquals($transactionTypeUpdatedData['active'], $transactionTypeUpdateData['active']);

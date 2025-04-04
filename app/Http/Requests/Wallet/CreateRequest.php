@@ -18,7 +18,6 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:wallets,name,NULL,NULL,owner_id,' . $this->get('owner_id') . '|between:3,45|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
-            'owner_id' => 'required|integer|exists:owners,id',
             'description' => 'max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
             'active' => 'required_if:main_wallet,true|accepted_if:main_wallet,true',
         ];
@@ -31,7 +30,6 @@ class CreateRequest extends FormRequest
             'name.unique' => __('validation.unique', ['attribute' => 'Nome']),
             'name.between' => __('validation.between', ['attribute' => 'Nome']),
             'name.regex' => __('The :attribute field must contain only letters, numbers, periods, dashes and spaces.', ['attribute' => 'Nome']),
-            'owner_id.required' => __('It is necessary to inform who this wallet belongs to.'),
             'description.max' => __('validation.max', ['attribute' => 'Descrição']),
             'description.regex' => __('The :attribute field must contain only letters, numbers, periods, dashes and spaces.', ['attribute' => 'Descrição']),
             'active.required_if' => __('A wallet marked as main cannot be inactive.'),

@@ -21,10 +21,10 @@ class BaseService
         }
     }
 
-    public function find(int $id)
+    public function find(int $id, array $with = [])
     {
         try {
-            return $this->repository->find($id);
+            return $this->repository->find($id, $with);
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {

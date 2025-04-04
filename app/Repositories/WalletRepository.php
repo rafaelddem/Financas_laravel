@@ -15,7 +15,6 @@ class WalletRepository extends BaseRepository
     {
         return $this->model
             ->with('owner')
-            ->orderby('owner_id', 'asc')
             ->orderby('main_wallet', 'desc')
             ->orderby('active', 'desc')
             ->orderby('name', 'asc')

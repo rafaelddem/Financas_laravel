@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('header')
-{{__('Wallet')}}
+{{__('Wallet from owner', ['owner' => $wallet->owner->name])}}
 @endsection
 
 @section('content')
@@ -22,15 +22,12 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <form method="post" action="{{route('wallet.update')}}">
+            <form method="post" action="{{route('owner.wallet.update', ['owner_id' => $wallet->owner_id])}}">
                 @csrf @method('PUT')
                 <div class="container">
                     <input type="hidden" name="id" value={{$wallet->id}}>
                     <label for="name">Nome</label>
                     <input type="text" class="form-control" name="name" id="name" value="{{ $wallet->name }}" disabled>
-                    <br />
-                    <label for="owner_id">Pertencente a:</label>
-                    <input type="text" class="form-control" name="name" id="name" value="{{ $wallet->owner->name }}" disabled>
                     <br />
                     @if ($wallet->main_wallet)
                         <label for="nome">Carteira Principal</label>
@@ -46,7 +43,7 @@
                     @endif
                     <br />
                     <input class="btn btn-primary mt-2" type="submit" value="Atualizar">
-                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('wallet.list')}}'">
+                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('owner.wallet.list', ['owner_id' => $wallet->owner_id])}}'">
                 </div>
             </form>
         </div>

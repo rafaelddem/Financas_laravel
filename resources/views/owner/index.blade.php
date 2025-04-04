@@ -37,19 +37,22 @@
         </div>
         <div class="col">
             <ul class="list-group">
-                @foreach($owners as $itemOwner)
+                @foreach($owners as $owner)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $itemOwner->name }}
-                    @if(!$itemOwner->active)
+                    {{ $owner->name }}
+                    @if(!$owner->active)
                         (inativo)
                     @endif
 
                     <span class="d-flex">
+                        <form method="get" action="{{route('owner.wallet.list', ['owner_id' => $owner->id])}}">
+                            <button type="submit" class="btn btn-primary">{{__('Wallets')}}</button>
+                        </form>
                         <form method="post" action="{{route('owner.update')}}">
                             @csrf @method('PUT')
-                            <input type="hidden" name="id" value={{$itemOwner->id}}>
-                            <input type="hidden" name="active" value={{!$itemOwner->active}}>
-                            <button type="submit" class="btn btn-primary">@if ($itemOwner->active) Inativar @else Ativar @endif</button>
+                            <input type="hidden" name="id" value={{$owner->id}}>
+                            <input type="hidden" name="active" value={{!$owner->active}}>
+                            <button type="submit" class="btn btn-primary">@if ($owner->active) Inativar @else Ativar @endif</button>
                         </form>
                     </span>
                 </li>

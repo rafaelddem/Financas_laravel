@@ -14,6 +14,10 @@
     "Owner": "Dono",
 
     "Wallet": "Carteira",
+    "Wallet from owner": "Carteira de :owner",
+    "New wallet for owner": "Nova carteira para :owner",
+    "Wallets": "Carteiras",
+    "Wallets from owner": "Carteiras de :owner",
     "Standard Owner's Wallet": "Carteira padrão de :owner",
     "Welcome :name": "Bom dia :name",
     "The :attribute field must contain only letters, numbers, periods, dashes and spaces.": "O campo :attribute deve conter apenas letras, números, pontos, traços e espaços.",
