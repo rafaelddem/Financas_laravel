@@ -20,7 +20,7 @@ class OwnerFactory extends Factory
     {
         return [
             'name' => substr($this->faker->name(), 0, 30),
-            'active' => $this->faker->boolean(),
+            'active' => true,
         ];
     }
 

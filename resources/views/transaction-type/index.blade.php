@@ -18,7 +18,6 @@
 </div>
 @endif
 
-<br />
 <div class="container">
     <div class="row">
         <a href="{{ route('transaction-type.create') }}" class="btn btn-primary">Novo</a>

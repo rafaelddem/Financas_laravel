@@ -17,7 +17,7 @@ class CreateCardsTable extends Migration
             $table->increments('id');
             $table->integer('wallet_id')->unsigned();
             $table->string('name', 20)->nullable(false);
-            $table->boolean('credit')->default(false);
+            $table->enum('card_type', ['debit', 'credit'])->nullable(false);
             $table->integer('first_day_month');
             $table->integer('days_to_expiration');
             $table->boolean('active')->default(true);

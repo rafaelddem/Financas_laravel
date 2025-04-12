@@ -1,7 +1,11 @@
 @extends('layout')
 
+@section('path')
+{{__('Path to wallet', ['owner' => $owner->name])}}
+@endsection
+
 @section('header')
-{{__('New wallet for owner', ['owner' => $owner->name])}}
+{{__('New wallet')}}
 @endsection
 
 @section('content')
@@ -18,7 +22,6 @@
 </div>
 @endif
 
-<br />
 <div class="container">
     <div class="row">
         <div class="col">

@@ -31,7 +31,7 @@ class WalletController extends Controller
             $message = $request->get('message');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
-        } catch (\Throwable $th) {dd($th);
+        } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 

@@ -234,10 +234,11 @@ A entidade *Cartão* (internamente ao sistema, identificada como "card") é a en
     - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
     - tamanho:              De 3 a 20 caracteres;
     - alteração:            Não permitida.
-- crédito (credit):
-    - objetivo:             Define se o *Cartão* é do tipo "crédito";
+- crédito (card_type):
+    - objetivo:             Define se o *Cartão* é do tipo "crédito" ou "débito";
     - obrigatório:          Sim;
-    - tipo dado:            Booleano;
+    - tipo dado:            Enum;
+    - valores aceitos:      'debit' (para débito) ou 'credit' (para crédito);
     - alteração:            Não permitida.
 - primeiro dia do mês (first_day_month):
     - objetivo:             Define o primeiro dia da fatura do cartão;
@@ -277,11 +278,10 @@ Nome da tabela: cards
     - tamanho: 20;
     - não permite valor nulo;
     - valor único.
-- credit: Referente ao atributo "crédito". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
-    - não permite valor nulo;
-    - valor padrão: 0.
+- card_type: Referente ao atributo "crédito". Terá as seguintes características:
+    - tipo: enum;
+    - valores aceitos: 'debit' ou 'credit';
+    - não permite valor nulo.
 - first_day_month: Referente ao atributo "primeiro dia do mês". Terá as seguintes características:
     - tipo: int;
     - tamanho: 2;
@@ -304,15 +304,15 @@ Nome da tabela: cards
 
 #### 1.1.3.4. Características da entidade
 
-- Característica #1: Não é permitida a exclusão de um registro de *Cartão*, apenas sua inativação;
+- Característica #1: Não é permitido que duas entidades *Cartão* possuam o mesmo nome;
 
-- Característica #2: É permitida a inativação de um *Cartão*, porém, isso não afeta suas fatura, que permanecerão em aberto até que sejam quitadas;
+- Característica #2: Quando uma entidade *Cartão* é criada, sua primeira *Fatura* (mais sobre a entidade *Fatura* no item 1.1.4) é criada automaticamente. Além de ser adicionado (o *Cartão*) a Rotina diária de fechamento/criação de faturas.
 
-- Característica #3: Não é permitida a reativação de um *Cartão*;
+- Característica #3: É permitida a inativação de um *Cartão*, porém, isso não afeta suas fatura, que permanecerão em aberto até que sejam quitadas;
 
-- Característica #4: Não é permitido que duas entidades *Cartão* possuam o mesmo nome;
+- Característica #4: Não é permitida a reativação de um *Cartão*;
 
-- Característica #5: Quando uma entidade *Cartão* é criada, sua primeira *Fatura* (mais sobre a entidade *Fatura* no item 1.1.4) é criada automaticamente. Além de ser adicionado (o *Cartão*) a Rotina diária de fechamento/criação de faturas.
+- Característica #5: Não é permitida a exclusão de um registro de *Cartão*, apenas sua inativação;
 
 
 #### 1.1.4. Fatura (Credit Card Dates)

@@ -1,7 +1,11 @@
 @extends('layout')
 
+@section('path')
+{{__('Path to wallet', ['owner' => $owner->name])}}
+@endsection
+
 @section('header')
-{{__('Wallets from owner', ['owner' => $owner->name])}}
+{{__('Wallets')}}
 @endsection
 
 @section('content')
@@ -18,7 +22,6 @@
 </div>
 @endif
 
-<br />
 <div class="container">
     <div class="row">
         <a href="{{ route('owner.wallet.create', ['owner_id' => $owner->id]) }}" class="btn btn-primary">Novo</a>
@@ -36,6 +39,9 @@
                     @endif
 
                     <span class="d-flex">
+                        <form method="get" action="{{route('owner.wallet.card.list', ['owner_id' => $owner->id, 'wallet_id' => $wallet->id, 'id' => $wallet->id])}}">
+                            <button type="submit" class="btn btn-primary">{{__('Cards')}}</button>
+                        </form>
                         @if(!$wallet->main_wallet)
                         <form method="get" action="{{route('owner.wallet.edit', ['owner_id' => $owner->id, 'id' => $wallet->id])}}">
                             <button type="submit" class="btn btn-primary">Editar</button>

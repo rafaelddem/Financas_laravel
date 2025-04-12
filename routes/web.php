@@ -32,6 +32,14 @@ Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
         Route::get('/{id}', [WalletController::class, 'edit'])->name('edit');
         Route::put('/', [WalletController::class, 'update'])->name('update');
         Route::delete('/', [WalletController::class, 'destroy'])->name('destroy');
+
+        Route::group(['prefix' => '{wallet_id}/cartao', 'as' => 'card.'], function () {
+            Route::get('/', [CardController::class, 'index'])->name('list');
+            Route::get('/novo', [CardController::class, 'create'])->name('create');
+            Route::post('/', [CardController::class, 'store'])->name('store');
+            Route::get('/{id}', [CardController::class, 'edit'])->name('edit');
+            Route::put('/', [CardController::class, 'update'])->name('update');
+        });
     });
 });
 

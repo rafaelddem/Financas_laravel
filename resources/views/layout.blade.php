@@ -49,7 +49,9 @@
     <div class="container">
         <div class="jumbotron">
             <br />
+            @yield('path')
             <h1>@yield('header')</h1>
+            <br />
         </div>
 
         @yield('content')

@@ -26,7 +26,7 @@ class WalletFactory extends Factory
         ];
     }
 
-    public function fromOwner(?Owner $owner, bool $first = false)
+    public function fromOwner(?Owner $owner = null, bool $first = false)
     {
         if (empty($owner)) {
             $owner = Owner::factory()->create();

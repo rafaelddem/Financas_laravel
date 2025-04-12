@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Card extends Model
 {
-    protected $fillable = ['wallet_id', 'name', 'credit', 'first_day_month', 'days_to_expiration', 'active'];
+    use HasFactory;
+
+    protected $fillable = ['wallet_id', 'name', 'card_type', 'first_day_month', 'days_to_expiration', 'active'];
 
     protected $casts = ['active' => 'boolean'];
 
@@ -16,6 +19,6 @@ class Card extends Model
      */
     public function wallet(): BelongsTo
     {
-        return $this->belongsTo(wallet::class);
+        return $this->belongsTo(Wallet::class);
     }
 }
