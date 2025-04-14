@@ -8,7 +8,7 @@ Comecei esse projeto já a tanto tempo que nem lembro mais, e nesse meio tempo m
 
 A ideia principal do sistema é criar uma API que seja capaz de gerenciar as finanças pessoais de uma determinada pessoa. Cadastro de compras, salário, empréstimos, geração de relatório de dívidas, previsão de gastos e entradas de valores, etc... A seguir, detalharei melhor cada função.
 
-Obs.: Optei por utilizar os nomes de entidades, atributos e funções em inglês, pois notei que esse é o padrão utilizado na maioria dos projetos. Por esse motivo, nomeei as entidades como "owner", "wallet" e "transaction" ao invés de "pessoa", "carteira" e "transação". No entanto, para essa documentação, escolhi também manter alguns nomes em português, pois acredito que isso facilitará a compreensão do funcionamento do sistema. Por exemplo, dessa forma posso descrever algo como "O título da transação identificará a mesma" ao invés de "O valor do atributo 'tittle' da entidade 'transaction' identificará a mesma". Outra questão sobre a decisão de manter os nomes em inglês é que pode levar a algumas complicações, como não encontrar uma tradução, ou achar, mas não ser precisa como na versão em português. Como por exemplo "boleto", que não encontrei uma tradução, e "fatura", que devido a dúvidas na precisão da tradução, optei por dar um nome mais genérico baseado em características da entidade (credit_card_dates).
+Obs.: Optei por utilizar os nomes de entidades, atributos e funções em inglês, pois notei que esse é o padrão utilizado na maioria dos projetos. Por esse motivo, nomeei as entidades como "owner", "wallet" e "transaction" ao invés de "pessoa", "carteira" e "transação". Para essa documentação escolhi manter também as versões dos nomes em português, pois acredito que isso facilitará a compreensão do funcionamento do sistema. Por exemplo, mantendo também o nome em português posso descrever algo como "O título da transação identificará a mesma" ao invés de "O valor do atributo 'tittle' da entidade 'transaction' identificará a mesma". Ainda sobre os nomes em inglês, pode existir algumas conplicações nas traduções, pois não encontrei equivalência para nomes como "Boleto", e outros que tive dúvidas nos resultados encontrados, como "Fatura".
 
 
 ### 1.1. Entidades
@@ -315,12 +315,12 @@ Nome da tabela: cards
 - Característica #5: Não é permitida a exclusão de um registro de *Cartão*, apenas sua inativação;
 
 
-#### 1.1.4. Fatura (Credit Card Dates)
+#### 1.1.4. Fatura (Invoices)
 
 
 #### 1.1.4.1. Descrição
 
-A entidade *Fatura* (internamente ao sistema, identificada como "credit_card_dates") é a entidade que representa a fatura dos cartões de crédito. Ela mantém os períodos de início e fim de cada fatura, assim como a data de vencimento e o seu valor.
+A entidade *Fatura* (internamente ao sistema, identificada como "invoice") é a entidade que representa a fatura dos cartões de crédito. Ela mantém os períodos de início e fim de cada fatura, assim como a data de vencimento e o seu valor.
 
 
 #### 1.1.4.2. Atributos da entidade
@@ -355,17 +355,17 @@ A entidade *Fatura* (internamente ao sistema, identificada como "credit_card_dat
     - tipo dado:            Decimal;
     - formato:              000000.00;
     - alteração:            Permitida.
-- estado (status):
-    - objetivo:             Definir o estado de uma fatura (Aberta, Fechada, Quitada ou Vencida);
+- situação (status):
+    - objetivo:             Definir o situação de uma fatura (Aberta, Fechada, Quitada ou Vencida);
     - obrigatório:          Sim;
     - tipo de dado:         Alfanumérico;
-    - valores aceitos:      "Aberta", "Fechada", "Quitada" ou "Vencida";
+    - valores aceitos:      'open' (para aberta), 'closed' (para fechada), 'overdue' (para vencida) ou 'paid' (para paga);
     - alteração:            Permitida em algumas circunstâncias (ver características #3).
 
 
 #### 1.1.4.3. Banco de dados
 
-Nome da tabela: credit_card_dates
+Nome da tabela: invoices
 
 - card_id: Referente ao atributo "cartão". Terá as seguintes características:
     - tipo: int;
@@ -383,11 +383,10 @@ Nome da tabela: credit_card_dates
 - value: Referente ao atributo "valor". Terá as seguintes características:
     - tipo: double;
     - tamanho: 8 sendo 2 casas decimais.
-- status: Referente ao atributo "estado". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
-    - não permite valor nulo;
-    - valor padrão: 1.
+- status: Referente ao atributo "situação". Terá as seguintes características:
+    - tipo: enum;
+    - valores aceitos: 'open', 'closed', 'overdue' ou 'paid';
+    - não permite valor nulo.
 
 - chave primária: 
     - id
@@ -397,38 +396,71 @@ Nome da tabela: credit_card_dates
 
 #### 1.1.4.4. Características da entidade
 
-- Característica #1: Os registros das *Fatura*s serão gerados exclusivamente pelo sistema. Uma rotina diária verificará a necessidade de fechamento e criação de *Fatura*s;
+- Característica #1: Os registros das *Fatura*s serão gerados exclusivamente pelo sistema. Uma rotina diária verificará a necessidade de fechamento e criação de *Fatura*s. Novas *Fatura*s serão geradas enquanto seu *Cartão* estiver ativo, e enquanto existirem *Parcelas* pendentes para esse *Cartão*;
 
-- Característica #2: Somente registros das *Fatura*s antigas e da atual serão mantidos, *Fatura*s futuras não devem ser salvas, uma vez que não ha garantia sobre suas datas;
+- Característica #2: Somente registros das *Fatura*s antigas e da atual serão mantidos, *Fatura*s futuras não devem ser salvas, uma vez que não há garantia sobre suas datas;
 
-- Característica #3: As *Fatura*s terão quatro "estados": Aberta, Fechada, Quitada e Vencida. Mais detalhes sobre estes estados na Tarefa #1 (item 1.1.4.5);
+- Característica #3: Toda *Fatura* está relacionada uma única *Carteira*, já que toda *Fatura* pertence a um *Cartão*, e todo *Cartão* está relacionado a uma única *Carteira*. No entanto, uma *Carteira* pode possuir mais de uma *Cartão* e por isso, mais de uma *Fatura*;
 
-- Característica #4: Não é permitido a exclusão de uma *Fatura*. Sua alteração pode ocorrer somente nos casos descritos nas Características #10 e #11;
+- Característica #4: O valor da *data de início* de uma fatura, caso não hajam faturas anteriores, deve ser a data de criação do cartão. Caso já existam *Fatura*s anteriores, então a *data de início* da *Fatura* (que está sendo criada) deve ser o dia seguinte a *data final* da última *Fatura* informada;
 
-- Característica #5: Somente *Fatura*s marcadas como "Fechada" serão liberadas para pagamento;
+- Característica #5: O valor da *data final* de uma *Fatura* deve ser sempre o dia anterior a *data de início* da próxima *Fatura*. Ver a tarefa #1 (item 1.1.4.5) para mais detalhes;
 
-- Característica #6: O valor da *data de vencimento* da *Fatura* deve ser maior que a sua *data final*, assim como a *data final* da *Fatura* deve ser maior que a sua *data de início*;
+- Característica #6: O valor da *data de vencimento* da *Fatura* deve ser maior que a sua *data final*;
 
-- Característica #7: Quanto ao valor da *data de início* de uma fatura, caso não hajam faturas anteriores, deve-se calcular a mesma considerando o valor do atributo *primeiro dia do mês* do *Cartão* relacionado (mais detalhes na tarefa #2, item 1.1.4.5). Caso já existam *Fatura*s anteriores, então a *data de início* da *Fatura* (que está sendo criada) deve ser o dia seguinte a *data final* da última *Fatura* informada;
+- Característica #7: O valor padrão da *data de vencimento* será calculada somando o atributo *dias para o vencimento* do *Cartão* relacionado, a *data final* da *Fatura*. Um exemplo foi apresentado na Tarefa #2 (item 1.1.4.5);
 
-- Característica #8: Quanto ao valor da *data final* de uma *Fatura*, seu valor deve ser sempre o dia anterior a *data de início* da próxima *Fatura*. Ver a tarefa #3 (item 1.1.4.5) para mais detalhes;
+- Característica #8: Quando uma *Fatura* é criada, ela deve recalcular o atributo *data da parcela* (ver mais sobre Parcela no item 1.1.8) das *Parcela*s que passarem a pertencer a essa *Fatura* recém criada (ver Tarefa #4, item 1.1.4.5);
 
-- Característica #9: O valor padrão da *data de vencimento* será calculada somando o atributo *dias para o vencimento* do *Cartão* relacionado, a *data final* da *Fatura*. Um exemplo foi apresentado na Tarefa #3 (item 1.1.4.5);
+- Característica #9: Os valores permitidos para o campo "situação" de uma *Fatura* serão: Aberta, Fechada, Quitada e Vencida. Somente um valor (dentre os citados) será aceito por vez, mas será permitida a alteração do mesmo ao longo do tempo. Mais detalhes sobre a "situação" de uma *Fatura* na Tarefa #3 (item 1.1.4.5);
 
 - Característica #10: É permitido a alteração da *data de vencimento* pelo usuário, mas somente se a *Fatura* estiver marcada como "Aberta" ou "Fechada";
 
-- Característica #11: O valor da *Fatura* será calculado pelo sistema, e será recalculado a cada inserção de uma transação relacionada a esta *Fatura*. É vetado a alteração a valor da *Fatura* pelo usuário;
+- Característica #11: O valor da *Fatura* será calculado pelo sistema com base nas parcelas que farão parte da mesma, e será recalculado a cada inserção de uma transação relacionada a esta *Fatura*. É vetado a alteração a valor da *Fatura* pelo usuário;
 
-- Característica #12: Quando uma *Fatura* é criada, ela deve recalcular o atributo *data da parcela* (ver mais sobre Parcela no item 1.1.8) das *Parcela*s que passarem a pertencer a essa *Fatura* recém criada (ver Tarefa #5, item 1.1.4.5);
+- Característica #12: Em um primeiro momento, somente *Fatura*s marcadas como "Fechada" serão liberadas para pagamento;
 
-- Característica #13: Toda *Fatura* está relacionada uma única *Carteira*, já que toda *Fatura* pertence a um *Cartão*, e todo *Cartão* está relacionado a uma única *Carteira*. No entanto, uma *Carteira* pode possuir mais de uma *Cartão* e por isso, mais de uma *Fatura*.
+- Característica #13: *Fatura*s marcadas como "Vencidas" serão quitadas mediante o pagamento de uma multa, além do valor da *Fatura*;
 
-- Característica #14: Para que o pagamento de uma *Fatura* seja permitida, no momento do seu pagamento a *Carteira* a qual ela pertence deverá possuir um valor igual ou maior ao *valor* da *Fatura*.
+- Característica #14: Para que o pagamento de uma *Fatura* seja permitida, no momento do seu pagamento a *Carteira* a qual ela pertence deverá possuir um valor igual ou maior ao *valor* da *Fatura*, uma vez que este valor será removido da carteira;
+
+- Característica #15: A alteração de uma *Fatura* pode ocorrer somente nos casos descritos nas Características #9, #10 e #11;
+
+- Característica #16: Não é permitido a exclusão de uma *Fatura*.
 
 
 #### 1.1.4.5. Tarefas
 
-Tarefa #1: Definir o status da *Fatura*.
+Tarefa #1: Cálculo da *data final* de uma *Fatura*.
+> A *data final* da *Fatura* será sempre o dia anterior ao da *data de início* da próxima *Fatura*, que será calculado considerando o atributo *primeiro dia do mês* do *Cartão* relacionado. Para o cálculo da *data de início* da próxima *Fatura*, considere o próximo *primeiro dia do mês* (atributo do *Cartão* relacionado a *Fatura*) posterior a data atual.
+> 
+> Para o primeiro exemplo, considere os seguintes dados:
+> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
+> - Data atual: 15/05/2023.
+> 
+> Nesse caso, como o *primeiro dia do mês* (5) é menor que o dia da data atual (15), pega-se o próximo mês (06/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), para se encontrar a *data de início* da próxima *Fatura*, ou seja, dia 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
+> 
+> Para o segundo exemplo, considere os seguintes dados:
+> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
+> - Data atual: 05/05/2023.
+> 
+> Nesse caso, como o *primeiro dia do mês* (5) é igual ao dia da data atual (5), soma-se um mês a data atual para encontrar a *data de início* da próxima *Fatura*, que nesse exemplo será 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
+> 
+> Para o terceiro exemplo, considere os seguintes dados:
+> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 15;
+> - Data atual: 10/05/2023.
+> 
+> Nesse caso, como o *primeiro dia do mês* (15) é maior que o dia da data atual (10), mantem-se o mês e o ano (05/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (15), logo, a *data de início* da próxima *Fatura* será 15/05/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 14/05/2023.
+> 
+
+Tarefa #2: Cálculo da *data de vencimento* de uma *Fatura*.
+> O cálculo da *data de vencimento* da *Fatura* deve ser feito pegando a *data final* da *Fatura*, e somando o valor do atributo *dias para o vencimento* do cartão relacionado. 
+> <br>Ex.: Caso a quantidade de dias até o vencimento seja 10, e a *data final* da *Fatura* seja dia 15/05/2023, então a *data de vencimento* da mesma será dia 25/05/2023.
+> 
+
+Tarefa #3: Definir a "situação" da *Fatura*.
+> O valor do campo "situação" de uma *Fatura* é calculado diariamente, e seguira as seguintes regras:
+> 
 > Caso a data atual for inferior a *data final* da *Fatura*, a *Fatura* será definida como "Aberta".
 > Exemplo de *Fatura* aberta: 
 > - Data no momento da verificação: 25/05/2023;
@@ -460,56 +492,7 @@ Tarefa #1: Definir o status da *Fatura*.
 > - *Fatura* paga.
 > 
 
-Tarefa #2: Cálculo da *data de início* de uma *Fatura*, quando não há *Fatura*s anteriores.
-> Será pego o último *primeiro dia do mês* (atributo do *Cartão* relacionado a *Fatura*) anterior a data atual, e será definido como a *data de início* da *Fatura*.
-> 
-> Para o primeiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 15/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é menor que o dia da data atual (15), mantém-se o mês e o ano (05/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), logo, a *data de início* da nova *Fatura* será 05/05/2023.
-> 
-> Para o segundo exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 05/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é igual ao dia da data atual (5), a *data de início* da nova *Fatura* será o mesmo que a data atual, ou seja, dia 05/05/2023.
-> 
-> Para o terceiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 15;
-> - Data atual: 10/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (15) é maior que o dia da data atual (10), pega-se o mês anterior ao atual (04/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), logo, a *data de início* da nova *Fatura* será 15/04/2023.
-> 
-
-Tarefa #3: Cálculo da *data final* de uma *Fatura*.
-> A *data final* da *Fatura* será sempre o dia anterior ao da *data de início* da próxima *Fatura*, que será calculado considerando o atributo *primeiro dia do mês* do *Cartão* relacionado. Para o cálculo da *data de início* da próxima *Fatura*, considere o próximo *primeiro dia do mês* (atributo do *Cartão* relacionado a *Fatura*) posterior a data atual.
-> 
-> Para o primeiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 15/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é menor que o dia da data atual (15), pega-se o próximo mês (06/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), para se encontrar a *data de início* da próxima *Fatura*, ou seja, dia 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
-> 
-> Para o segundo exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 05/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é igual ao dia da data atual (5), soma-se um mês a data atual para encontrar a *data de início* da próxima *Fatura*, que nesse exemplo será 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
-> 
-> Para o terceiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 15;
-> - Data atual: 10/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (15) é maior que o dia da data atual (10), mantem-se o mês e o ano (05/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (15), logo, a *data de início* da próxima *Fatura* será 15/05/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 14/05/2023.
-> 
-
-Tarefa #4: Cálculo da *data de vencimento* de uma *Fatura*.
-> O cálculo da *data de vencimento* da *Fatura* deve ser feito pegando a *data final* da *Fatura*, e somando o valor do atributo *dias para o vencimento* do cartão relacionado. 
-> <br>Ex.: Caso a quantidade de dias até o vencimento seja 10, e a *data final* da *Fatura* seja dia 15/05/2023, então a *data de vencimento* da mesma será dia 25/05/2023.
-> 
-
-Tarefa #5: Redefinir o valor do atributo *data da parcela* (ver mais sobre *Parcela* no item 1.1.8).
+Tarefa #4: Redefinir o valor do atributo *data da parcela* (ver mais sobre *Parcela* no item 1.1.8).
 > Quando uma nova *Fatura* for criada, as *Parcela*s que passarem a pertencer a essa *Fatura* terão os valores de seus atributos *data da parcela* alterados para o primeiro dia da *Fatura* recém criada.
 > <br>Ex.: Considere uma venda efetuada no dia 25/04/2023, e que 4 *Parcela*s foram geradas para essa venda, com os valores do atributo *data da parcela* salvos como "25/04/2023", "25/05/2023", "25/06/2023" e "25/07/2023". Considere também que estamos no dia 05/05/2023, e que uma nova *Fatura* foi criada, indo do dia 05/05/2023 até 04/06/2023.
 Nesse caso, a primeira *Parcela* será mantida com o mesmo valor, pois se trata de uma *Fatura* antiga. O mesmo ocorrerá com as *Parcela*s 3 e 4, pois se trata de *Fatura*s ainda não lançadas. A segunda *Parcela*, no entanto, terá o valor de seu atributo *data da parcela* alterado para "05/05/2023", a mesma *data de início* da *Fatura* a qual ela agora pertence
@@ -797,7 +780,7 @@ Nome da tabela: transaction.
 
 #### 1.1.7.4. Características da entidade
 
-- Característica #1: A exclusão de uma *Transação*, ou a alteração de seus atributos, está condicionada ao estado da(s) *Fatura*(s) a que sua(s) *Parcela*(s) pertence(m) (Tarefa #2, item 1.1.7.5);
+- Característica #1: A exclusão de uma *Transação*, ou a alteração de seus atributos, está condicionada ao situação da(s) *Fatura*(s) a que sua(s) *Parcela*(s) pertence(m) (Tarefa #2, item 1.1.7.5);
 
 - Característica #2: O valor informado nos atributos "data de processamento* e *data da transação*, por padrão, será igual. Caso sejam diferentes, o valor informado no atributo *data de processamento* deve ser maior que o valor informado no atributo *data da transação*, e a diferença entre os dois valores não deve ser maior que 3 dias.
 
