@@ -8,7 +8,7 @@ Comecei esse projeto já a tanto tempo que nem lembro mais, e nesse meio tempo m
 
 A ideia principal do sistema é criar uma API que seja capaz de gerenciar as finanças pessoais de uma determinada pessoa. Cadastro de compras, salário, empréstimos, geração de relatório de dívidas, previsão de gastos e entradas de valores, etc... A seguir, detalharei melhor cada função.
 
-Obs.: Optei por utilizar os nomes de entidades, atributos e funções em inglês, pois notei que esse é o padrão utilizado na maioria dos projetos. Por esse motivo, nomeei as entidades como "owner", "wallet" e "transaction" ao invés de "pessoa", "carteira" e "transação". No entanto, para essa documentação, escolhi também manter alguns nomes em português, pois acredito que isso facilitará a compreensão do funcionamento do sistema. Por exemplo, dessa forma posso descrever algo como "O título da transação identificará a mesma" ao invés de "O valor do atributo 'tittle' da entidade 'transaction' identificará a mesma". Outra questão sobre a decisão de manter os nomes em inglês é que pode levar a algumas complicações, como não encontrar uma tradução, ou achar, mas não ser precisa como na versão em português. Como por exemplo "boleto", que não encontrei uma tradução, e "fatura", que devido a dúvidas na precisão da tradução, optei por dar um nome mais genérico baseado em características da entidade (credit_card_dates).
+Obs.: Optei por utilizar os nomes de entidades, atributos e funções em inglês, pois notei que esse é o padrão utilizado na maioria dos projetos. Por esse motivo, nomeei as entidades como "owner", "wallet" e "transaction" ao invés de "pessoa", "carteira" e "transação". Para essa documentação escolhi manter também as versões dos nomes em português, pois acredito que isso facilitará a compreensão do funcionamento do sistema. Por exemplo, mantendo também o nome em português posso descrever algo como "O título da transação identificará a mesma" ao invés de "O valor do atributo 'tittle' da entidade 'transaction' identificará a mesma". Ainda sobre os nomes em inglês, pode existir algumas conplicações nas traduções, pois não encontrei equivalência para nomes como "Boleto", e outros que tive dúvidas nos resultados encontrados, como "Fatura".
 
 
 ### 1.1. Entidades
@@ -39,7 +39,7 @@ A entidade *Pessoa* (internamente ao sistema, identificada como "owner") é a en
 
 #### 1.1.1.3. Banco de dados
 
-Nome da tabela: owner.
+Nome da tabela: owners.
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -68,33 +68,23 @@ Nome da tabela: owner.
 
 - Característica #2: Não é permitido que duas *Pessoa*s possuam o mesmo nome;
 
-- Característica #3: Não é permitido a inativação de uma *Pessoa* que possua pendências (Tarefa #1, item 1.1.1.5);
+- Característica #3: Não é permitido a inativação de uma *Pessoa* que possua pendências, uma vez que isso impediria ela de lançar movimentos para quitar suas pendências;
 
-- Característica #4: É exigido a existência de pelo menos uma *Carteira* (mais sobre a entidade *Carteira* no item 1.1.2) para cada *Pessoa* (Tarefa #2, item 1.1.1.5).
+- Característica #4: É exigido que cada *Pessoa* possua exatamente uma *Carteira* (mais sobre a entidade *Carteira* no item 1.1.2) marcada como sendo sua principal. A mesma deve ser criada com o mesmo status (ativa ou inativa) que sua *Pessoa*;
 
-- Característica #5: Quando uma *Pessoa* é inativada, suas *Carteira*s também deverão ser inativadas. Mesmo que uma *Pessoa* esteja inativa, os registros referentes a ela ainda serão mantidos
+- Característica #5: Quando uma *Pessoa* é inativada, suas *Carteira*s também deverão ser inativadas. Mesmo que uma *Pessoa* esteja inativa, os registros referentes a ela ainda serão mantidos;
 
-
-#### 1.1.1.5. Tarefas
-
-Tarefa #1: Validar se existem "pendências" para uma determinada *Pessoa*.
-> Buscar por todas as transações que estão em aberto para esta *Pessoa*, como débitos e empréstimos não devolvidos.
-
-Tarefa #2: Garantir que toda *Pessoa* possua pelo menos uma *Carteira* (ver o item 1.1.2 para mais detalhes).
-> Criar uma *Carteira* automaticamente quando uma *Pessoa* é criada. A *Carteira* deve ser marcada como de posse da *Pessoa* em questão.
-
-Tarefa #3: Identificar a *Carteira* principal de uma *Pessoa*.
-> Buscar a *Carteira* relacionada a *Pessoa* em questão, que esteja marcada como a principal.
+- Característica #6: Quando uma *Pessoa* é ativada, o registro de *Carteira* relacionado a ela que estiver marcado como sendo sua carteira pricipal, também deve ser reativado.
 
 
-#### 1.1.1.6. Valores pré cadastrados
+#### 1.1.1.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (owner):
 
-| Registro | id  | name              | active | Objetivo                                                                   |
-| :------: | :-: | :---------------- | :----: | :------------------------------------------------------------------------- |
-|       #1 |  1  | Sistema           |      1 | Será o "Dono" utilizado em movimentações de destino indefinido (ou origem) |
-|       #2 |  2  | (Nome do usuário) |      1 | Será o "Dono" relacionado o usuário do sistema                             |
+| Registro | id  | name              | active | Objetivo                                                                     |
+| :------: | :-: | :---------------- | :----: | :--------------------------------------------------------------------------- |
+|       #1 |  1  | Sistema           |      1 | Será a "Pessoa" utilizada em movimentações de destino indefinido (ou origem) |
+|       #2 |  2  | (Nome do usuário) |      1 | Será a "Pessoa" relacionada ao usuário do sistema                            |
 
 > Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores, o valor aqui definido seja respeitado;
 
@@ -130,8 +120,8 @@ A entidade *Carteira* (internamente ao sistema, identificada como "wallet") é a
     - alteração:            Permitida em algumas circunstâncias (ver característica #3).
 - descrição (description): 
     - objetivo:             Salvar uma pequena descrição sobre o registro;
-    - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - obrigatório:          Não;
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, vírgulas e espaços);
     - tamanho:              Entre 0 e 255 caracteres;
     - alteração:            Permitida.
 - ativo (active):
@@ -143,7 +133,7 @@ A entidade *Carteira* (internamente ao sistema, identificada como "wallet") é a
 
 #### 1.1.2.3. Banco de dados
 
-Nome da tabela: wallet
+Nome da tabela: wallets
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -176,41 +166,35 @@ Nome da tabela: wallet
 - chave primária: 
     - id
 - chave estrangeira: 
-    - owner_id faz referência ao atributo "id" da tabela "owner"
+    - owner_id faz referência ao atributo "id" da tabela "owners"
 
 
 #### 1.1.2.4. Características da entidade
 
-- Característica #1: Não é permitida a exclusão de um registro de *Carteira*, apenas sua inativação;
+- Característica #1: Quando for a única *Carteira* de uma *Pessoa*, ela será obrigatoriamente marcada como a carteira principal;
 
-- Característica #2: Quando for a única *Carteira* de uma *Pessoa*, ela será obrigatoriamente marcada como a carteira principal (Tarefa #1, item 1.1.2.5);
+- Característica #2: Não é permitido que mais de uma *Carteira* (de um mesmo Dono) esteja marcada como principal;
 
-- Característica #3: Quando uma *Carteira* é marcada como principal, as demais *Carteira*s (da mesma *Pessoa*) são automaticamente desmarcadas como tal (Tarefa #2, item 1.1.2.5);
+- Característica #3: Quando uma *Carteira* é marcada como principal, as demais *Carteira*s (da mesma *Pessoa*) são automaticamente desmarcadas como tal;
 
-- Característica #4: Não é permitida a inativação de uma *Carteira* que esteja marcada como principal (como quando esta for a única), que tenha valores (Tarefa #3, item 1.1.2.5) ou que possua pendências (Tarefa #4, item 1.1.2.5);
+- Característica #4: Uma *Carteira* recém criada pode ser marcada como principal, mas nesse caso, ela precisa obrigatóriamente ser marcada como ativa;
 
-- Característica #5: Não é permitida a reativação de uma *Carteira* cujo dono (*Pessoa*) estiver inativo (Tarefa #5, item 1.1.2.5).
+- Característica #5: Não é permitida a inativação de uma *Carteira* que esteja marcada como principal (como quando esta for a única), que tenha valores ou que possua pendências;
 
+- Característica #6: Não é permitida a reativação de uma *Carteira* cujo Dono (*Pessoa*) estiver inativo;
 
-#### 1.1.2.5. Tarefas
+- Característica #7: Não é permitido que uma *Carteira* seja desmarcada como sendo a principal;
 
-Tarefa #1: Garantir a existência de pelo menos uma *Carteira* principal para cada *Pessoa*.
-> Buscar todas as *Carteira*s relacionadas a *Pessoa* em questão, caso não existe nenhuma, a *Carteira* que estiver sendo salva será marcada como sendo a principal.
+- Característica #8: Não é permitido que uma *Carteira* tenha seu Dono alterado;
 
-Tarefa #2: Garantir a existência de uma única *Carteira* principal para cada *Pessoa*.
-> Buscar todas as *Carteira*s relacionadas a *Pessoa* em questão, que estejam marcadas como principal. Caso seja encontrado alguma *Carteira*, a mesma será desmarcada como principal. Esse procedimento será executado antes de se salvar um registro novo de *Carteira*, ou ao marcar um registro antigo como principal.
+- Característica #9: Não é permitido que uma *Carteira* tenha seu Nome alterado;
 
-Tarefa #3: Buscar o valor total presente em uma determinada *Carteira*.
-> Buscar por todas as transações (já quitadas) relacionadas a uma *Carteira*, e efetuar o somatório destes valores (valores de entradas menos valores de saída).
+- Característica #10: A remoção de um registro não será feita em definitivo. Quando um cliente optar por remover uma *Carteira*, a mesma será marcada como removida, e não aparecerá mais para o usuário. Porém, os dados da mesma ainda existirão no sistema, o que garantirá a permanência de dados necessários em relatórios futuros.
 
-Tarefa #4: Verificar a existência de valores pendentes (crédito, empréstimos e transações agendadas) para uma determinada *Carteira*.
-> Buscar por todas as transações pendentes (crédito, empréstimos e transações agendadas...) relacionadas a uma *Carteira*.
-
-Tarefa #5: Garantir que uma *Carteira* não seja ativada quando seu usuário estiver desativado.
-> Confirmar se o dono (*Pessoa*) da *Carteira* em questão está ativo.
+- Característica #11: A remoção de um registro não será permitida quando o mesmo possuir valores ou pendências;
 
 
-#### 1.1.2.6. Valores pré cadastrados
+#### 1.1.2.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (wallet):
 
@@ -223,9 +207,9 @@ Na implantação do sistema, os seguintes registros devem ser cadastrados nesta 
 
 > Obs. 2: O valor do atributo *active* pode ser **1** ou **true**, dependendo do banco de dados utilizado;
 
-> Obs. 3: Como se trata de uma referência a uma entidade Dono, o valor do atributo *owner_id* do registro #1 deve ser o mesmo do atributo *id* do registro #1 na tabela owner.
+> Obs. 3: Como se trata de uma referência a uma entidade *Pessoa*, o valor do atributo *owner_id* do registro #1 deve ser o mesmo do atributo *id* do registro #1 na tabela owner.
 
-> Obs. 4: Como se trata de uma referência a uma entidade Dono, o valor do atributo *owner_id* do registro #2 deve ser o mesmo do atributo *id* do registro #2 na tabela owner.
+> Obs. 4: Como se trata de uma referência a uma entidade *Pessoa*, o valor do atributo *owner_id* do registro #2 deve ser o mesmo do atributo *id* do registro #2 na tabela owner.
 
 
 #### 1.1.3. Cartão (Card)
@@ -250,10 +234,11 @@ A entidade *Cartão* (internamente ao sistema, identificada como "card") é a en
     - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
     - tamanho:              De 3 a 20 caracteres;
     - alteração:            Não permitida.
-- crédito (credit):
-    - objetivo:             Define se o *Cartão* é do tipo "crédito";
+- crédito (card_type):
+    - objetivo:             Define se o *Cartão* é do tipo "crédito" ou "débito";
     - obrigatório:          Sim;
-    - tipo dado:            Booleano;
+    - tipo dado:            Enum;
+    - valores aceitos:      'debit' (para débito) ou 'credit' (para crédito);
     - alteração:            Não permitida.
 - primeiro dia do mês (first_day_month):
     - objetivo:             Define o primeiro dia da fatura do cartão;
@@ -276,7 +261,7 @@ A entidade *Cartão* (internamente ao sistema, identificada como "card") é a en
 
 #### 1.1.3.3. Banco de dados
 
-Nome da tabela: card
+Nome da tabela: cards
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -293,11 +278,10 @@ Nome da tabela: card
     - tamanho: 20;
     - não permite valor nulo;
     - valor único.
-- credit: Referente ao atributo "crédito". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
-    - não permite valor nulo;
-    - valor padrão: 0.
+- card_type: Referente ao atributo "crédito". Terá as seguintes características:
+    - tipo: enum;
+    - valores aceitos: 'debit' ou 'credit';
+    - não permite valor nulo.
 - first_day_month: Referente ao atributo "primeiro dia do mês". Terá as seguintes características:
     - tipo: int;
     - tamanho: 2;
@@ -315,28 +299,28 @@ Nome da tabela: card
 - chave primária: 
     - id
 - chave estrangeira: 
-    - wallet_id faz referência ao atributo "id" da tabela "wallet"
+    - wallet_id faz referência ao atributo "id" da tabela "wallets"
 
 
 #### 1.1.3.4. Características da entidade
 
-- Característica #1: Não é permitida a exclusão de um registro de *Carteira*, apenas sua inativação;
+- Característica #1: Não é permitido que duas entidades *Cartão* possuam o mesmo nome;
 
-- Característica #2: É permitida a inativação de um *Cartão*, porém, isso não afeta suas fatura, que permanecerão em aberto até que sejam quitadas;
+- Característica #2: Quando uma entidade *Cartão* é criada, sua primeira *Fatura* (mais sobre a entidade *Fatura* no item 1.1.4) é criada automaticamente. Além de ser adicionado (o *Cartão*) a Rotina diária de fechamento/criação de faturas.
 
-- Característica #3: Não é permitida a reativação de um *Cartão*;
+- Característica #3: É permitida a inativação de um *Cartão*, porém, isso não afeta suas fatura, que permanecerão em aberto até que sejam quitadas;
 
-- Característica #4: Não é permitido que duas entidades *Cartão* possuam o mesmo nome;
+- Característica #4: Não é permitida a reativação de um *Cartão*;
 
-- Característica #5: Quando uma entidade *Cartão* é criada, sua primeira *Fatura* (mais sobre a entidade *Fatura* no item 1.1.4) é criada automaticamente. Além de ser adicionado (o *Cartão*) a Rotina diária de fechamento/criação de faturas.
+- Característica #5: Não é permitida a exclusão de um registro de *Cartão*, apenas sua inativação;
 
 
-#### 1.1.4. Fatura (Credit Card Dates)
+#### 1.1.4. Fatura (Invoices)
 
 
 #### 1.1.4.1. Descrição
 
-A entidade *Fatura* (internamente ao sistema, identificada como "credit_card_dates") é a entidade que representa a fatura dos cartões de crédito. Ela mantém os períodos de início e fim de cada fatura, assim como a data de vencimento e o seu valor.
+A entidade *Fatura* (internamente ao sistema, identificada como "invoice") é a entidade que representa a fatura dos cartões de crédito. Ela mantém os períodos de início e fim de cada fatura, assim como a data de vencimento e o seu valor.
 
 
 #### 1.1.4.2. Atributos da entidade
@@ -371,17 +355,17 @@ A entidade *Fatura* (internamente ao sistema, identificada como "credit_card_dat
     - tipo dado:            Decimal;
     - formato:              000000.00;
     - alteração:            Permitida.
-- estado (status):
-    - objetivo:             Definir o estado de uma fatura (Aberta, Fechada, Quitada ou Vencida);
+- situação (status):
+    - objetivo:             Definir o situação de uma fatura (Aberta, Fechada, Quitada ou Vencida);
     - obrigatório:          Sim;
     - tipo de dado:         Alfanumérico;
-    - valores aceitos:      "Aberta", "Fechada", "Quitada" ou "Vencida";
+    - valores aceitos:      'open' (para aberta), 'closed' (para fechada), 'overdue' (para vencida) ou 'paid' (para paga);
     - alteração:            Permitida em algumas circunstâncias (ver características #3).
 
 
 #### 1.1.4.3. Banco de dados
 
-Nome da tabela: credit_card_dates
+Nome da tabela: invoices
 
 - card_id: Referente ao atributo "cartão". Terá as seguintes características:
     - tipo: int;
@@ -399,11 +383,10 @@ Nome da tabela: credit_card_dates
 - value: Referente ao atributo "valor". Terá as seguintes características:
     - tipo: double;
     - tamanho: 8 sendo 2 casas decimais.
-- status: Referente ao atributo "estado". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
-    - não permite valor nulo;
-    - valor padrão: 1.
+- status: Referente ao atributo "situação". Terá as seguintes características:
+    - tipo: enum;
+    - valores aceitos: 'open', 'closed', 'overdue' ou 'paid';
+    - não permite valor nulo.
 
 - chave primária: 
     - id
@@ -413,38 +396,71 @@ Nome da tabela: credit_card_dates
 
 #### 1.1.4.4. Características da entidade
 
-- Característica #1: Os registros das *Fatura*s serão gerados exclusivamente pelo sistema. Uma rotina diária verificará a necessidade de fechamento e criação de *Fatura*s;
+- Característica #1: Os registros das *Fatura*s serão gerados exclusivamente pelo sistema. Uma rotina diária verificará a necessidade de fechamento e criação de *Fatura*s. Novas *Fatura*s serão geradas enquanto seu *Cartão* estiver ativo, e enquanto existirem *Parcelas* pendentes para esse *Cartão*;
 
-- Característica #2: Somente registros das *Fatura*s antigas e da atual serão mantidos, *Fatura*s futuras não devem ser salvas, uma vez que não a garantia sobre suas datas;
+- Característica #2: Somente registros das *Fatura*s antigas e da atual serão mantidos, *Fatura*s futuras não devem ser salvas, uma vez que não há garantia sobre suas datas;
 
-- Característica #3: As *Fatura*s terão quatro "estados": Aberta, Fechada, Quitada e Vencida. Mais detalhes sobre estes estados na Tarefa #1 (item 1.1.4.5);
+- Característica #3: Toda *Fatura* está relacionada uma única *Carteira*, já que toda *Fatura* pertence a um *Cartão*, e todo *Cartão* está relacionado a uma única *Carteira*. No entanto, uma *Carteira* pode possuir mais de uma *Cartão* e por isso, mais de uma *Fatura*;
 
-- Característica #4: Não é permitido a exclusão de uma *Fatura*. Sua alteração pode ocorrer somente nos casos descritos nas Características #10 e #11;
+- Característica #4: O valor da *data de início* de uma fatura, caso não hajam faturas anteriores, deve ser a data de criação do cartão. Caso já existam *Fatura*s anteriores, então a *data de início* da *Fatura* (que está sendo criada) deve ser o dia seguinte a *data final* da última *Fatura* informada;
 
-- Característica #5: Somente *Fatura*s marcadas como "Fechada" serão liberadas para pagamento;
+- Característica #5: O valor da *data final* de uma *Fatura* deve ser sempre o dia anterior a *data de início* da próxima *Fatura*. Ver a tarefa #1 (item 1.1.4.5) para mais detalhes;
 
-- Característica #6: O valor da *data de vencimento* da *Fatura* deve ser maior que a sua *data final*, assim como a *data final* da *Fatura* deve ser maior que a sua *data de início*;
+- Característica #6: O valor da *data de vencimento* da *Fatura* deve ser maior que a sua *data final*;
 
-- Característica #7: Quanto ao valor da *data de início* de uma fatura, caso não hajam faturas anteriores, deve-se calcular a mesma considerando o valor do atributo *primeiro dia do mês* do *Cartão* relacionado (mais detalhes na tarefa #2, item 1.1.4.5). Caso já existam *Fatura*s anteriores, então a *data de início* da *Fatura* (que está sendo criada) deve ser o dia seguinte a *data final* da última *Fatura* informada;
+- Característica #7: O valor padrão da *data de vencimento* será calculada somando o atributo *dias para o vencimento* do *Cartão* relacionado, a *data final* da *Fatura*. Um exemplo foi apresentado na Tarefa #2 (item 1.1.4.5);
 
-- Característica #8: Quanto ao valor da *data final* de uma *Fatura*, seu valor deve ser sempre o dia anterior a *data de início* da próxima *Fatura*. Ver a tarefa #3 (item 1.1.4.5) para mais detalhes;
+- Característica #8: Quando uma *Fatura* é criada, ela deve recalcular o atributo *data da parcela* (ver mais sobre Parcela no item 1.1.8) das *Parcela*s que passarem a pertencer a essa *Fatura* recém criada (ver Tarefa #4, item 1.1.4.5);
 
-- Característica #9: O valor padrão da *data de vencimento* será calculada somando o atributo *dias para o vencimento* do *Cartão* relacionado, a *data final* da *Fatura*. Um exemplo foi apresentado na Tarefa #3 (item 1.1.4.5);
+- Característica #9: Os valores permitidos para o campo "situação" de uma *Fatura* serão: Aberta, Fechada, Quitada e Vencida. Somente um valor (dentre os citados) será aceito por vez, mas será permitida a alteração do mesmo ao longo do tempo. Mais detalhes sobre a "situação" de uma *Fatura* na Tarefa #3 (item 1.1.4.5);
 
 - Característica #10: É permitido a alteração da *data de vencimento* pelo usuário, mas somente se a *Fatura* estiver marcada como "Aberta" ou "Fechada";
 
-- Característica #11: O valor da *Fatura* será calculado pelo sistema, e será recalculado a cada inserção de uma transação relacionada a esta *Fatura*. É vetado a alteração a valor da *Fatura* pelo usuário;
+- Característica #11: O valor da *Fatura* será calculado pelo sistema com base nas parcelas que farão parte da mesma, e será recalculado a cada inserção de uma transação relacionada a esta *Fatura*. É vetado a alteração a valor da *Fatura* pelo usuário;
 
-- Característica #12: Quando uma *Fatura* é criada, ela deve recalcular o atributo *data da parcela* (ver mais sobre Parcela no item 1.1.8) das *Parcela*s que passarem a pertencer a essa *Fatura* recém criada (ver Tarefa #5, item 1.1.4.5);
+- Característica #12: Em um primeiro momento, somente *Fatura*s marcadas como "Fechada" serão liberadas para pagamento;
 
-- Característica #13: Toda *Fatura* está relacionada uma única *Carteira*, já que toda *Fatura* pertence a um *Cartão*, e todo *Cartão* está relacionado a uma única *Carteira*. No entanto, uma *Carteira* pode possuir mais de uma *Cartão* e por isso, mais de uma *Fatura*.
+- Característica #13: *Fatura*s marcadas como "Vencidas" serão quitadas mediante o pagamento de uma multa, além do valor da *Fatura*;
 
-- Característica #14: Para que o pagamento de uma *Fatura* seja permitida, no momento do seu pagamento a *Carteira* a qual ela pertence deverá possuir um valor igual ou maior ao *valor* da *Fatura*.
+- Característica #14: Para que o pagamento de uma *Fatura* seja permitida, no momento do seu pagamento a *Carteira* a qual ela pertence deverá possuir um valor igual ou maior ao *valor* da *Fatura*, uma vez que este valor será removido da carteira;
+
+- Característica #15: A alteração de uma *Fatura* pode ocorrer somente nos casos descritos nas Características #9, #10 e #11;
+
+- Característica #16: Não é permitido a exclusão de uma *Fatura*.
 
 
 #### 1.1.4.5. Tarefas
 
-Tarefa #1: Definir o status da *Fatura*.
+Tarefa #1: Cálculo da *data final* de uma *Fatura*.
+> A *data final* da *Fatura* será sempre o dia anterior ao da *data de início* da próxima *Fatura*, que será calculado considerando o atributo *primeiro dia do mês* do *Cartão* relacionado. Para o cálculo da *data de início* da próxima *Fatura*, considere o próximo *primeiro dia do mês* (atributo do *Cartão* relacionado a *Fatura*) posterior a data atual.
+> 
+> Para o primeiro exemplo, considere os seguintes dados:
+> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
+> - Data atual: 15/05/2023.
+> 
+> Nesse caso, como o *primeiro dia do mês* (5) é menor que o dia da data atual (15), pega-se o próximo mês (06/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), para se encontrar a *data de início* da próxima *Fatura*, ou seja, dia 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
+> 
+> Para o segundo exemplo, considere os seguintes dados:
+> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
+> - Data atual: 05/05/2023.
+> 
+> Nesse caso, como o *primeiro dia do mês* (5) é igual ao dia da data atual (5), soma-se um mês a data atual para encontrar a *data de início* da próxima *Fatura*, que nesse exemplo será 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
+> 
+> Para o terceiro exemplo, considere os seguintes dados:
+> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 15;
+> - Data atual: 10/05/2023.
+> 
+> Nesse caso, como o *primeiro dia do mês* (15) é maior que o dia da data atual (10), mantem-se o mês e o ano (05/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (15), logo, a *data de início* da próxima *Fatura* será 15/05/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 14/05/2023.
+> 
+
+Tarefa #2: Cálculo da *data de vencimento* de uma *Fatura*.
+> O cálculo da *data de vencimento* da *Fatura* deve ser feito pegando a *data final* da *Fatura*, e somando o valor do atributo *dias para o vencimento* do cartão relacionado. 
+> <br>Ex.: Caso a quantidade de dias até o vencimento seja 10, e a *data final* da *Fatura* seja dia 15/05/2023, então a *data de vencimento* da mesma será dia 25/05/2023.
+> 
+
+Tarefa #3: Definir a "situação" da *Fatura*.
+> O valor do campo "situação" de uma *Fatura* é calculado diariamente, e seguira as seguintes regras:
+> 
 > Caso a data atual for inferior a *data final* da *Fatura*, a *Fatura* será definida como "Aberta".
 > Exemplo de *Fatura* aberta: 
 > - Data no momento da verificação: 25/05/2023;
@@ -476,56 +492,7 @@ Tarefa #1: Definir o status da *Fatura*.
 > - *Fatura* paga.
 > 
 
-Tarefa #2: Cálculo da *data de início* de uma *Fatura*, quando não há *Fatura*s anteriores.
-> Será pego o último *primeiro dia do mês* (atributo do *Cartão* relacionado a *Fatura*) anterior a data atual, e será definido como a *data de início* da *Fatura*.
-> 
-> Para o primeiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 15/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é menor que o dia da data atual (15), mantém-se o mês e o ano (05/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), logo, a *data de início* da nova *Fatura* será 05/05/2023.
-> 
-> Para o segundo exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 05/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é igual ao dia da data atual (5), a *data de início* da nova *Fatura* será o mesmo que a data atual, ou seja, dia 05/05/2023.
-> 
-> Para o terceiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 15;
-> - Data atual: 10/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (15) é maior que o dia da data atual (10), pega-se o mês anterior ao atual (04/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), logo, a *data de início* da nova *Fatura* será 15/04/2023.
-> 
-
-Tarefa #3: Cálculo da *data final* de uma *Fatura*.
-> A *data final* da *Fatura* será sempre o dia anterior ao da *data de início* da próxima *Fatura*, que será calculado considerando o atributo *primeiro dia do mês* do *Cartão* relacionado. Para o cálculo da *data de início* da próxima *Fatura*, considere o próximo *primeiro dia do mês* (atributo do *Cartão* relacionado a *Fatura*) posterior a data atual.
-> 
-> Para o primeiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 15/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é menor que o dia da data atual (15), pega-se o próximo mês (06/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (05), para se encontrar a *data de início* da próxima *Fatura*, ou seja, dia 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
-> 
-> Para o segundo exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 5;
-> - Data atual: 05/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (5) é igual ao dia da data atual (5), soma-se um mês a data atual para encontrar a *data de início* da próxima *Fatura*, que nesse exemplo será 05/06/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 04/06/2023.
-> 
-> Para o terceiro exemplo, considere os seguintes dados:
-> - Valor do atributo *primeiro dia do mês* do *Cartão* relacionado: 15;
-> - Data atual: 10/05/2023.
-> 
-> Nesse caso, como o *primeiro dia do mês* (15) é maior que o dia da data atual (10), mantem-se o mês e o ano (05/2023) e altera-se o dia para o mesmo valor de *primeiro dia do mês* (15), logo, a *data de início* da próxima *Fatura* será 15/05/2023. Com essa data em mãos, basta calcular o dia anterior a ela para se encontrar a *data final* da *Fatura* atual, ou seja, dia 14/05/2023.
-> 
-
-Tarefa #4: Cálculo da *data de vencimento* de uma *Fatura*.
-> O cálculo da *data de vencimento* da *Fatura* deve ser feito pegando a *data final* da *Fatura*, e somando o valor do atributo *dias para o vencimento* do cartão relacionado. 
-> <br>Ex.: Caso a quantidade de dias até o vencimento seja 10, e a *data final* da *Fatura* seja dia 15/05/2023, então a *data de vencimento* da mesma será dia 25/05/2023.
-> 
-
-Tarefa #5: Redefinir o valor do atributo *data da parcela* (ver mais sobre *Parcela* no item 1.1.8).
+Tarefa #4: Redefinir o valor do atributo *data da parcela* (ver mais sobre *Parcela* no item 1.1.8).
 > Quando uma nova *Fatura* for criada, as *Parcela*s que passarem a pertencer a essa *Fatura* terão os valores de seus atributos *data da parcela* alterados para o primeiro dia da *Fatura* recém criada.
 > <br>Ex.: Considere uma venda efetuada no dia 25/04/2023, e que 4 *Parcela*s foram geradas para essa venda, com os valores do atributo *data da parcela* salvos como "25/04/2023", "25/05/2023", "25/06/2023" e "25/07/2023". Considere também que estamos no dia 05/05/2023, e que uma nova *Fatura* foi criada, indo do dia 05/05/2023 até 04/06/2023.
 Nesse caso, a primeira *Parcela* será mantida com o mesmo valor, pois se trata de uma *Fatura* antiga. O mesmo ocorrerá com as *Parcela*s 3 e 4, pois se trata de *Fatura*s ainda não lançadas. A segunda *Parcela*, no entanto, terá o valor de seu atributo *data da parcela* alterado para "05/05/2023", a mesma *data de início* da *Fatura* a qual ela agora pertence
@@ -551,14 +518,15 @@ A entidade *Método de Pagamento* (internamente ao sistema, identificada como "p
 - tipo (type):
     - objetivo:             Definir se a entidade se refere a transações feitas por dinheiro físico (cédulas e/ou moedas), transações bancárias, débito ou crédito;
     - obrigatório:          Sim;
-    - tipo dado:            Numérico;
-    - valores aceitos:      0 (para cédulas e/ou moedas), 1 (para transações bancárias), 2 (para débito) ou 3 (para crédito);
+    - tipo dado:            Enum;
+    - valores aceitos:      'notes' (para cédulas e/ou moedas), 'transfer' (para transações bancárias), 'debit' (para débito) ou 'credit' (para crédito);
     - alteração:            Não permitida.
 - ativo (active):
-    - objetivo:             Definir se o registro está ativo ou não;
+    - objetivo:             Permitir que um registro seja ocultado dos resultados, mas sem excluí-lo;
     - obrigatório:          Sim;
-    - tipo dado:            Booleano;
-    - alteração:            Permitida em algumas circunstâncias (ver característica #3). (se não houver transações marcadas como).
+    - tipo dado:            Boleano;
+    - valor default:        true;
+    - alteração:            Permitida.
 
 
 #### 1.1.5.3. Banco de dados
@@ -577,14 +545,12 @@ Nome da tabela: payment_method.
     - não permite valor nulo;
     - valor único.
 - type: Referente ao atributo "tipo". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
+    - tipo: enum;
+    - valores aceitos: 'notes', 'transfer', 'debit' ou 'credit';
     - não permite valor nulo.
 - active: Referente ao atributo "ativo". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
-    - não permite valor nulo;
-    - valor padrão: 1.
+    - tipo: boolean;
+    - valor default: true.
 
 - chave primária:
     - id
@@ -594,25 +560,27 @@ Nome da tabela: payment_method.
 
 - Característica #1: Não é permitido que duas entidades *Método de Pagamento* possuam o mesmo nome;
 
-- Característica #2: Não é permitido a alteração dos atributos da entidade, exceto o atributo *ativo* (ver característica #3 para mais detalhe);
+- Característica #2: Não é permitido a alteração dos atributos da entidade, exceto sua ativação/inativação;
 
-- Característica #3: Não é permitido a exclusão de um registro de *Método de Pagamento*, apenas sua inativação. Sendo que a inativação de um registro só poderá ser feita se o mesmo não estiver relacionado a nenhum outro registro.
+- Característica #3: É permitido a inativação de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro;
 
-- Característica #4: Caso seja necessário inativar um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento* ativo, que tenha o mesmo valor para o atributo "tipo".
+- Característica #4: É permitido a exclusão de um registro de *Método de Pagamento*, apenas se o mesmo não estiver relacionado a nenhum outro registro;
+
+- Característica #5: Caso seja necessário excluir um registro que esteja relacionado a alguma *Transação* (ver mais sobre a entidade *Transação* no item 1.1.7), será preciso "atualizar" os registros de *Transação* que utilizam aquele *Método de Pagamento*, para um outro *Método de Pagamento*, que tenha o mesmo valor para o atributo "tipo".
 
 
 #### 1.1.5.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (payment_method):
 
-| Registro | id  | name            | type | active | Objetivo                                                                             |
-| :------: | :-: | :-------------- | :--: | :----: | :----------------------------------------------------------------------------------- |
-| #1       | 1   | Dinheiro físico | 0    | 1      | Método padrão para movimentações feitas em dinheiro físico, como cédulas e moedas    |
-| #2       | 2   | Transação       | 1    | 1      | Método padrão para movimentações feitas com transações bancárias como PIX, TED e DOC |
-| #3       | 3   | Cartão crédito  | 2    | 1      | Método padrão para movimentações pagas com cartão de crédito                         |
-| #4       | 4   | Cartão débito   | 3    | 1      | Método padrão para movimentações pagas com cartão de débito                          |
+| Registro | id  | name            | type     | active | Objetivo                                                                             |
+| :------: | :-: | :-------------: | :------: | :----: | :----------------------------------------------------------------------------------: |
+| #1       | 1   | Dinheiro físico | notes    | true   | Método padrão para movimentações feitas em dinheiro físico, como cédulas e moedas    |
+| #2       | 2   | Transação       | transfer | true   | Método padrão para movimentações feitas com transações bancárias como PIX, TED e DOC |
+| #3       | 3   | Cartão débito   | debit    | true   | Método padrão para movimentações pagas com cartão de débito                          |
+| #4       | 4   | Cartão crédito  | credit   | true   | Método padrão para movimentações pagas com cartão de crédito                         |
 
-> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores, o valor aqui definido seja respeitado;
+> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores o valor aqui definido seja respeitado, além de atualizar o auto incremento para a partir do maior 'id'.
 
 > Obs. 2: O valor do atributo *active* pode ser **1** ou **true**, dependendo do banco de dados utilizado.
 
@@ -637,14 +605,14 @@ A entidade *Tipo de Transação* (internamente ao sistema, identificada como "tr
     - objetivo:             Definir a relevância padrão da transação ao qual esse registro é relacionado;
     - obrigatório:          Sim;
     - tipo dado:            Numérico;
-    - valores aceitos:      0 (não relevante), 1 (pouco relevante) ou 2 (relevante);
+    - valores aceitos:      banal (Banal), relevant (Relevante) ou indispensable (Indispensável);
     - alteração:            Permitida.
 - ativo (active):
-    - objetivo:             Definir se o registro está ativo ou não;
+    - objetivo:             Permitir que um registro seja ocultado dos resultados, mas sem excluí-lo;
     - obrigatório:          Sim;
-    - tipo dado:            Booleano;
-    - alteração:            Permitida em algumas circunstâncias (ver característica #3). (se não hover transações marcadas como).
-
+    - tipo dado:            Boleano;
+    - valor default:        true;
+    - alteração:            Permitida.
 
 #### 1.1.6.3. Banco de dados
 
@@ -662,14 +630,12 @@ Nome da tabela: transaction_type.
     - não permite valor nulo;
     - valor único.
 - relevance: Referente ao atributo "relevância". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
+    - tipo: enum;
+    - valores aceitos: 'banal', 'relevant' ou 'indispensable';
     - não permite valor nulo.
 - active: Referente ao atributo "ativo". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
-    - não permite valor nulo;
-    - valor padrão: 1.
+    - tipo: boolean;
+    - valor default: true.
 
 - chave primária:
     - id
@@ -679,32 +645,24 @@ Nome da tabela: transaction_type.
 
 - Característica #1: Não é permitido que duas entidades *Tipo de Transação* possuam o mesmo nome;
 
-- Característica #2: Não é permitido a alteração dos atributos da entidade, exceto o atributo *ativo* (ver característica #3 para mais detalhe);
+- Característica #2: Os valores aceitos para o campo 'relevância' são: 'banal' para 'Banal', 'relevant' para 'Relevante' ou 'indispensable' para 'Indispensável';
 
-- Característica #3: Registros inativos não estarão disponíveis para seleção nos cadastros de *Transação*, mas ainda aparecerão nos relatórios.
+- Característica #3: Não será permitida a alteração do atributo 'name';
 
-- Característica #4: Caso seja necessário a exclusão de algum *Tipo de Transação*, ela somente será permitida se o registro em questão não tiver referência em nenhuma *Transação*. Se for o caso, a *Transação* terá que ter seu *Tipo de Transação* alterado para outro registro ativo para liberar a exclusão do *Tipo de Transação* antigo (Tarefa #1, item 1.1.6.5).
-
-
-#### 1.1.6.5. Tarefas
-
-Tarefa #1: Alterar o *Tipo de Transação* de todas os registros de *Transação*.
-> Deve-se informar um *Tipo de Transação* alvo, e então buscar todas os registros de *Transação* com tal *Tipo de Transação*.
-> <br>Com a lista de registros encontrada, deve-se efetuar a troca do *Tipo de Transação* antigo para o novo (informado pelo usuário) em cada um dos registros de *Transação* encontrados.
-> 
+- Característica #4: Caso seja necessário a exclusão de algum *Tipo de Transação*, ela somente será permitida se o registro em questão não tiver referência em nenhuma *Transação*. Se for o caso, a *Transação* terá que ter seu *Tipo de Transação* alterado para outro registro ativo para liberar a exclusão do *Tipo de Transação* antigo.
 
 
-#### 1.1.6.6. Valores pré cadastrados
+#### 1.1.6.5. Valores pré cadastrados
 
 Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (transaction_type):
 
-| Registro | id  | name                         | type | relevance | Objetivo                                                                                                                                                                  |
-| :------: | :-: | :--------------------------- | :--: | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| #1       | 1   | Entradas diversas            | 0    | 1         | Tipo de Transação padrão para movimentações que transferem valores de entrada, (considerando o usuário como recebedor), como recebimento de salário e empréstimos         |
-| #2       | 2   | Saídas diversas              | 1    | 1         | Tipo de Transação padrão para movimentações que transferem valores de saída, (considerando o usuário como quem paga), como pagamento de contas e devolução de empréstimos |
-| #3       | 3   | Movimentação entre carteiras | 1    | 1         | Tipo de Transação padrão para movimentações que transferem valores de uma carteira para outra, de um mesmo dono                                                           |
+| Registro | id  | name                         | relevance | active | Objetivo                                                                                                                                                                  |
+| :------: | :-: | :--------------------------- | :-------: | :----: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| #1       | 1   | Entradas diversas            | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de entrada, (considerando o usuário como recebedor), como recebimento de salário e empréstimos                                                                                                                                      |
+| #2       | 2   | Saídas diversas              | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de saída, (considerando o usuário como quem paga), como pagamento de contas e devolução de empréstimos                                                                                                                            |
+| #3       | 3   | Movimentação entre carteiras | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de uma carteira para outra, de um mesmo dono                                                                                                                                                                      |
 
-> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores, o valor aqui definido seja respeitado;
+> Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores o valor aqui definido seja respeitado, além de atualizar o auto incremento para a partir do maior 'id'.
 
 > Obs. 2: O valor do atributo *active* pode ser **1** ou **true**, dependendo do banco de dados utilizado.
 
@@ -822,11 +780,11 @@ Nome da tabela: transaction.
 
 #### 1.1.7.4. Características da entidade
 
-- Característica #1: A exclusão de uma *Transação*, ou a alteração de seus atributos, está condicionada ao estado da(s) *Fatura*(s) a que sua(s) *Parcela*(s) pertence(m) (Tarefa #2, item 1.1.7.5);
+- Característica #1: A exclusão de uma *Transação*, ou a alteração de seus atributos, está condicionada ao situação da(s) *Fatura*(s) a que sua(s) *Parcela*(s) pertence(m) (Tarefa #2, item 1.1.7.5);
 
-- Característica #2: O valor informado nos atributos "data de processamento* e *data da transação*, por padrão, será igual. Caso sejam diferentes, o valor informado no atributo *data de processamento* deve ser maior que o valor informado no atributo *data da transação*, e a diferença entre os dois valores não deve ser maior que 2 dias.
+- Característica #2: O valor informado nos atributos "data de processamento* e *data da transação*, por padrão, será igual. Caso sejam diferentes, o valor informado no atributo *data de processamento* deve ser maior que o valor informado no atributo *data da transação*, e a diferença entre os dois valores não deve ser maior que 3 dias.
 
-- Característica #3: O valor informado no atributo *data de processamento* deve pertencer a uma *Fatura* marcada como "Aberta" ou "Fechada" (Tarefa #1, item 1.1.7.5).
+- Característica #3: O valor informado no atributo *data de processamento*, quando o *Método de Pagamento* for "crédito", deve pertencer a uma *Fatura* marcada como "Aberta" ou "Fechada" (Tarefa #1, item 1.1.7.5).
 
 - Característica #4: O valor da *Transação* deve ser igual a soma dos valores das suas *Parcela*s (Tarefa #3, item 1.1.7.5).
 
@@ -835,6 +793,8 @@ Nome da tabela: transaction.
 - Característica #6: O *valor líquido* da *Transação* não será mantido no sistema, ao invés disso, será calculado no momento que for solicitado. Seu cálculo será feito somando o *valor líquido* de cada uma das *Parcela*s da *Transação* em questão.
 
 - Característica #7: Por padrão, o valor do atributo *relevância* será igual ao valor do mesmo atributo da entidade *Tipo de Transação* selecionado, porém, esse valor pode ser alterado a qualquer momento.
+
+- Característica #8: Quando feita uma exclusão de uma *Transação* (rever Característica #1), sua(s) *Parcela*(s) serão excluídas também, bem como será feito o recalculo da(s) *Fatura*(s) relacionada(s);
 
 
 #### 1.1.7.5. Tarefas
@@ -1055,10 +1015,20 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 Possíveis alterações no projeto:
 
-Bloqueei a alterações dos nomes ṕor que creio que isso cria a possibilidade de que o usuário fique trocando o nome de uma determinada entidade, e depois de algum tempo o histórico de movimentos da entidade tenha valores misturados. Por exemplo: Nomear um Cartão como "Banco A" e depois renomear para "Banco B". Tal alteração faria com que os movimentos relativos ao primeiro cartão "se misturassem" com os movimentos do segundo, já que para o sistema, os dois cartões sempre foram o mesmo cartão, apenas com nomes diferentes. No entanto, isso cria um cenário onde o usuário não pode corrigir erros de digitação, depois de a entidade salva, sendo necessário (para a correção) a exclusão e recriação da entidade. Uma alternativa de correção seria criar uma tabela adicional, com o registro dos nomes das entidades, antigos e o atual. Nesse caso, a tabela não teria o registro do nome da entidade, mas sim, uma referência a um registro na tabela "Nomes".
+Alterar para que Metodos de Pagamento e Tipos de Transação permitam inativações, e dessa forma, possa 'esconder' um cadastro não utilizado, mas sem excluí-lo
+
+Alterar os campos char para enum.
+
+No tipo de transações, ver a necessidade de um ca po 'descrição' e um campo 'nome abreviado'.
+
+No tipo de transações, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
+
+Bloqueei a alterações dos nomes por que creio que isso cria a possibilidade de que o usuário fique trocando o nome de uma determinada entidade, e depois de algum tempo o histórico de movimentos da entidade tenha valores misturados. Por exemplo: Nomear um Cartão como "Banco A" e depois renomear para "Banco B". Tal alteração faria com que os movimentos relativos ao primeiro cartão "se misturassem" com os movimentos do segundo, já que para o sistema, os dois cartões sempre foram o mesmo cartão, apenas com nomes diferentes. No entanto, isso cria um cenário onde o usuário não pode corrigir erros de digitação, depois de a entidade salva, sendo necessário (para a correção) a exclusão e recriação da entidade. Uma alternativa de correção seria criar uma tabela adicional, com o registro dos nomes das entidades, antigos e o atual. Nesse caso, a tabela não teria o registro do nome da entidade, mas sim, uma referência a um registro na tabela "Nomes".
 
 Mantive um padrão de formatação para os valores de duas casas decimais (000.00), mas tenho receio de que isso crie problemas de arredondamento em algum cálculo. Uma possível alternativa seria manter o valor, mas ignorar a marcação de casas decimais, por exemplo, nesse caso o número "123.45" se tornaria "12345". Preciso ver se isso realmente soluciona o problema, uma vez que adiciona mais uma camada de tratamento dos valores.
 
 Rever o bloqueio na alteração dos valores das parcelas. Uma alternativa seria distribuir a diferença no valor entre as parcelas ainda não quitadas
 
 Considerar manter Transação e Parcela como uma entidade só, mas manter elas separadas no banco. Poderia ser mais fácil de manusear os dados no sistema, garantindo sua integridade, mas devo considerar o aumento no tamanho dos dados
+
+Ao invés de fazer apenas a inativição, utilizar também o softdelete, dessa forma a inativação seria apenas para organização dos dados, e o softdelete para quando não for mais necessário o registro

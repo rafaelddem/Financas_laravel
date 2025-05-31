@@ -2,57 +2,114 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\WalletRequest;
-use App\Tasks\Wallet\Delete;
-use App\Tasks\Wallet\Insert;
-use App\Tasks\Wallet\LoadPage;
-use App\Tasks\Wallet\Update;
+use App\Exceptions\BaseException;
+use App\Http\Requests\Wallet\CreateRequest;
+use App\Http\Requests\Wallet\UpdateRequest;
+use App\Services\OwnerService;
+use App\Services\WalletService;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
-    public function index(Request $request)
+    private WalletService $service;
+    private OwnerService $ownerService;
+
+    public function __construct()
     {
-        $id = isset($request->id) ? $request->id : 0;
-        return (new LoadPage)->run($id, "");
+        $this->service = app(WalletService::class);
+        $this->ownerService = app(OwnerService::class);
     }
 
-    public function store(WalletRequest $request)
+    public function index(int $owner_id, Request $request)
     {
-        try {
-            (new Insert)->run($request);
+        $wallets = [];
 
-            $message = 'Registro criado com sucesso';
+        try {
+            $owner = $this->ownerService->find($owner_id, ['wallets']);
+            $wallets = $owner->wallets->sortBy('main_wallet', SORT_REGULAR, true);
+
+            $message = $request->get('message');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            $message = 'Erro ao tentar criar o registro';
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return (new LoadPage)->run(0, $message);
+        return view('wallet.index', compact('wallets', 'owner', 'message'));
     }
 
-    public function update(WalletRequest $request)
+    public function create(int $owner_id, Request $request)
     {
         try {
-            (new Update)->run($request);
+            $owner = $this->ownerService->find($owner_id);
 
-            $message = 'Registro atualizado com sucesso';
+            return view('wallet.create', compact('owner'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            $message = 'Erro ao tentar atualizar o registro';
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return (new LoadPage)->run(0, $message);
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
     }
 
-    public function destroy(int $id)
+    public function store(int $owner_id, CreateRequest $request)
     {
         try {
-            (new Delete)->run($id);
+            $this->service->create(array_merge($request->all(), ['owner_id' => $owner_id]));
 
-            $message = 'Registro excluído com sucesso';
+            $message = __('Data created successfully.');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
         } catch (\Throwable $th) {
-            $message = 'Erro ao tentar excluir o registro';
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return (new LoadPage)->run(0, $message);
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+    }
+
+    public function edit(int $owner_id, int $id, Request $request)
+    {
+        try {
+            $wallet = $this->service->find($id, ['owner']);
+
+            return view('wallet.edit', compact('wallet'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+    }
+
+    public function update(int $owner_id, UpdateRequest $request)
+    {
+        try {
+            $this->service->update($request->get('id'), $request->only('main_wallet', 'active', 'description'));
+
+            $message = __('Data updated successfully.');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+    }
+
+    public function destroy(int $owner_id, Request $request)
+    {
+        try {
+            $this->service->delete($request->get('id'));
+
+            $message = __('Data deleted successfully.');
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
     }
 }

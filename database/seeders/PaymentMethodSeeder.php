@@ -14,28 +14,27 @@ class PaymentMethodSeeder extends Seeder
      */
     public function run()
     {
-        // id: 1
         DB::table('payment_methods')->insert([
-            'name' => 'Dinheiro', 
-            'active' => true, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
-        ]);
-
-        // id: 2
-        DB::table('payment_methods')->insert([
-            'name' => 'Crédito', 
-            'active' => true, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
-        ]);
-
-        // id: 3
-        DB::table('payment_methods')->insert([
-            'name' => 'Débito', 
-            'active' => true, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
+            [
+                'id' => 1,
+                'name' => 'Dinheiro físico',
+                'type' => 'notes',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Transação',
+                'type' => 'transfer',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Cartão débito',
+                'type' => 'debit',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Cartão crédito',
+                'type' => 'credit',
+            ],
         ]);
     }
 }

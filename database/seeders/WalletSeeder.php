@@ -14,74 +14,27 @@ class WalletSeeder extends Seeder
      */
     public function run()
     {
-        // id:   1  | owner: Não definida
+        // id:   1  | owner: Sistema
         DB::table('wallets')->insert([
-            'name' => 'Entradas', 
-            'owner' => 1, 
-            'active' => true, 
-            'main_wallet' => false, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
+            'id' => 1,
+            'name' => 'Origem/Destino Indefinido',
+            'owner_id' => 1,
+            'main_wallet' => true,
+            'description' => 'Carteira utilizada para movimentações de origem indefinida (como recebimento de salário) ou destino indefinido (como pagamento de uma venda)',
+            'active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        // id:   2  | owner: Não definida
+        // id:   2  | owner: Rafael
         DB::table('wallets')->insert([
-            'name' => 'Saídas', 
-            'owner' => 1, 
-            'active' => true, 
-            'main_wallet' => false, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
-        ]);
-
-        // id:   3  | owner: Rafael
-        DB::table('wallets')->insert([
-            'name' => 'Casa', 
-            'owner' => 2, 
-            'active' => true, 
-            'main_wallet' => true, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
-        ]);
-
-        // id:   4  | owner: Rafael
-        DB::table('wallets')->insert([
-            'name' => 'NuBank', 
-            'owner' => 2, 
-            'active' => true, 
-            'main_wallet' => false, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
-        ]);
-
-        // id:   5  | owner: Rafael
-        DB::table('wallets')->insert([
-            'name' => 'NuConta', 
-            'owner' => 2, 
-            'active' => true, 
-            'main_wallet' => false, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
-        ]);
-
-        // id:   6  | owner: Terezinha
-        DB::table('wallets')->insert([
-            'name' => 'Casa', 
-            'owner' => 3, 
-            'active' => true, 
-            'main_wallet' => true, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
-        ]);
-
-        // id:   7  | owner: Márcio
-        DB::table('wallets')->insert([
-            'name' => 'Casa', 
-            'owner' => 4, 
-            'active' => true, 
-            'main_wallet' => true, 
-            'created_at' => now(), 
-            'updated_at' => now(), 
+            'name' => 'Casa',
+            'owner_id' => 2,
+            'main_wallet' => true,
+            'description' => 'Carteira padrão do usuário',
+            'active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

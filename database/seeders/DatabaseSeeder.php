@@ -15,12 +15,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            OwnerSeeder::class, 
-            WalletSeeder::class, 
-            PaymentMethodSeeder::class, 
-            MovementTypeSeeder::class, 
-
-            MovementSeeder::class,
+            OwnerSeeder::class,
+            WalletSeeder::class,
+            PaymentMethodSeeder::class,
+            TransactionTypeSeeder::class,
         ]);
     }
 }
