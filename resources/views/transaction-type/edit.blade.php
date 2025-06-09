@@ -1,49 +1,33 @@
 @extends('layout')
 
-@section('header')
-{{__('Transaction Type')}}
-@endsection
-
-@section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-        @endforeach
+@section('page_content')
+    <div class="presentation">
+        <h1>{{__('Transaction Type')}}</h1>
     </div>
-@endif
-@if(!empty($message))
-<div class="alert alert-success">
-    {{ $message }}
-</div>
-@endif
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <form method="post" action="{{route('transaction-type.update')}}">
-                @csrf @method('PUT')
-                <div class="container">
+    <div class="presentation">
+        <div class="row">
+            <div class="col">
+                <h2 class="card-title">Preencha o formulário</h2>
+                <form method="post" action="{{route('transaction-type.update')}}">
+                    @csrf @method('PUT')
                     <input type="hidden" name="id" value={{$transactionType->id}}>
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" value="{{$transactionType->name}}" disabled>
-                    <br />
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="name" id="name" value="{{ $transactionType->name }}" disabled>
                     <label for="relevance">Relevância:</label>
                     <select class="form-select" aria-label=".form-select-sm example" name="relevance" id="relevance">
                         <option value='banal' @if ($transactionType->relevance == 'banal') selected @endif>{{__('Banal')}}</option>
                         <option value='relevant' @if ($transactionType->relevance == 'relevant') selected @endif>{{__('Relevant')}}</option>
                         <option value='indispensable' @if ($transactionType->relevance == 'indispensable') selected @endif>{{__('Indispensable')}}</option>
                     </select>
-                    <br />
-                    <label for="active">Ativo</label>
-                    <input type="hidden" name="active" value=false>
-                    <input type="checkbox" name="active" value=true @if ($transactionType->active) checked @endif>
-                    <br />
-                    <button type="submit" class="btn btn-primary mt-2">Atualizar</button>
-                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('transaction-type.list')}}'">
-                </div>
-            </form>
+                    <label for="nome">Status:</label>
+                    <div class="radio-container">
+                        <label class="radio-option"><input type="radio" name="active" value="1" @if ($transactionType->active) checked @endif>Ativo</label>
+                        <label class="radio-option"><input type="radio" name="active" value="0" @if (!$transactionType->active) checked @endif>Inativo</label>
+                    </div>
+                    <input type="submit" value="Atualizar">
+                    <input type="button" value="Voltar" onclick="window.location='{{app('url')->route('transaction-type.list')}}'">
+                </form>
+            </div>
         </div>
     </div>
-</div>
 @endsection

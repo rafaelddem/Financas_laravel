@@ -1,62 +1,65 @@
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Controle de Financas</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{env('APPLICATION_NAME')}}</title>
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <script src="{{ asset('js/dark-mode.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alterna navegação">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home</span></a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Movimento
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{route('owner.list')}}">Cadastrar novo</a></li>
-                        <li><a class="dropdown-item" href="/pagamento">Efetuar pagamento</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{route('owner.list')}}">Movimentos</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Cadastros
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{route('owner.list')}}">{{__('Owner')}}</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{route('payment-method.list')}}">{{__('Payment Method')}}</a></li>
-                        <li><a class="dropdown-item" href="{{route('transaction-type.list')}}">{{__('Transaction Type')}}</a></li>
-                    </ul>
-                </li>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="/">{{__('Dashboard')}}</a></li>
+            <li>Relatórios</li>
+            <li onclick="toggleSubmenu()">Cadastros</li>
+            <ul class="submenu">
+                <li><a href="{{route('owner.list')}}">{{__('Owner')}}</a></li>
+                <li><a href="{{route('payment-method.list')}}">{{__('Payment Method')}}</a></li>
+                <li><a href="{{route('transaction-type.list')}}">{{__('Transaction Type')}}</a></li>
             </ul>
-        </div>
+        </ul>
     </nav>
-    <div class="container">
-        <div class="jumbotron">
-            <br />
-            @yield('path')
-            <h1>@yield('header')</h1>
-            <br />
-        </div>
+    
+    <div class="base-page">
+        <header class="topbar">
+            <div class="notifications-menu" onclick="toggleNotificationsMenu()">Avisos
+                <span class="badge" id="notificationCount">3</span>
+                <ul class="dropdown-menu notifications-options">
+                    <li>Nova atualização disponível</li>
+                    <li>Lembrete: reunião às 15h</li>
+                    <li>Seu relatório foi aprovado</li>
+                </ul>
+            </div>
+            <div class="menu-item" onclick="toggleDarkMode()">Modo Escuro</div>
+            <div class="menu-item" onclick="toggleLogoutMenu()">Logout
+                <ul class="dropdown-menu logout-options">
+                    <li>Perfil</li>
+                    <li>Sair</li>
+                </ul>
+            </div>
+        </header>
+        
+        <section class="alerts">
+            @if ($errors->any())
+                <div id="alertBox" class="alert alert-error">
+                    @foreach ($errors->all() as $error)
+                        {{ $error }} <br />
+                    @endforeach
+                </div>
+            @endif
 
-        @yield('content')
+            @if(!empty($message))
+            <div id="alertBox" class="alert alert-success">
+                {{ $message }}
+            </div>
+            @endif
+
+            <!-- <div class="alert alert-warning">⚠️ Atenção: Este é um aviso de alerta!</div> -->
+        </section>
+
+        @yield('page_content')
     </div>
-    <br />
-    <br />
 </body>
 </html>

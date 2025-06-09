@@ -1,55 +1,37 @@
 @extends('layout')
 
-@section('path')
-{{__('Path to wallet', ['owner' => $wallet->owner->name])}}
-@endsection
-
-@section('header')
-{{$wallet->name}}
-@endsection
-
-@section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-        @endforeach
+@section('page_content')
+    <div class="presentation">
+        <h1>{{__('Edit wallet name', ['wallet' => $wallet->name])}}</h1>
+        {{__('Path to wallet', ['owner' => $wallet->owner->name])}}
     </div>
-@endif
-@if(!empty($message))
-<div class="alert alert-success">
-    {{ $message }}
-</div>
-@endif
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <form method="post" action="{{route('owner.wallet.update', ['owner_id' => $wallet->owner_id])}}">
-                @csrf @method('PUT')
-                <div class="container">
+    <div class="presentation">
+        <div class="row">
+            <div class="col">
+                <h2 class="card-title">Preencha o formulário</h2>
+                <form method="post" action="{{route('owner.wallet.update', ['owner_id' => $wallet->owner_id])}}">
+                    @csrf @method('PUT')
                     <input type="hidden" name="id" value={{$wallet->id}}>
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" name="name" id="name" value="{{ $wallet->name }}" disabled>
-                    <br />
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="name" id="name" value="{{ $wallet->name }}" disabled>
                     @if ($wallet->main_wallet)
                         <label for="nome">Carteira Principal</label>
-                        <br />
                     @else
-                        <label for="nome">Carteira Principal</label>
-                        <input type="checkbox" name="main_wallet" id="main_wallet" value=1>
-                        <br />
-                        <label for="nome">Ativo</label>
-                        <input type="hidden" name="active" value=false>
-                        <input type="checkbox" name="active" id="active" value=1 @if ($wallet->active) checked @endif>
-                        <br />
+                        <label for="nome">Carteira:</label>
+                        <div class="radio-container">
+                            <label class="radio-option"><input type="radio" name="main_wallet" value="1">Principal</label>
+                            <label class="radio-option"><input type="radio" name="main_wallet" value="0" checked>Secundária</label>
+                        </div>
+                        <label for="nome">Status:</label>
+                        <div class="radio-container">
+                            <label class="radio-option"><input type="radio" name="active" value="1" @if ($wallet->active) checked @endif>Ativo</label>
+                            <label class="radio-option"><input type="radio" name="active" value="0" @if (!$wallet->active) checked @endif>Inativo</label>
+                        </div>
                     @endif
-                    <br />
-                    <input class="btn btn-primary mt-2" type="submit" value="Atualizar">
-                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('owner.wallet.list', ['owner_id' => $wallet->owner_id])}}'">
-                </div>
-            </form>
+                    <input type="submit" value="Atualizar">
+                    <input type="button" value="Voltar" onclick="window.location='{{app('url')->route('owner.wallet.list', ['owner_id' => $wallet->owner_id])}}'">
+                </form>
+            </div>
         </div>
     </div>
-</div>
 @endsection

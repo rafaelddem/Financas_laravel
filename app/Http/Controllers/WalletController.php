@@ -26,7 +26,11 @@ class WalletController extends Controller
 
         try {
             $owner = $this->ownerService->find($owner_id, ['wallets']);
-            $wallets = $owner->wallets->sortBy('main_wallet', SORT_REGULAR, true);
+            $wallets = $owner->wallets->sortBy([
+                ['main_wallet', 'desc'],
+                ['active', 'desc'],
+                ['name', 'asc'],
+            ]);
 
             $message = $request->get('message');
         } catch (BaseException $exception) {

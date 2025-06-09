@@ -1,47 +1,32 @@
 @extends('layout')
 
-@section('path')
-{{__('Path to wallet', ['owner' => $owner->name])}}
-@endsection
-
-@section('header')
-{{__('New wallet')}}
-@endsection
-
-@section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-        @endforeach
+@section('page_content')
+    <div class="presentation">
+        <h1>{{__('New wallet')}}</h1>
+        {{__('Path to wallet', ['owner' => $owner->name])}}
     </div>
-@endif
-@if(!empty($message))
-<div class="alert alert-success">
-    {{ $message }}
-</div>
-@endif
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <form method="post" action=" {{route('owner.wallet.store', ['owner_id' => $owner->id])}} ">
-                @csrf
-                <div class="container">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" name="name" id="name">
-                    <br />
-                    <label for="main_wallet">Carteira Principal</label>
-                    <input type="checkbox" name="main_wallet" id="main_wallet" value=1>
-                    <br />
-                    <label for="active">Ativo</label>
-                    <input type="checkbox" name="active" id="active" value=1 checked>
-                    <br />
-                    <input class="btn btn-primary mt-2" type="submit" value="Adicionar">
-                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('owner.wallet.list', ['owner_id' => $owner->id])}}'">
-                </div>
-            </form>
+    <div class="presentation">
+        <div class="row">
+            <div class="col">
+                <h2 class="card-title">Preencha o formulário</h2>
+                <form method="post" action=" {{route('owner.wallet.store', ['owner_id' => $owner->id])}} ">
+                    @csrf
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="name" placeholder="Nome" required>
+                    <label for="nome">Carteira:</label>
+                    <div class="radio-container">
+                        <label class="radio-option"><input type="radio" name="main_wallet" value="1">Principal</label>
+                        <label class="radio-option"><input type="radio" name="main_wallet" value="0" checked>Secundária</label>
+                    </div>
+                    <label for="nome">Status:</label>
+                    <div class="radio-container">
+                        <label class="radio-option"><input type="radio" name="active" value="1" checked>Ativo</label>
+                        <label class="radio-option"><input type="radio" name="active" value="0">Inativo</label>
+                    </div>
+                    <input type="submit" value="Adicionar">
+                    <input type="button" value="Voltar" onclick="window.location='{{app('url')->route('owner.wallet.list', ['owner_id' => $owner->id])}}'">
+                </form>
+            </div>
         </div>
     </div>
-</div>
 @endsection

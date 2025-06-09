@@ -17,6 +17,7 @@
 
     "Wallet": "Carteira",
     "New wallet": "Nova carteira",
+    "Edit wallet name": "Editar carteira: :wallet",
     "Wallets": "Carteiras",
     "Wallets from owner": "Carteiras de :owner",
     "Standard Owner's Wallet": "Carteira padrão de :owner",
@@ -47,6 +48,8 @@
     "It is not allowed to remove a transaction type that is linked to a transaction.": "Não é permitido remover um Tipo de Transação que esteja vinculado a uma Transação.",
 
     "Card": "Cartão",
+    "New card": "Novo cartão",
+    "Edit card name": "Editar cartão: :card",
     "Cards": "Cartões",
     "Card from wallet": "Cartão de :wallet",
     "Cards from wallet": "Cartões de :wallet",

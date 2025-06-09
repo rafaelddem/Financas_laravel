@@ -1,33 +1,18 @@
 @extends('layout')
 
-@section('header')
-{{__('Payment Method')}}
-@endsection
-
-@section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-        @endforeach
+@section('page_content')
+    <div class="presentation">
+        <h1>{{"Payment Method"}}</h1>
     </div>
-@endif
-@if(!empty($message))
-<div class="alert alert-success">
-    {{ $message }}
-</div>
-@endif
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <form method="post" action=" {{route('payment-method.store')}} ">
-                @csrf
-                <input type="hidden" name="active" value=true>
-                <div class="container">
-                    <label for="name">Nome:</label>
-                    <input type="text" class="form-control" name="name" id="name">
-                    <br />
+    <div class="presentation">
+        <div class="row">
+            <div class="col">
+                <h2 class="card-title">Preencha o formulário</h2>
+                <form method="post" action=" {{route('payment-method.store')}} ">
+                    @csrf
+                    <input type="hidden" name="active" value=true>
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="name" placeholder="Nome" required>
                     <label for="type">Tipo:</label>
                     <select class="form-select" aria-label=".form-select-sm example" name="type" id="type">
                         <option value="notes">{{__('Notes')}}</option>
@@ -35,12 +20,10 @@
                         <option value="debit">{{__('Debit')}}</option>
                         <option value="credit">{{__('Credit')}}</option>
                     </select>
-                    <br />
-                    <button type="submit" class="btn btn-primary mt-2">Adicionar</button>
-                    <input class="btn btn-primary mt-2" type="button" value="Voltar" onclick="window.location='{{app('url')->route('payment-method.list')}}'">
-                </div>
-            </form>
+                    <input type="submit" value="Adicionar">
+                    <input type="button" value="Voltar" onclick="window.location='{{app('url')->route('payment-method.list')}}'">
+                </form>
+            </div>
         </div>
     </div>
-</div>
 @endsection

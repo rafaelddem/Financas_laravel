@@ -1,0 +1,463 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #e8f1e7;
+    color: black;
+    transition: 0.3s;
+}
+.dark-mode {
+    background-color: #1e1e1e;
+    color: white;
+}
+
+/* menu lateral inicio */
+
+.sidebar {
+    width: 350px;
+    background: #387f75;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100vh;
+    font-size: 24px;
+    transition: 0.3s;
+}
+.dark-mode .sidebar {
+    background: #121212;
+}
+.sidebar ul {
+    list-style: none;
+}
+.sidebar li {
+    padding: 10px;
+    cursor: pointer;
+}
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+}
+.sidebar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.submenu {
+    display: none;
+    padding-left: 20px;
+}
+
+/* menu lateral fim */
+
+.base-page {
+    margin-left: 350px;
+    width: 100%;
+    margin-top: 40px;
+    padding-top: 20px;
+    transition: 0.3s;
+}
+
+.dark-mode .base-page {
+    background-color: #1e1e1e;
+    color: white;
+}
+
+/* menu superior inicio */
+
+.topbar {
+    background: #7bbcb6;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    gap: 20px;
+    top: 0;
+    left: 350px;
+    width: calc(100% - 350px);
+    z-index: 1000;
+    transition: 0.3s;
+}
+.dark-mode .topbar {
+    background: #222;
+}
+.notifications-menu {
+    position: relative;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+}
+.badge {
+    background: #387f75;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 50%;
+    font-size: 12px;
+    position: absolute;
+    top: 5px;
+    right: -10px;
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    color: black;
+    list-style: none;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    width: 150px;
+    transition: 0.3s;
+}
+.dropdown-menu li {
+    padding: 10px;
+    cursor: pointer;
+}
+.dark-mode .dropdown-menu {
+    background: #333;
+    color: white;
+}
+.dropdown-menu li:hover {
+    background: #eee;
+}
+.dark-mode .dropdown-menu li:hover {
+    background: #444;
+}
+.notifications-options {
+    background: #ffffff;
+    color: black;
+}
+.notifications-options li:hover {
+    background: #eeeeee;
+}
+.menu-item {
+    position: relative;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+}
+
+/* menu superior fim */
+
+/* alertas inicio */
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+    color: #856404;
+    border: 1px solid #ff9800;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: white;
+    border: 1px solid #218838;
+}
+
+.alert-error {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #b21f2d;
+}
+
+.dark-mode .alert-warning {
+    background-color: #d39e00;
+    color: #fff3cd;
+}
+
+.dark-mode .alert-success {
+    background-color: #1e7e34;
+    color: #c3e6cb;
+}
+
+.dark-mode .alert-error {
+    background-color: #a71d2a;
+    color: #f8d7da;
+}
+
+/* alertas fim */
+
+/* posicionamento inicio */
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.col {
+    width: 100%;
+}
+
+.col_1_2 {
+    width: 50%;
+}
+
+.col_1_3 {
+    width: 33%;
+}
+
+.col_2_3 {
+    width: 66%;
+}
+
+.col_1_4 {
+    width: 25%;
+}
+
+.col_3_4 {
+    width: 75%;
+}
+
+/* posicionamento fim */
+
+/* componentes inicio */
+
+.presentation {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    margin: 20px;
+    transition: 0.3s;
+}
+.cards-container {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin: 20px;
+    transition: 0.3s;
+}
+.card {
+    flex: 1;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.3s;
+}
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px 0;
+    transition: 0.3s;
+}
+.card-value {
+    font-size: 24px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    margin: 20px;
+    transition: 0.3s;
+}
+
+.dark-mode .presentation,
+.dark-mode .cards-container .card,
+.dark-mode .chart-container {
+    background: #222;
+    color: white;
+    box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .card-value {
+    color: #ABD1B5;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    transition: 0.3s;
+}
+
+td form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.td-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.td-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.td-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tag {
+    background-color: #387f75;
+    color: white;
+    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.dark-mode td {
+    border: 1px solid #555;
+}
+
+.dark-mode .tag {
+    background-color: #555;
+}
+
+input[type="submit"],
+input[type="button"] {
+    background-color: #387f75;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 0px;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background-color: #285c54;
+}
+
+.dark-mode input[type="submit"],
+.dark-mode input[type="button"] {
+    background-color: #555;
+}
+
+/* componentes fim */
+
+/* formulario inicio */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input, select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.dark-mode input,
+.dark-mode select {
+    background-color: #222;
+    color: white;
+    border: 1px solid #555;
+}
+
+input[type="radio"] {
+    appearance: none;
+    margin-bottom: 0px;
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 50%;
+    display: inline-block;
+    padding: 7px;
+}
+
+input[type="radio"]:checked {
+    background-color: #387f75;
+}
+
+.dark-mode input[type="radio"] {
+    background-color: #222;
+}
+
+.dark-mode input[type="radio"]:checked {
+    background-color: #555;
+}
+
+/* revisar */
+/* input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #333;
+    background-color: #fff;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #387f75;
+}
+
+.dark-mode input[type="checkbox"] {
+    background-color: #222;
+}
+
+.dark-mode input[type="checkbox"]:checked {
+    background-color: #555;
+} */
+
+button {
+    background-color: #387f75;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #285c54;
+}
+
+.dark-mode button {
+    background-color: #555;
+}
+
+.radio-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* formulario fim */

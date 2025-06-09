@@ -11,6 +11,14 @@ class TransactionTypeRepository extends BaseRepository
         parent::__construct(TransactionType::class);
     }
 
+    public function list()
+    {
+        return $this->model
+            ->orderby('active', 'desc')
+            ->orderby('id', 'asc')
+            ->get();
+    }
+
     /**
      * Implementar função após implementação da Transação
      */

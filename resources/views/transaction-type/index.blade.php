@@ -1,54 +1,49 @@
 @extends('layout')
 
-@section('header')
-{{__('Transaction Type')}}
-@endsection
-
-@section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        @foreach ($errors->all() as $error)
-            {{ $error }}<br />
-        @endforeach
+@section('page_content')
+    <div class="presentation">
+        <h1>{{__('Transaction Type')}}</h1>
     </div>
-@endif
-@if(!empty($message))
-<div class="alert alert-success">
-    {{ $message }}
-</div>
-@endif
-
-<div class="container">
-    <div class="row">
-        <a href="{{ route('transaction-type.create') }}" class="btn btn-primary">Novo</a>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col">
-            <ul class="list-group">
-                @foreach($transactionTypes as $transactionType)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $transactionType->name }}
-                    @switch($transactionType->relevance)
-                        @case('banal') ({{__('Banal')}}) @break
-                        @case('relevant') ({{__('Relevant')}}) @break
-                        @case('indispensable') ({{__('Indispensable')}}) @break
-                    @endswitch
-
-                    <span class="d-flex">
-                        <form method="get" action="{{route('transaction-type.edit', ['id' => $transactionType->id])}}">
-                            <button type="submit" class="btn btn-primary">Editar</button>
-                        </form>
-                        <form method="post" action="{{route('transaction-type.destroy')}}">
-                            @csrf @method('DELETE')
-                            <input type="hidden" name="id" value={{$transactionType->id}}>
-                            <button type="submit" class="btn btn-primary">Remover</button>
-                        </form>
-                    </span>
-                </li>
-                @endforeach
-            </ul>
+    <div class="presentation">
+        <div class="row">
+            <div class="col">
+                <input type="button" value="Novo" onclick="window.location='{{ route('transaction-type.create') }}'">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table>
+                    @foreach($transactionTypes as $transactionType)
+                    <tr>
+                        <td class="td-item">
+                            <div class="td-content">
+                                <span class="item-value">
+                                    {{ $transactionType->name }}
+                                    @switch($transactionType->relevance)
+                                        @case('banal') <span class="tag">{{__('Banal')}}</span> @break
+                                        @case('relevant') <span class="tag">{{__('Relevant')}}</span> @break
+                                        @case('indispensable') <span class="tag">{{__('Indispensable')}}</span> @break
+                                    @endswitch
+                                    @if(!$transactionType->active)
+                                        <span class="tag">inativo</span>
+                                    @endif
+                                </span>
+                            </div>
+                            <div class="td-buttons">
+                                <form method="get" action="{{route('transaction-type.edit', ['id' => $transactionType->id])}}">
+                                    <button type="submit">Editar</button>
+                                </form>
+                                <form method="post" action="{{route('transaction-type.destroy')}}">
+                                    @csrf @method('DELETE')
+                                    <input type="hidden" name="id" value={{$transactionType->id}}>
+                                    <button type="submit">Remover</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
+            </div>
         </div>
     </div>
-</div>
 @endsection
