@@ -877,25 +877,25 @@ A entidade *Parcela* (internamente ao sistema, identificada como "installment") 
     - tipo dado:            Decimal;
     - formato:              00000.00;
     - alteração:            Não Permitida.
-- método de pagamento (payment_method):
+- método de pagamento (payment_method_id):
     - objetivo:             Manter o código de identificação do *Método de Pagamento* utilizado no pagamento da *Parcela*;
     - obrigatório:          Sim;
     - tipo dado:            Numérico;
     - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
     - alteração:            Permitida em algumas circunstâncias (ver característica #2).
-- cartão (card):
+- cartão (card_id):
     - objetivo:             Manter o código de identificação do *Cartão* utilizado no pagamento da *Parcela*;
     - obrigatório:          Não (ver exceção em Característica #7);
     - tipo dado:            Numérico;
     - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
     - alteração:            Permitida em algumas circunstâncias (ver características #2, #7).
-- carteira origem (source_wallet):
+- carteira origem (source_wallet_id):
     - objetivo:             Manter o código de identificação da *Carteira* de origem dos valores transacionados por essa *Parcela*;
     - obrigatório:          Não (ver exceção em Característica #8);
     - tipo dado:            Numérico;
     - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
     - alteração:            Permitida em algumas circunstâncias (ver características #2, #7 e #8).
-- carteira destino (destination_wallet):
+- carteira destino (destination_wallet_id):
     - objetivo:             Manter o código de identificação da *Carteira* de destino dos valores transacionados por essa *Parcela*;
     - obrigatório:          Sim;
     - tipo dado:            Numérico;

@@ -16,28 +16,23 @@
                     @foreach($transactionTypes as $transactionType)
                     <tr>
                         <td class="td-item">
-                            <div class="td-content">
-                                <span class="item-value">
-                                    {{ $transactionType->name }}
-                                    @switch($transactionType->relevance)
-                                        @case('banal') <span class="tag">{{__('Banal')}}</span> @break
-                                        @case('relevant') <span class="tag">{{__('Relevant')}}</span> @break
-                                        @case('indispensable') <span class="tag">{{__('Indispensable')}}</span> @break
-                                    @endswitch
-                                    @if(!$transactionType->active)
-                                        <span class="tag">inativo</span>
-                                    @endif
-                                </span>
-                            </div>
+                            <span class="td-content">
+                                {{ $transactionType->name }}
+                                @switch($transactionType->relevance)
+                                    @case('banal') <span class="tag">{{__('Banal')}}</span> @break
+                                    @case('relevant') <span class="tag">{{__('Relevant')}}</span> @break
+                                    @case('indispensable') <span class="tag">{{__('Indispensable')}}</span> @break
+                                @endswitch
+                                @if(!$transactionType->active)
+                                    <span class="tag">{{__('Inactive')}}</span>
+                                @endif
+                            </span>
+                            <form method="get" id="form-update-{{$transactionType->id}}" action="{{route('transaction-type.edit', ['id' => $transactionType->id])}}"></form>
+                            <form method="post" id="form-delete-{{$transactionType->id}}" action="{{route('transaction-type.destroy')}}"> @csrf @method('DELETE') </form>
                             <div class="td-buttons">
-                                <form method="get" action="{{route('transaction-type.edit', ['id' => $transactionType->id])}}">
-                                    <button type="submit">Editar</button>
-                                </form>
-                                <form method="post" action="{{route('transaction-type.destroy')}}">
-                                    @csrf @method('DELETE')
-                                    <input type="hidden" name="id" value={{$transactionType->id}}>
-                                    <button type="submit">Remover</button>
-                                </form>
+                                <button type="submit" form="form-update-{{$transactionType->id}}">{{__('Edit')}}</button>
+                                <input type="hidden" form="form-delete-{{$transactionType->id}}" name="id" value={{$transactionType->id}}>
+                                <button type="submit" form="form-delete-{{$transactionType->id}}">{{__('Delete')}}</button>
                             </div>
                         </td>
                     </tr>

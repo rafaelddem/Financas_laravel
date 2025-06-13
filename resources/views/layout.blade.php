@@ -7,12 +7,18 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script src="{{ asset('js/dark-mode.js') }}"></script>
     <script src="{{ asset('js/script.js') }}" defer></script>
+    @stack('head-script')
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
     <nav class="sidebar">
         <ul>
             <li><a href="/">{{__('Dashboard')}}</a></li>
             <li>Relatórios</li>
+            <li><a href="{{route('transaction.list')}}">{{__('Transaction Entry')}}</a></li>
             <li onclick="toggleSubmenu()">Cadastros</li>
             <ul class="submenu">
                 <li><a href="{{route('owner.list')}}">{{__('Owner')}}</a></li>

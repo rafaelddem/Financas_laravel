@@ -18,8 +18,8 @@ class CreateRequest extends FormRequest
         return [
             'name' => 'required|unique:cards,name,NULL,NULL,wallet_id,' . $this->route()->parameter('wallet_id') . '|between:3,20|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
             'card_type' => 'required|in:debit,credit',
-            'first_day_month' => 'required|integer|between:1,28',
-            'days_to_expiration' => 'required|integer|between:1,20',
+            'first_day_month' => 'required_if:card_type,credit|integer|between:1,28',
+            'days_to_expiration' => 'required_if:card_type,credit|integer|between:1,20',
             'active' => 'required|boolean',
         ];
     }

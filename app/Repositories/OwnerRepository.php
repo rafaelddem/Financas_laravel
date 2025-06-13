@@ -11,6 +11,14 @@ class OwnerRepository extends BaseRepository
         parent::__construct(Owner::class);
     }
 
+    public function list()
+    {
+        return $this->model
+            ->orderby('active', 'desc')
+            ->orderby('name', 'asc')
+            ->get();
+    }
+
     /**
      * Implementar função após implementação da Transação
      */

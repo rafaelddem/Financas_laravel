@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('card_id')->unsigned();
+            $table->integer('card_id')->unsigned()->nullable(false);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->dateTime('due_date');

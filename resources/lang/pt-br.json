@@ -11,17 +11,34 @@
     "Data updated successfully.": "Registro atualizado com sucesso.",
     "Data deleted successfully.": "Registro removido com sucesso.",
 
+    "Fill out the form": "Preencha o formulário",
+    "Save": "Salvar",
+    "Edit": "Editar",
+    "Delete": "Excluir",
+    "Active": "Ativo",
+    "Inactive": "Inativo",
+    "Activate": "Ativar",
+    "Inactivate": "Inativar",
+    "Return": "Voltar",
+
+    "Name": "Nome",
+    "Type": "Tipo",
+
     "Owner": "Dono",
     "Path to wallet": "Dono: :owner",
-    "Path to card": "Dono: :owner > Carteira: :wallet",
+    "Path to card": "Dono: :owner | Carteira: :wallet",
+    "Owner Status": "Status",
+    "Owner List": "Donos Cadastrados",
 
     "Wallet": "Carteira",
+    "Main Wallet": "Carteira Principal",
+    "Secondary Wallet": "Carteira Secundária",
+    "Wallet Status": "Status",
     "New wallet": "Nova carteira",
-    "Edit wallet name": "Editar carteira: :wallet",
+    "Edit wallet": "Editar carteira",
     "Wallets": "Carteiras",
     "Wallets from owner": "Carteiras de :owner",
     "Standard Owner's Wallet": "Carteira padrão de :owner",
-    "Welcome :name": "Bom dia :name",
     "The :attribute field must contain only letters, numbers, periods, dashes and spaces.": "O campo :attribute deve conter apenas letras, números, pontos, traços e espaços.",
     "It is necessary to inform who this wallet belongs to.": "É necessário informar a quem pertence esta Carteira.",
     "A wallet marked as main cannot be inactive.": "Uma Carteira marcada como principal não pode estar inativa ou ser inativada.",
@@ -42,6 +59,7 @@
     "It is not allowed to remove a payment method that is linked to a transaction.": "Não é permitido remover um Método de Pagamento que esteja vinculado a uma Transação.",
 
     "Transaction Type": "Tipo de Transação",
+    "Relevance": "Relevância",
     "Banal": "Banal",
     "Relevant": "Relevante",
     "Indispensable": "Importante",
@@ -49,7 +67,7 @@
 
     "Card": "Cartão",
     "New card": "Novo cartão",
-    "Edit card name": "Editar cartão: :card",
+    "Edit card": "Editar cartão",
     "Cards": "Cartões",
     "Card from wallet": "Cartão de :wallet",
     "Cards from wallet": "Cartões de :wallet",
@@ -61,6 +79,8 @@
     "Invoice": "Fatura",
     "Invoices": "Faturas",
     "Invoices created successfully.": "Faturas criadas com sucesso.",
+
+    "Transaction Entry": "Lançamento de Transações",
 
     "": ""
 }
