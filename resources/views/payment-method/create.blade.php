@@ -10,7 +10,7 @@
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <input type="hidden" form="form-insert" name="active" value=true>
                 <label for="name">{{__('Name')}}:</label>
-                <input type="text" form="form-insert" name="name" id="name" placeholder="Nome" required>
+                <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
                 <label for="type">{{__('Type')}}:</label>
                 <select form="form-insert" name="type" id="type">
                     <option value="notes">{{__('Notes')}}</option>

@@ -11,9 +11,12 @@ class PaymentMethodRepository extends BaseRepository
         parent::__construct(PaymentMethod::class);
     }
 
-    public function list()
+    public function list(bool $onlyActive = true)
     {
         return $this->model
+            ->when($onlyActive, function ($query) {
+                $query->where('active', true);
+            })
             ->orderby('active', 'desc')
             ->orderby('id', 'asc')
             ->get();

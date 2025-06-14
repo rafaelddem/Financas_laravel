@@ -14,7 +14,7 @@
             <div class="col">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <label for="name">{{__('Name')}}:</label>
-                <input type="text" form="form-insert" name="name" id="name" placeholder="Nome" required>
+                <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
                 <label for="card_type">{{__('Type')}}:</label>
                 <div class="radio-container">
                     <label class="radio-option"><input type="radio" form="form-insert" name="card_type" id="card_type_credit" value="credit" checked>{{ __('Credit') }}</label>

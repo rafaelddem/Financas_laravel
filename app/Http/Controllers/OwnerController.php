@@ -22,7 +22,7 @@ class OwnerController extends Controller
         $owners = [];
 
         try {
-            $owners = $this->service->list();
+            $owners = $this->service->list(false);
             $message = $request->get('message');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());

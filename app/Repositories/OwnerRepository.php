@@ -11,9 +11,12 @@ class OwnerRepository extends BaseRepository
         parent::__construct(Owner::class);
     }
 
-    public function list()
+    public function list(bool $onlyActive = true)
     {
         return $this->model
+            ->when($onlyActive, function ($query) {
+                $query->where('active', true);
+            })
             ->orderby('active', 'desc')
             ->orderby('name', 'asc')
             ->get();

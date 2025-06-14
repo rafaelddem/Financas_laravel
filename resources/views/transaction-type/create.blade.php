@@ -9,7 +9,7 @@
             <div class="col">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <label for="name">{{__('Name')}}:</label>
-                <input type="text" form="form-insert" name="name" id="name" placeholder="Nome" required>
+                <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
                 <label for="relevance">{{__('Relevance')}}:</label>
                 <select name="relevance" form="form-insert" id="relevance">
                     <option value='banal'>{{__('Banal')}}</option>

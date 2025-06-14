@@ -11,10 +11,13 @@ class WalletRepository extends BaseRepository
         parent::__construct(Wallet::class);
     }
 
-    public function list()
+    public function list(bool $onlyActive = true)
     {
         return $this->model
             ->with('owner')
+            ->when($onlyActive, function ($query) {
+                $query->where('active', true);
+            })
             ->orderby('main_wallet', 'desc')
             ->orderby('active', 'desc')
             ->orderby('name', 'asc')
