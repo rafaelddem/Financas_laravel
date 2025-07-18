@@ -1,5 +1,5 @@
-function toggleSubmenu() {
-    let submenu = document.querySelector('.submenu');
+function toggleSubmenu(submenuClass) {
+    let submenu = document.querySelector('.' + submenuClass);
     submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
 }
 

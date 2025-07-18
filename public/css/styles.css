@@ -38,12 +38,12 @@ body {
     padding: 10px;
     cursor: pointer;
 }
+.sidebar li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
 .sidebar ul li a {
     text-decoration: none;
     color: white;
-}
-.sidebar ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
 }
 .submenu {
     display: none;

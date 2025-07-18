@@ -12,9 +12,15 @@
     <nav class="sidebar">
         <ul>
             <li><a href="/">{{__('Dashboard')}}</a></li>
-            <li>Relatórios</li>
-            <li onclick="toggleSubmenu()">Cadastros</li>
-            <ul class="submenu">
+            <li><a href="/">{{__('Reports')}}</a></li>
+
+            <!-- <li onclick="toggleSubmenu('transactions')">{{__('Transactions')}}</li>
+            <ul class="submenu transactions">
+                <li><a href="/">{{__('New Transactions')}}</a></li>
+            </ul> -->
+
+            <li onclick="toggleSubmenu('entries')">{{__('Entries')}}</li>
+            <ul class="submenu entries">
                 <li><a href="{{route('owner.list')}}">{{__('Owner')}}</a></li>
                 <li><a href="{{route('payment-method.list')}}">{{__('Payment Method')}}</a></li>
                 <li><a href="{{route('transaction-type.list')}}">{{__('Transaction Type')}}</a></li>
