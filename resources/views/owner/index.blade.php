@@ -6,7 +6,7 @@
     </div>
     <div class="presentation">
         <div class="row">
-            <div class="col_1_2">
+            <div class="col_50">
                 <h2 class="card-title">Preencha o formulário</h2>
                 <form method="post" action="{{route('owner.store')}}">
                     @csrf
@@ -20,7 +20,7 @@
                     <button type="submit">Salvar</button>
                 </form>
             </div>
-            <div class="col_1_2">
+            <div class="col_50">
                 <h2 class="card-title">Lista de Valores</h2>
                 <table>
                     @foreach($owners as $owner)

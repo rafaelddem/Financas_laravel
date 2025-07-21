@@ -21,11 +21,6 @@
             </div>
         </section>
 
-        <section class="chart-container">
-            <h2 class="card-title">Relatório Financeiro</h2>
-            <canvas id="lineChart"></canvas>
-        </section>
-
         <section class="presentation">
             <h2 class="card-title">Preencha o formulário</h2>
             <form action="#" method="POST">

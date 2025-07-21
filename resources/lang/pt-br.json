@@ -3,6 +3,8 @@
     "Transactions": "Transações",
     "Entries": "Cadastros",
 
+    "Dark Mode": "Modo Escuro",
+
     "An error occurred while performing the action. Please try again or contact support.": "Ocorreu um erro ao executar a ação. Tente novamente ou entre em contato com o suporte.",
     "An error was encountered while trying to apply the rules required for the action. Please try again or contact support.": "Foi encontrado um erro ao tentar aplicar as regras necessárias para a ação. Tente novamente ou entre em contato com o suporte.",
     "An error occurred while trying to perform the action on the database. Please try again or contact support.": "Ocorreu um erro ao tentar executar a ação na base de dados. Tente novamente ou entre em contato com o suporte.",

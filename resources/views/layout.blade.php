@@ -27,26 +27,26 @@
             </ul>
         </ul>
     </nav>
-    
+
     <div class="base-page">
         <header class="topbar">
-            <div class="notifications-menu" onclick="toggleNotificationsMenu()">Avisos
+            <div class="menu-item" onclick="toggleNotificationsMenu()">Avisos
                 <span class="badge" id="notificationCount">3</span>
-                <ul class="dropdown-menu notifications-options">
+                <ul class="topbar-dropdown notifications-options">
                     <li>Nova atualização disponível</li>
                     <li>Lembrete: reunião às 15h</li>
                     <li>Seu relatório foi aprovado</li>
                 </ul>
             </div>
-            <div class="menu-item" onclick="toggleDarkMode()">Modo Escuro</div>
+            <div class="menu-item" onclick="toggleDarkMode()">{{ __('Dark Mode') }}</div>
             <div class="menu-item" onclick="toggleLogoutMenu()">Logout
-                <ul class="dropdown-menu logout-options">
+                <ul class="topbar-dropdown logout-options">
                     <li>Perfil</li>
                     <li>Sair</li>
                 </ul>
             </div>
         </header>
-        
+
         <section class="alerts">
             @if ($errors->any())
                 <div id="alertBox" class="alert alert-error">

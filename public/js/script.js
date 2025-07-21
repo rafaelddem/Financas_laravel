@@ -22,8 +22,8 @@ function toggleNotificationsMenu() {
 }
 
 document.addEventListener('click', function(event) {
-    if (!event.target.closest('.menu-item') && !event.target.closest('.notifications-menu')) {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.style.display = 'none');
+    if (!event.target.closest('.menu-item')) {
+        document.querySelectorAll('.topbar-dropdown').forEach(menu => menu.style.display = 'none');
     }
 });
 
