@@ -15,7 +15,7 @@ class CreateCardsTable extends Migration
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('wallet_id')->unsigned();
+            $table->integer('wallet_id')->unsigned()->nullable(false);
             $table->string('name', 20)->nullable(false);
             $table->enum('card_type', ['debit', 'credit'])->nullable(false);
             $table->integer('first_day_month');

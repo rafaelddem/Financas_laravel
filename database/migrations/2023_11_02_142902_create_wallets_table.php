@@ -16,7 +16,7 @@ class CreateWalletsTable extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 45)->nullable(false);
-            $table->integer('owner_id')->unsigned();
+            $table->integer('owner_id')->unsigned()->nullable(false);
             $table->boolean('main_wallet')->default(false);
             $table->string('description', 255)->nullable();
             $table->boolean('active')->default(true);

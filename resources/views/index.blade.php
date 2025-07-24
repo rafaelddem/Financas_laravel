@@ -6,7 +6,7 @@
             <p>Este sistema ajuda a gerenciar seus dados financeiros de forma eficiente e segura.</p>
         </section>
 
-        <section class="cards-container">
+        <section class="cards">
             <div class="card">
                 <h2 class="card-title">Total Receitas</h2>
                 <p class="card-value">R$ 120.000,00</p>

@@ -134,6 +134,7 @@ body {
 .dark-mode .sidebar ul li a {
     color: var(--sidebar-font-dm);
 }
+
 .submenu {
     display: none;
     padding-left: 20px;
@@ -267,10 +268,11 @@ body {
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    padding-bottom: 20px;
+    margin: 0 0 10px 0;
 }
 .col {
     width: 100%;
+    margin: 0 10px;
 }
 .col_50 {
     width: 50%;
@@ -301,7 +303,8 @@ body {
     margin: 20px;
     transition: 0.3s;
 }
-.cards-container {
+
+.cards {
     display: flex;
     gap: 20px;
     justify-content: space-between;
@@ -334,6 +337,11 @@ body {
     background: var(--card-dm);
     color: var(--card-font-dm);
     box-shadow: var(--card-shadow-dm);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
 }
 
 table {
@@ -392,7 +400,7 @@ input[type="button"] {
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    margin-bottom: 0px;
+    margin-bottom: 15px;
 }
 input[type="submit"]:hover,
 input[type="button"]:hover {
@@ -460,9 +468,8 @@ input, select {
     gap: 10px;
     margin-bottom: 15px;
 }
-
 .radio-option {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 5px;
 }
@@ -475,6 +482,9 @@ input[type="radio"] {
     border-radius: 50%;
     display: inline-block;
     padding: 7px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
 }
 input[type="radio"]:checked {
     background-color: var(--button);

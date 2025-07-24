@@ -15,9 +15,13 @@ abstract class BaseRepository
         $this->model = app($model);
     }
 
-    public function list()
+    public function list(bool $onlyActive = true)
     {
-        return $this->model->get();
+        return $this->model
+            ->when($onlyActive, function ($query) {
+                $query->where('active', true);
+            })
+            ->get();
     }
 
     public function find(int $id, array $with = [])

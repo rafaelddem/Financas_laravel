@@ -16,32 +16,30 @@
                     @foreach($paymentMethods as $paymentMethod)
                     <tr>
                         <td class="td-item">
-                            <div class="td-content">
-                                <span class="item-value">
-                                    {{ $paymentMethod->name }}
-                                    @switch($paymentMethod->type)
-                                        @case('notes') <span class="tag">({{__('Notes')}})</span> @break
-                                        @case('transfer') <span class="tag">({{__('Transfer')}})</span> @break
-                                        @case('debit') <span class="tag">({{__('Debit')}})</span> @break
-                                        @case('credit') <span class="tag">({{__('Credit')}})</span> @break
-                                    @endswitch
-                                    @if(!$paymentMethod->active)
-                                        <span class="tag">inativo</span>
-                                    @endif
-                                </span>
-                            </div>
+                            <span class="td-content">
+                                {{ $paymentMethod->name }}
+                                @switch($paymentMethod->type)
+                                    @case('notes') <span class="tag">({{__('Notes')}})</span> @break
+                                    @case('transfer') <span class="tag">({{__('Transfer')}})</span> @break
+                                    @case('debit') <span class="tag">({{__('Debit')}})</span> @break
+                                    @case('credit') <span class="tag">({{__('Credit')}})</span> @break
+                                @endswitch
+                                @if(!$paymentMethod->active)
+                                    <span class="tag">{{__('Inactive')}}</span>
+                                @endif
+                            </span>
+                            <form method="post" id="form-update{{$paymentMethod->id}}" action="{{route('payment-method.update')}}"> @csrf @method('PUT') </form>
+                            <form method="post" id="form-delete{{$paymentMethod->id}}" action="{{route('payment-method.destroy')}}"> @csrf @method('DELETE') </form>
                             <div class="td-buttons">
-                                <form method="post" action="{{route('payment-method.update')}}">
-                                    @csrf @method('PUT')
-                                    <input type="hidden" name="id" value={{$paymentMethod->id}}>
-                                    <input type="hidden" name="active" value={{!$paymentMethod->active}}>
-                                    <button type="submit">@if ($paymentMethod->active) Inativar @else Ativar @endif</button>
-                                </form>
-                                <form method="post" action="{{route('payment-method.destroy')}}">
-                                    @csrf @method('DELETE')
-                                    <input type="hidden" name="id" value={{$paymentMethod->id}}>
-                                    <button type="submit">Remover</button>
-                                </form>
+                                <input type="hidden" form="form-update{{$paymentMethod->id}}" name="id" value={{$paymentMethod->id}}>
+                                <input type="hidden" form="form-update{{$paymentMethod->id}}" name="active" value={{!$paymentMethod->active}}>
+                                @if ($paymentMethod->active)
+                                    <button type="submit" form="form-update{{$paymentMethod->id}}">{{__('Inactivate')}}</button>
+                                @else
+                                    <button type="submit" form="form-update{{$paymentMethod->id}}">{{__('Activate')}}</button>
+                                @endif
+                                <input type="hidden" form="form-delete{{$paymentMethod->id}}" name="id" value={{$paymentMethod->id}}>
+                                <button type="submit" form="form-delete{{$paymentMethod->id}}">{{__('Delete')}}</button>
                             </div>
                         </td>
                     </tr>

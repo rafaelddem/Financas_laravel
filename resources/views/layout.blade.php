@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script src="{{ asset('js/dark-mode.js') }}"></script>
     <script src="{{ asset('js/script.js') }}" defer></script>
+    @stack('head-script')
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
     <nav class="sidebar">

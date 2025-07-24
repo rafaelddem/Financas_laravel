@@ -22,7 +22,7 @@ class PaymentMethodController extends Controller
         $paymentMethods = [];
 
         try {
-            $paymentMethods = $this->service->list();
+            $paymentMethods = $this->service->list(false);
             $message = $request->get('message');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
