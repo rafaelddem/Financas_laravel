@@ -333,7 +333,8 @@ body {
     transition: 0.3s;
 }
 .dark-mode .presentation,
-.dark-mode .cards-container .card {
+.dark-mode .cards-container,
+.dark-mode .card {
     background: var(--card-dm);
     color: var(--card-font-dm);
     box-shadow: var(--card-shadow-dm);
