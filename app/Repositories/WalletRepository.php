@@ -18,6 +18,7 @@ class WalletRepository extends BaseRepository
             ->when($onlyActive, function ($query) {
                 $query->where('active', true);
             })
+            ->orderby('owner_id', 'asc')
             ->orderby('main_wallet', 'desc')
             ->orderby('active', 'desc')
             ->orderby('name', 'asc')
@@ -31,6 +32,7 @@ class WalletRepository extends BaseRepository
             ->when($ownerId, function ($query, $ownerId) {
                 $query->where('owner_id', $ownerId);
             })
+            ->orderby('owner_id', 'asc')
             ->orderby('main_wallet', 'desc')
             ->orderby('active', 'desc')
             ->orderby('name', 'asc')

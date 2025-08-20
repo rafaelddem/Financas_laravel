@@ -10,7 +10,7 @@
         {{__('Path to wallet', ['owner' => $owner->name])}}
     </div>
     <div class="presentation">
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <label for="name">{{__('Name')}}:</label>
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <input type="submit" form="form-insert" value="{{__('Save')}}">
                 <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->route('owner.wallet.list', ['owner_id' => $owner->id])}}'">

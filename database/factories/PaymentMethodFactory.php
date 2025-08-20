@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\PaymentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class PaymentMethodFactory extends Factory
     {
         return [
             'name' => substr($this->faker->name(), 0, 30),
-            'type' => $this->faker->randomElement(['notes', 'transfer', 'debit', 'credit']),
+            'type' => $this->faker->randomElement(PaymentType::names()),
             'active' => true,
         ];
     }

@@ -1,0 +1,45 @@
+<?php
+
+use App\Enums\Relevance;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('transactions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title', 50)->nullable(false);
+            $table->date('transaction_date')->nullable(false);
+            $table->date('processing_date')->nullable(false);
+            $table->integer('transaction_type_id')->unsigned()->nullable(false);
+            $table->enum('relevance', Relevance::names())->nullable(false);
+            $table->integer('payment_method_id')->unsigned()->nullable(false);
+            $table->integer('card_id')->unsigned()->nullable(true);
+            $table->integer('source_wallet_id')->unsigned()->nullable(false);
+            $table->integer('destination_wallet_id')->unsigned()->nullable(false);
+            $table->decimal('gross_value', 5, 2);
+            $table->decimal('discount_value', 5, 2)->default(0.0);
+            $table->string('description', 255)->nullable();
+
+            $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
+            $table->foreign('card_id')->references('id')->on('cards');
+            $table->foreign('source_wallet_id')->references('id')->on('wallets');
+            $table->foreign('destination_wallet_id')->references('id')->on('wallets');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('transactions');
+    }
+};

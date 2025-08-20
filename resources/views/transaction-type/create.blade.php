@@ -1,3 +1,7 @@
+@php
+use App\Enums\Relevance;
+@endphp
+
 @extends('layout')
 
 @section('page_content')
@@ -5,16 +9,16 @@
         <h1>{{__('Transaction Type')}}</h1>
     </div>
     <div class="presentation">
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <label for="name">{{__('Name')}}:</label>
                 <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
                 <label for="relevance">{{__('Relevance')}}:</label>
                 <select name="relevance" form="form-insert" id="relevance">
-                    <option value='banal'>{{__('Banal')}}</option>
-                    <option value='relevant'>{{__('Relevant')}}</option>
-                    <option value='indispensable'>{{__('Indispensable')}}</option>
+                    @foreach (Relevance::values() as $value => $presentation)
+                        <option value='{{ $value }}'>{{ $presentation }}</option>
+                    @endforeach
                 </select>
                 <label>{{__('Status')}}:</label>
                 <div class="radio-container">
@@ -23,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <input type="submit" form="form-insert" value="{{__('Save')}}">
                 <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->route('transaction-type.list')}}'">

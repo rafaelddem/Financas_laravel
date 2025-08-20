@@ -66,9 +66,6 @@
 
     "Transaction Type": "Tipo de Transação",
     "Relevance": "Relevância",
-    "Banal": "Banal",
-    "Relevant": "Relevante",
-    "Indispensable": "Importante",
     "It is not allowed to remove a transaction type that is linked to a transaction.": "Não é permitido remover um Tipo de Transação que esteja vinculado a uma Transação.",
 
     "Card": "Cartão",

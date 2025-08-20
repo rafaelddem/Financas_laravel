@@ -8,7 +8,7 @@ Comecei esse projeto já a tanto tempo que nem lembro mais, e nesse meio tempo m
 
 A ideia principal do sistema é criar uma API que seja capaz de gerenciar as finanças pessoais de uma determinada pessoa. Cadastro de compras, salário, empréstimos, geração de relatório de dívidas, previsão de gastos e entradas de valores, etc... A seguir, detalharei melhor cada função.
 
-Obs.: Optei por utilizar os nomes de entidades, atributos e funções em inglês, pois notei que esse é o padrão utilizado na maioria dos projetos. Por esse motivo, nomeei as entidades como "owner", "wallet" e "transaction" ao invés de "pessoa", "carteira" e "transação". Para essa documentação escolhi manter também as versões dos nomes em português, pois acredito que isso facilitará a compreensão do funcionamento do sistema. Por exemplo, mantendo também o nome em português posso descrever algo como "O título da transação identificará a mesma" ao invés de "O valor do atributo 'tittle' da entidade 'transaction' identificará a mesma". Ainda sobre os nomes em inglês, pode existir algumas conplicações nas traduções, pois não encontrei equivalência para nomes como "Boleto", e outros que tive dúvidas nos resultados encontrados, como "Fatura".
+Obs.: Optei por utilizar os nomes de entidades, atributos e funções em inglês, pois notei que esse é o padrão utilizado na maioria dos projetos. Por esse motivo, nomeei as entidades como "owner", "wallet" e "transaction" ao invés de "pessoa", "carteira" e "transação". Para essa documentação escolhi manter também as versões dos nomes em português, pois acredito que isso facilitará a compreensão do funcionamento do sistema. Por exemplo, mantendo também o nome em português posso descrever algo como "O título da transação identificará a mesma" ao invés de "O valor do atributo 'title' da entidade 'transaction' identificará a mesma". Ainda sobre os nomes em inglês, pode existir algumas conplicações nas traduções, pois não encontrei equivalência para nomes como "Boleto", e outros que tive dúvidas nos resultados encontrados, como "Fatura".
 
 
 ### 1.1. Entidades
@@ -602,9 +602,9 @@ A entidade *Tipo de Transação* (internamente ao sistema, identificada como "tr
     - tamanho:              De 3 a 45 caracteres;
     - alteração:            Não permitida.
 - relevância (relevance):
-    - objetivo:             Definir a relevância padrão da transação ao qual esse registro é relacionado;
+    - objetivo:             Definir a relevância padrão da *Transação* ao qual esse registro é relacionado;
     - obrigatório:          Sim;
-    - tipo dado:            Numérico;
+    - tipo dado:            Enum;
     - valores aceitos:      banal (Banal), relevant (Relevante) ou indispensable (Indispensável);
     - alteração:            Permitida.
 - ativo (active):
@@ -677,7 +677,7 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
 
 #### 1.1.7.2. Atributos da entidade
 
-- título (tittle):
+- título (title):
     - objetivo:             Manter o nome pelo qual a *Transação* será identificada;
     - obrigatório:          Sim;
     - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
@@ -701,6 +701,36 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
     - tipo dado:            Numérico;
     - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
     - alteração:            Permitida.
+- relevância (relevance):
+    - objetivo:             Definir a relevância da *Transação* ao qual esse registro é relacionado;
+    - obrigatório:          Sim;
+    - tipo dado:            Enum;
+    - valores aceitos:      banal (Banal), relevant (Relevante) ou indispensable (Indispensável);
+    - alteração:            Permitida.
+- método de pagamento (payment_method_id):
+    - objetivo:             Manter o código de identificação do *Método de Pagamento* utilizado no pagamento da *Parcela*;
+    - obrigatório:          Sim;
+    - tipo dado:            Numérico;
+    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
+    - alteração:            Permitida em algumas circunstâncias (ver característica #9).
+- cartão (card_id):
+    - objetivo:             Manter o código de identificação do *Cartão* utilizado no pagamento da *Parcela*;
+    - obrigatório:          Não (ver exceção em Característica #7);
+    - tipo dado:            Numérico;
+    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
+    - alteração:            Permitida em algumas circunstâncias (ver características #9, #10).
+- carteira origem (source_wallet_id):
+    - objetivo:             Manter o código de identificação da *Carteira* de origem dos valores transacionados por essa *Parcela*;
+    - obrigatório:          Não (ver exceção em Característica #8);
+    - tipo dado:            Numérico;
+    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
+    - alteração:            Permitida em algumas circunstâncias (ver características #9, #10 e #11).
+- carteira destino (destination_wallet_id):
+    - objetivo:             Manter o código de identificação da *Carteira* de destino dos valores transacionados por essa *Parcela*;
+    - obrigatório:          Sim;
+    - tipo dado:            Numérico;
+    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
+    - alteração:            Permitida em algumas circunstâncias (ver característica #9).
 - valor bruto (gross_value): 
     - objetivo:             Registrar o valor total da *Transação*, no momento que esta é efetuada (não considera descontos ou arredondamentos);
     - obrigatório:          Sim;
@@ -719,12 +749,6 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
     - tipo dado:            Decimal;
     - formato:              00000.00;
     - alteração:            Não Permitida.
-- relevância (relevance):
-    - objetivo:             Definir a relevância da *Transação* ao qual esse registro é relacionado;
-    - obrigatório:          Sim;
-    - tipo dado:            Numérico;
-    - valores aceitos:      0 (não relevante), 1 (pouco relevante) ou 2 (relevante);
-    - alteração:            Permitida.
 - descrição (description): 
     - objetivo:             Salvar uma pequena descrição sobre o registro;
     - obrigatório:          Não;
@@ -735,7 +759,7 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
 
 #### 1.1.7.3. Banco de dados
 
-Nome da tabela: transaction.
+Nome da tabela: transactions.
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -743,7 +767,7 @@ Nome da tabela: transaction.
     - auto incremento;
     - não permite valor nulo;
     - chave primária.
-- tittle: Referente ao atributo "título". Terá as seguintes características:
+- title: Referente ao atributo "título". Terá as seguintes características:
     - tipo: varchar;
     - tamanho: 50;
     - não permite valor nulo.
@@ -757,6 +781,26 @@ Nome da tabela: transaction.
     - tipo: int;
     - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
     - não permite valor nulo.
+- relevance: Referente ao atributo "relevância". Terá as seguintes características:
+    - tipo: enum;
+    - tamanho: 1;
+    - não permite valor nulo.
+- payment_method_id: Referente ao atributo "método de pagamento". Terá as seguintes características:
+    - tipo: int;
+    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
+    - não permite valor nulo.
+- card_id: Referente ao atributo "cartão". Terá as seguintes características:
+    - tipo: int;
+    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
+    - não permite valor nulo.
+- source_wallet_id: Referente ao atributo "carteira origem". Terá as seguintes características:
+    - tipo: int;
+    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
+    - não permite valor nulo.
+- destination_wallet_id: Referente ao atributo "carteira destino". Terá as seguintes características:
+    - tipo: int;
+    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
+    - não permite valor nulo.
 - gross_value: Referente ao atributo "valor bruto". Terá as seguintes características:
     - tipo: double;
     - tamanho: 5 sendo 2 casas decimais.
@@ -764,10 +808,6 @@ Nome da tabela: transaction.
     - tipo: double;
     - tamanho: 5 sendo 2 casas decimais;
     - não permite valor nulo (quando a entidade não possuir este valor, utilizar o valor padrão 0).
-- relevance: Referente ao atributo "relevância". Terá as seguintes características:
-    - tipo: char;
-    - tamanho: 1;
-    - não permite valor nulo.
 - description: Referente ao atributo "descrição". Terá as seguintes características:
     - tipo: varchar;
     - tamanho: 255.
@@ -776,11 +816,15 @@ Nome da tabela: transaction.
     - id
 - chave estrangeira: 
     - transaction_type_id faz referência ao atributo "id" da tabela "transaction_type"
+    - payment_method_id faz referência ao atributo "id" da tabela "payment_method"
+    - card_id faz referência ao atributo "id" da tabela "card"
+    - source_wallet_id faz referência ao atributo "id" da tabela "wallet"
+    - destination_wallet_id faz referência ao atributo "id" da tabela "wallet"
 
 
 #### 1.1.7.4. Características da entidade
 
-- Característica #1: A exclusão de uma *Transação*, ou a alteração de seus atributos, está condicionada ao situação da(s) *Fatura*(s) a que sua(s) *Parcela*(s) pertence(m) (Tarefa #2, item 1.1.7.5);
+- Característica #1: A exclusão de uma *Transação*, ou a alteração de seus atributos, está condicionada a situação da(s) *Fatura*(s) (quando possuir) a que sua(s) *Parcela*(s) pertence(m) (Tarefa #2, item 1.1.7.5);
 
 - Característica #2: O valor informado nos atributos "data de processamento* e *data da transação*, por padrão, será igual. Caso sejam diferentes, o valor informado no atributo *data de processamento* deve ser maior que o valor informado no atributo *data da transação*, e a diferença entre os dois valores não deve ser maior que 3 dias.
 
@@ -795,6 +839,12 @@ Nome da tabela: transaction.
 - Característica #7: Por padrão, o valor do atributo *relevância* será igual ao valor do mesmo atributo da entidade *Tipo de Transação* selecionado, porém, esse valor pode ser alterado a qualquer momento.
 
 - Característica #8: Quando feita uma exclusão de uma *Transação* (rever Característica #1), sua(s) *Parcela*(s) serão excluídas também, bem como será feito o recalculo da(s) *Fatura*(s) relacionada(s);
+
+- Característica #9: Quando a *Transação* possuir um *Método de Pagamento* que seja relativo a cartão (crédito ou débito), não será permitido a alteração dos atributos *método de pagamento*, *cartão*, *carteira origem* e\ou *carteira destino*;
+
+- Característica #10: Por padrão, o atributo *cartão* não é obrigatório, entretanto, caso seja informado um valor para o atributo *método de pagamento* que seja relativo a cartão (seja crédito ou débito), o atributo *cartão* passa a ser obrigatório. O *Método de Pagamento* selecionado também limita os registros de *Cartão* liberados para a venda, por exemplo, se o *Método de Pagamento* selecionado for do tipo crédito, então somente registro de *Cartão* do tipo "crédito" serão permitidos na *Transação*.
+
+- Característica #11: Por padrão, o atributo *carteira origem* não é obrigatório, e pode ser alterado posteriormente, entretanto, caso seja informado um *Cartão*, o atributo *carteira origem* passa a ser obrigatório, e sua alteração pelo usuário não será mais permitida. Nesse caso, a *carteira de origem* deverá ser obrigatoriamente a mesma *Carteira* qual o *Cartão* selecionado pertence.
 
 
 #### 1.1.7.5. Tarefas
@@ -824,7 +874,7 @@ Tarefa #3: Definir se o valor das *Parcela*s confere com o valor da *Transação
 
 #### 1.1.8.1. Descrição
 
-A entidade *Parcela* (internamente ao sistema, identificada como "installment") é utilizada (junto com a entidade Transação, item 1.1.7) para representar as diversas transações salvas no sistema. Mas especificamente seus valores, origem e destino dos valores, data de vencimento (quando necessário) e pagamento e o método de pagamento. Quando a transação original for do tipo "Crédito", será possível que ela possua mais de uma *Parcela*, e portanto, mas de um registro relacionado a esta Transação. Nas demais situações (vendas no débito, transferências, movimentações...) existirá somente um registro por transação. Na prática, vendas a vista não possuem parcelas, no entanto, por uma questão de organização e padronização, sempre que se falar da entidade que mantém os valores de uma *Transação*, será utilizado o nome "Parcela", independente se o pagamento for à vista, débito ou crédito.
+A entidade *Parcela* (internamente ao sistema, identificada como "installment") é utilizada (junto com a entidade Transação, item 1.1.7) para representar as diversas transações salvas no sistema. Mas especificamente seus valores e data de vencimento (quando necessário) e pagamento. Quando a transação original for do tipo "Crédito", será possível que ela possua mais de uma *Parcela*, e portanto, mas de um registro relacionado a esta Transação. Nas demais situações (vendas no débito, transferências, movimentações...) existirá somente um registro por transação. Na prática, vendas a vista não possuem parcelas, no entanto, por uma questão de organização e padronização, sempre que se falar da entidade que mantém os valores de uma *Transação*, será utilizado o nome "Parcela", independente se o pagamento for à vista, débito ou crédito.
 
 
 #### 1.1.8.2. Atributos da entidade
@@ -877,30 +927,6 @@ A entidade *Parcela* (internamente ao sistema, identificada como "installment") 
     - tipo dado:            Decimal;
     - formato:              00000.00;
     - alteração:            Não Permitida.
-- método de pagamento (payment_method_id):
-    - objetivo:             Manter o código de identificação do *Método de Pagamento* utilizado no pagamento da *Parcela*;
-    - obrigatório:          Sim;
-    - tipo dado:            Numérico;
-    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
-    - alteração:            Permitida em algumas circunstâncias (ver característica #2).
-- cartão (card_id):
-    - objetivo:             Manter o código de identificação do *Cartão* utilizado no pagamento da *Parcela*;
-    - obrigatório:          Não (ver exceção em Característica #7);
-    - tipo dado:            Numérico;
-    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
-    - alteração:            Permitida em algumas circunstâncias (ver características #2, #7).
-- carteira origem (source_wallet_id):
-    - objetivo:             Manter o código de identificação da *Carteira* de origem dos valores transacionados por essa *Parcela*;
-    - obrigatório:          Não (ver exceção em Característica #8);
-    - tipo dado:            Numérico;
-    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
-    - alteração:            Permitida em algumas circunstâncias (ver características #2, #7 e #8).
-- carteira destino (destination_wallet_id):
-    - objetivo:             Manter o código de identificação da *Carteira* de destino dos valores transacionados por essa *Parcela*;
-    - obrigatório:          Sim;
-    - tipo dado:            Numérico;
-    - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
-    - alteração:            Permitida em algumas circunstâncias (ver característica #2).
 - data de pagamento (payment_date):
     - objetivo:             Manter a data de pagamento da *Parcela*;
     - obrigatório:          Não;
@@ -911,7 +937,7 @@ A entidade *Parcela* (internamente ao sistema, identificada como "installment") 
 
 #### 1.1.8.3. Banco de dados
 
-Nome da tabela: installment.
+Nome da tabela: installments.
 
 - transaction_id: Referente ao atributo "transação". Terá as seguintes características:
     - tipo: int;
@@ -939,22 +965,6 @@ Nome da tabela: installment.
     - tipo: double;
     - tamanho: 5 sendo 2 casas decimais.
     - não permite valor nulo (quando a entidade não possuir este valor, utilizar o valor padrão 0).
-- payment_method_id: Referente ao atributo "método de pagamento". Terá as seguintes características:
-    - tipo: int;
-    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
-    - não permite valor nulo.
-- card_id: Referente ao atributo "cartão". Terá as seguintes características:
-    - tipo: int;
-    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
-    - não permite valor nulo.
-- source_wallet_id: Referente ao atributo "carteira origem". Terá as seguintes características:
-    - tipo: int;
-    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
-    - não permite valor nulo.
-- destination_wallet_id: Referente ao atributo "carteira destino". Terá as seguintes características:
-    - tipo: int;
-    - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
-    - não permite valor nulo.
 - payment_date: Referente ao atributo "data de pagamento". Terá as seguintes características:
     - tipo: date;
     - não permite valor nulo.
@@ -964,17 +974,13 @@ Nome da tabela: installment.
     - installment_number
 - chave estrangeira: 
     - transaction_id faz referência ao atributo "id" da tabela "transaction"
-    - payment_method_id faz referência ao atributo "id" da tabela "payment_method"
-    - card_id faz referência ao atributo "id" da tabela "card"
-    - source_wallet_id faz referência ao atributo "id" da tabela "wallet"
-    - destination_wallet_id faz referência ao atributo "id" da tabela "wallet"
 
 
 #### 1.1.8.4. Características da entidade
 
 - Característica #1: Não é permitido a exclusão do registro de uma *Parcela*;
 
-- Característica #2: Não é permitido a alteração dos valores dos atributos *transação*, *número da parcela*, *valor bruto* e *carteira destino*. Os demais atributos poderão ser alterados, desde que a *Parcela* não pertença a uma *Fatura*, ou que pertença a uma *Fatura* que esteja marcada como "Aberta" ou "Fechada" (ver demais características para regras adicionais sobre alterações).
+- Característica #2: Não é permitido a alteração dos valores dos atributos *transação*, *número da parcela* e *valor bruto*. Os demais atributos poderão ser alterados, desde que a *Parcela* não pertença a uma *Fatura*, ou que pertença a uma *Fatura* que esteja marcada como "Aberta" ou "Fechada" (ver demais características para regras adicionais sobre alterações).
 
 - Característica #3: As *Parcela*s são criadas com suas *data da parcela* sempre com o mesmo dia em que foi efetuada a *Transação* (Tarefa #1, item 1.1.8.5), no entanto, quando uma nova *Fatura* é criada, as *Parcela*s que irão pertencer a ela terão suas datas atualizadas para o primeiro dia da *Fatura* (rever a Característica #12, descrita no item 1.1.4.4).
 
@@ -984,13 +990,9 @@ Nome da tabela: installment.
 
 - Característica #6: O *valor líquido* da *Parcela* não será informado pelo usuário, ao invés disso, será calculado sempre que for solicitado através do seguinte cálculo: *valor líquido* = *valor bruto* - *valor de desconto* - *juros* - *arredondamento*. O *valor líquido* nunca deverá ser maior que o *valor bruto*, se assim ocorrer, alguns dos valores (*valor de desconto*, *juros* e *arredondamento*) está incorreto, e deverá ser corrigido;
 
-- Característica #7: Por padrão, o atributo *cartão* não é obrigatório, entretanto, caso seja informado um valor para o atributo *método de pagamento* que seja relativo a cartão (seja crédito ou débito), o atributo *cartão* passa a ser obrigatório. O *Método de Pagamento* selecionado também limita os registros de *Cartão* liberados para a venda, por exemplo, se o *Método de Pagamento* selecionado for do tipo crédito, então somente registro de *Cartão* do tipo "crédito" serão permitidos na *Transação*.
+- Característica #7: Quando uma *Transação* for marcada com um *Método de Pagamento* do tipo "crédito", obrigatoriamente suas *Parcela*s deverão ter os mesmos valores em seus atributos *cartão" e *carteira origem*.
 
-- Característica #8: Por padrão, o atributo *carteira origem* não é obrigatório, e pode ser alterado posteriormente, entretanto, caso seja informado um *Cartão*, o atributo *carteira origem* passa a ser obrigatório, e sua alteração pelo usuário não será mais permitida. Nesse caso, a *carteira de origem* deverá ser obrigatoriamente a mesma *Carteira* qual o *Cartão* selecionado pertence.
-
-- Característica #9: Quando uma *Transação* for marcada com um *Método de Pagamento* do tipo "crédito", obrigatoriamente suas *Parcela*s deverão ter os mesmos valores em seus atributos *cartão" e *carteira origem*.
-
-- Característica #10: Quando uma *Transação* for referentes a venda no crédito, suas *Parcela*s terão seu atributo *data de pagamento* preenchidos automaticamente no momento que *Fatura* for paga, com o valor da data em questão.
+- Característica #8: Quando uma *Transação* for referentes a venda no crédito, suas *Parcela*s terão seu atributo *data de pagamento* preenchidos automaticamente no momento que *Fatura* for paga, com o valor da data em questão.
 
 
 #### 1.1.8.5. Tarefas
@@ -1015,10 +1017,6 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 Possíveis alterações no projeto:
 
-Alterar para que Metodos de Pagamento e Tipos de Transação permitam inativações, e dessa forma, possa 'esconder' um cadastro não utilizado, mas sem excluí-lo
-
-Alterar os campos char para enum.
-
 No tipo de transações, ver a necessidade de um ca po 'descrição' e um campo 'nome abreviado'.
 
 No tipo de transações, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
@@ -1032,3 +1030,5 @@ Rever o bloqueio na alteração dos valores das parcelas. Uma alternativa seria 
 Considerar manter Transação e Parcela como uma entidade só, mas manter elas separadas no banco. Poderia ser mais fácil de manusear os dados no sistema, garantindo sua integridade, mas devo considerar o aumento no tamanho dos dados
 
 Ao invés de fazer apenas a inativição, utilizar também o softdelete, dessa forma a inativação seria apenas para organização dos dados, e o softdelete para quando não for mais necessário o registro
+
+Manter o controle dos imprestimos através de relatórios, como faço no sistema antigo

@@ -39,17 +39,16 @@ setTimeout(() => {
     }
 }, 5000);
 
-const inputValor = document.getElementById("valor");
-inputValor.addEventListener("input", function (e) {
-    let valor = e.target.value;
-    valor = valor.replace(/\D/g, "");
-    valor = (parseInt(valor, 10) / 100).toFixed(2);
-    valor = valor.replace(".", ",");
-    valor = valor
-        .toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
-
-    e.target.value = valor;
+document.querySelectorAll(".money").forEach(function (input) {
+    input.addEventListener("input", function (e) {
+        let valor = e.target.value;
+        valor = valor.replace(/\D/g, "");
+        valor = (parseInt(valor, 10) / 100).toFixed(2);
+        valor = valor.replace(".", ",");
+        valor = valor.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        e.target.value = valor;
+    });
 });

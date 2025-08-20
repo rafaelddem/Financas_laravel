@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Relevance;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ class CreateTransactionTypesTable extends Migration
         Schema::create('transaction_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 45)->unique()->nullable(false);
-            $table->enum('relevance', ['banal', 'relevant', 'indispensable'])->nullable(false);
+            $table->enum('relevance', Relevance::names())->nullable(false);
             $table->boolean('active')->default(true);
         });
     }

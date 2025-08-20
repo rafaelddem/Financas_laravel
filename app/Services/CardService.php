@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PaymentType;
 use App\Exceptions\BaseException;
 use App\Exceptions\ServiceException;
 use App\Repositories\CardRepository;
@@ -66,5 +67,31 @@ class CardService extends BaseService
         } catch (\Throwable $th) {
             throw new ServiceException();
         }
+    }
+
+    public function listDebit(int $wallet_id)
+    {
+        try {
+            return $this->repository->listDebitCredit($wallet_id, PaymentType::debit->name);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return [];
+    }
+
+    public function listCredit(int $wallet_id)
+    {
+        try {
+            return $this->repository->listDebitCredit($wallet_id, PaymentType::credit->name);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return [];
     }
 }

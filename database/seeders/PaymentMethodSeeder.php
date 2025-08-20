@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PaymentType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,22 +19,22 @@ class PaymentMethodSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Dinheiro físico',
-                'type' => 'notes',
+                'type' => PaymentType::notes->name,
             ],
             [
                 'id' => 2,
-                'name' => 'Transação',
-                'type' => 'transfer',
+                'name' => 'Transação bancária',
+                'type' => PaymentType::transfer->name,
             ],
             [
                 'id' => 3,
                 'name' => 'Cartão débito',
-                'type' => 'debit',
+                'type' => PaymentType::debit->name,
             ],
             [
                 'id' => 4,
                 'name' => 'Cartão crédito',
-                'type' => 'credit',
+                'type' => PaymentType::credit->name,
             ],
         ]);
     }

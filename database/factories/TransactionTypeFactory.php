@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Relevance;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class TransactionTypeFactory extends Factory
     {
         return [
             'name' => substr($this->faker->name(), 0, 45),
-            'relevance' => $this->faker->randomElement(['banal', 'relevant', 'indispensable']),
+            'relevance' => $this->faker->randomElement(Relevance::names()),
             'active' => true,
         ];
     }

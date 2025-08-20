@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\TransactionType;
 
+use App\Enums\Relevance;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -17,7 +18,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:transaction_types|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
-            'relevance' => 'required|in:banal,relevant,indispensable',
+            'relevance' => 'required|in:' . implode(',', Relevance::names()),
             'active' => 'required|boolean',
         ];
     }

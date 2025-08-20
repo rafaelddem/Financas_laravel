@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Relevance;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,17 +19,17 @@ class TransactionTypeSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Entradas diversas',
-                'relevance' => 'banal',
+                'relevance' => Relevance::banal->name,
             ],
             [
                 'id' => 2,
                 'name' => 'Saídas diversas',
-                'relevance' => 'banal',
+                'relevance' => Relevance::banal->name,
             ],
             [
                 'id' => 3,
                 'name' => 'Movimentação entre carteiras',
-                'relevance' => 'banal',
+                'relevance' => Relevance::banal->name,
             ],
         ]);
     }

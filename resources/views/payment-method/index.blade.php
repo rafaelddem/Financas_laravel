@@ -1,3 +1,7 @@
+@php
+use App\Enums\PaymentType;
+@endphp
+
 @extends('layout')
 
 @section('page_content')
@@ -5,12 +9,12 @@
         <h1>{{__("Payment Method")}}</h1>
     </div>
     <div class="presentation">
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <input type="button" value="Novo" onclick="window.location='{{ route('payment-method.create') }}'">
             </div>
         </div>
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <table>
                     @foreach($paymentMethods as $paymentMethod)
@@ -18,12 +22,7 @@
                         <td class="td-item">
                             <span class="td-content">
                                 {{ $paymentMethod->name }}
-                                @switch($paymentMethod->type)
-                                    @case('notes') <span class="tag">({{__('Notes')}})</span> @break
-                                    @case('transfer') <span class="tag">({{__('Transfer')}})</span> @break
-                                    @case('debit') <span class="tag">({{__('Debit')}})</span> @break
-                                    @case('credit') <span class="tag">({{__('Credit')}})</span> @break
-                                @endswitch
+                                <span class="tag">{{PaymentType::get($paymentMethod->type)}}</span>
                                 @if(!$paymentMethod->active)
                                     <span class="tag">{{__('Inactive')}}</span>
                                 @endif

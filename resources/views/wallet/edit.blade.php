@@ -10,12 +10,12 @@
         {{__('Path to wallet', ['owner' => $wallet->owner->name])}}
     </div>
     <div class="presentation">
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <input type="hidden" form="form-edit" name="id" value={{$wallet->id}}>
                 <label>{{__('Name')}}:</label>
-                <div class="row">
+                <div class="flex-container">
                     <label><strong>{{ $wallet->name }}</strong></label>
                 </div>
                 @if ($wallet->main_wallet)
@@ -34,7 +34,7 @@
                 @endif
             </div>
         </div>
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <input type="submit" form="form-edit" value="{{__('Edit')}}">
                 <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->route('owner.wallet.list', ['owner_id' => $wallet->owner_id])}}'">

@@ -5,7 +5,7 @@
         <h1>{{__('Owner')}}</h1>
     </div>
     <div class="presentation">
-        <div class="row">
+        <div class="flex-container">
             <div class="col_50">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <label for="name">{{__('Name')}}:</label>
@@ -15,7 +15,7 @@
                     <label class="radio-option"><input type="radio" form="form-insert" name="active" value="1" checked>{{__('Active')}}</label>
                     <label class="radio-option"><input type="radio" form="form-insert" name="active" value="0">{{__('Inactive')}}</label>
                 </div>
-                <div class="row">
+                <div class="flex-container">
                     <div class="col_child">
                         <button type="submit" form="form-insert">{{__('Save')}}</button>
                     </div>

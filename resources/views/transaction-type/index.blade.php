@@ -1,3 +1,7 @@
+@php
+use App\Enums\Relevance;
+@endphp
+
 @extends('layout')
 
 @section('page_content')
@@ -5,12 +9,12 @@
         <h1>{{__('Transaction Type')}}</h1>
     </div>
     <div class="presentation">
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <input type="button" value="Novo" onclick="window.location='{{ route('transaction-type.create') }}'">
             </div>
         </div>
-        <div class="row">
+        <div class="flex-container">
             <div class="col">
                 <table>
                     @foreach($transactionTypes as $transactionType)
@@ -18,11 +22,7 @@
                         <td class="td-item">
                             <span class="td-content">
                                 {{ $transactionType->name }}
-                                @switch($transactionType->relevance)
-                                    @case('banal') <span class="tag">{{__('Banal')}}</span> @break
-                                    @case('relevant') <span class="tag">{{__('Relevant')}}</span> @break
-                                    @case('indispensable') <span class="tag">{{__('Indispensable')}}</span> @break
-                                @endswitch
+                                <span class="tag">{{Relevance::get($transactionType->relevance)}}</span>
                                 @if(!$transactionType->active)
                                     <span class="tag">{{__('Inactive')}}</span>
                                 @endif

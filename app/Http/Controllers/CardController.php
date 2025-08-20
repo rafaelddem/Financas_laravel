@@ -41,6 +41,24 @@ class CardController extends Controller
         return view('card.index', compact('wallet', 'cards', 'message'));
     }
 
+    public function listDebit(int $owner_id, int $wallet_id)
+    {
+        try {
+            return $this->service->listDebit($wallet_id);
+        } catch (\Throwable $th) {
+            return [];
+        }
+    }
+
+    public function listCredit(int $owner_id, int $wallet_id)
+    {
+        try {
+            return $this->service->listCredit($wallet_id);
+        } catch (\Throwable $th) {
+            return [];
+        }
+    }
+
     public function create(int $owner_id, int $wallet_id)
     {
         try {
