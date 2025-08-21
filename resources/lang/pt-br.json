@@ -84,6 +84,23 @@
     "Invoices created successfully.": "Faturas criadas com sucesso.",
 
     "Transaction Entry": "Lançamento de Transações",
+    "Title": "Título",
+    "Transaction Date": "Data da Transação",
+    "Processing Date": "Data do Processamento",
+    "Gross Value": "Valor Bruto",
+    "Discount Value": "Desconto",
+    "Interest Value": "Juros",
+    "Rounding Value": "Arredondamento",
+    "Net Value": "Valor Líquido",
+    "Description": "Descrição",
+    "Source Wallet": "Carteira Origem",
+    "Destination Wallet": "Carteira Destino",
+    "A value needs to be entered": "Um valor precisa ser informado",
+
+    "Installments": "Parcelas",
+    "Installments Data": "Dados da(s) Parcela(s)",
+    "Installment Date": "Data da Parcela",
+    "Payment Date": "Data do Pagamento",
 
     "": ""
 }

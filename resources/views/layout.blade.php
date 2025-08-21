@@ -18,12 +18,10 @@
         <ul>
             <li><a href="/">{{__('Dashboard')}}</a></li>
             <li><a href="/">{{__('Reports')}}</a></li>
-
-            <!-- <li onclick="toggleSubmenu('transactions')">{{__('Transactions')}}</li>
+            <li onclick="toggleSubmenu('transactions')">{{__('Transactions')}}</li>
             <ul class="submenu transactions">
-                <li><a href="/">{{__('New Transactions')}}</a></li>
-            </ul> -->
-
+                <li><a href="{{route('transaction.list')}}">{{__('Transaction Entry')}}</a></li>
+            </ul>
             <li onclick="toggleSubmenu('entries')">{{__('Entries')}}</li>
             <ul class="submenu entries">
                 <li><a href="{{route('owner.list')}}">{{__('Owner')}}</a></li>

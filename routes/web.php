@@ -3,11 +3,18 @@
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionTypeController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return view('index');});
+
+Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
+    Route::get('/', [TransactionController::class, 'index'])->name('list');
+    Route::get('/novo', [TransactionController::class, 'create'])->name('create');
+    Route::post('/', [TransactionController::class, 'store'])->name('store');
+});
 
 Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
     Route::get('/', [OwnerController::class, 'index'])->name('list');
@@ -24,6 +31,8 @@ Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
 
         Route::group(['prefix' => '{wallet_id}/cartao', 'as' => 'card.'], function () {
             Route::get('/', [CardController::class, 'index'])->name('list');
+            Route::get('/debito', [CardController::class, 'listDebit'])->name('listDebit');
+            Route::get('/credito', [CardController::class, 'listCredit'])->name('listCredit');
             Route::get('/novo', [CardController::class, 'create'])->name('create');
             Route::post('/', [CardController::class, 'store'])->name('store');
             Route::get('/{id}', [CardController::class, 'edit'])->name('edit');

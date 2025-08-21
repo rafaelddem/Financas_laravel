@@ -39,16 +39,27 @@ setTimeout(() => {
     }
 }, 5000);
 
-document.querySelectorAll(".money").forEach(function (input) {
-    input.addEventListener("input", function (e) {
-        let valor = e.target.value;
-        valor = valor.replace(/\D/g, "");
-        valor = (parseInt(valor, 10) / 100).toFixed(2);
-        valor = valor.replace(".", ",");
-        valor = valor.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL"
-            });
-        e.target.value = valor;
+function addMonths(date, months) {
+    const newDate = (date.length === 0) 
+        ? new Date() 
+        : new Date(date);
+
+    newDate.setMonth(newDate.getMonth() + months);
+    return newDate;
+}
+
+function formatMoney(value) {
+    return value.toLocaleString("pt-BR", {
+        currency: "BRL",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
-});
+};
+
+function parseMoney(value) {
+    if (!value) 
+        return 0;
+
+    value = value.replace(/[^\d,-]/g, "").replace(/\./g, "").replace(",", ".");
+    return parseFloat(value) || 0;
+};
