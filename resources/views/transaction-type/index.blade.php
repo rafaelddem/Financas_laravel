@@ -22,7 +22,7 @@ use App\Enums\Relevance;
                         <td class="td-item">
                             <span class="td-content">
                                 {{ $transactionType->name }}
-                                <span class="tag">{{Relevance::get($transactionType->relevance)}}</span>
+                                <span class="tag">{{ __($transactionType->relevance->name)}}</span>
                                 @if(!$transactionType->active)
                                     <span class="tag">{{__('Inactive')}}</span>
                                 @endif

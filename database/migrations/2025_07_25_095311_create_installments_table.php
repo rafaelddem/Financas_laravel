@@ -15,10 +15,10 @@ return new class extends Migration
             $table->integer('transaction_id')->unsigned()->nullable(false);
             $table->integer('installment_number')->unsigned()->nullable(false);
             $table->date('installment_date')->nullable(false);
-            $table->decimal('gross_value', 5, 2);
-            $table->decimal('discount_value', 5, 2)->default(0.0);
-            $table->decimal('interest_value', 5, 2)->default(0.0);
-            $table->decimal('rounding_value', 5, 2)->default(0.0);
+            $table->decimal('gross_value', 8, 2);
+            $table->decimal('discount_value', 8, 2)->default(0.0);
+            $table->decimal('interest_value', 8, 2)->default(0.0);
+            $table->decimal('rounding_value', 8, 2)->default(0.0);
             $table->date('payment_date')->nullable(true);
             
             $table->primary(['transaction_id', 'installment_number']);

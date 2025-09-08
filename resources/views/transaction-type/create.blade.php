@@ -16,8 +16,8 @@ use App\Enums\Relevance;
                 <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
                 <label for="relevance">{{__('Relevance')}}:</label>
                 <select name="relevance" form="form-insert" id="relevance">
-                    @foreach (Relevance::values() as $value => $presentation)
-                        <option value='{{ $value }}'>{{ $presentation }}</option>
+                    @foreach (Relevance::cases() as $relevance)
+                        <option value='{{ $relevance->value }}'>{{ __($relevance->name) }}</option>
                     @endforeach
                 </select>
                 <label>{{__('Status')}}:</label>

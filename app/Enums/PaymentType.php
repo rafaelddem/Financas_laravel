@@ -3,27 +3,23 @@
 namespace App\Enums;
 
 enum PaymentType: string {
-    case notes = "Dinheiro físico";
-    case transfer = "Transação bancária";
-    case debit = "Cartão débito";
-    case credit = "Cartão crédito";
-
-    public static function names(): array {
-        return array_map(fn($m) => $m->name, self::cases());
-    }
+    case Notes = "notes";
+    case Transfer = "transfer";
+    case Debit = "debit";
+    case Credit = "credit";
 
     public static function values(): array {
         $values = [];
-        foreach (self::cases() as $relevance) {
-            $values[$relevance->name] = $relevance->value;
+        foreach (self::cases() as $paymentType) {
+            $values[$paymentType->name] = $paymentType->value;
         }
         return $values;
     }
 
-    public static function get(string $key): ?string {
-        foreach (self::cases() as $relevance) {
-            if ($relevance->name === $key) {
-                return $relevance->value;
+    public static function translate(string $key): ?string {
+        foreach (self::cases() as $paymentType) {
+            if ($paymentType->value === $key) {
+                return __($paymentType->name);
             }
         }
         return null;

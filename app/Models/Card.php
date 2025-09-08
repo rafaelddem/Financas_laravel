@@ -11,9 +11,18 @@ class Card extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['wallet_id', 'name', 'card_type', 'first_day_month', 'days_to_expiration', 'active'];
+    protected $fillable = [
+        'wallet_id', 
+        'name', 
+        'card_type', 
+        'first_day_month', 
+        'days_to_expiration', 
+        'active'
+    ];
 
-    protected $casts = ['active' => 'boolean'];
+    protected $casts = [
+        'active' => 'boolean'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -29,5 +38,13 @@ class Card extends Model
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

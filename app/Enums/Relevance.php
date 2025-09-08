@@ -3,13 +3,9 @@
 namespace App\Enums;
 
 enum Relevance: string {
-    case banal = "Banal";
-    case relevant = "Relevante";
-    case indispensable = "Indispensavel";
-
-    public static function names(): array {
-        return array_map(fn($m) => $m->name, self::cases());
-    }
+    case Banal = 'banal';
+    case Relevant = 'relevant';
+    case Indispensable = 'indispensable';
 
     public static function values(): array {
         $values = [];
@@ -19,10 +15,10 @@ enum Relevance: string {
         return $values;
     }
 
-    public static function get(string $key): ?string {
+    public static function translate(string $key): ?string {
         foreach (self::cases() as $relevance) {
-            if ($relevance->name === $key) {
-                return $relevance->value;
+            if ($relevance->value === $key) {
+                return __($relevance->name);
             }
         }
         return null;

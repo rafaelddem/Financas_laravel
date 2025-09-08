@@ -10,5 +10,29 @@
                 <input type="button" value="Novo" onclick="window.location='{{ route('transaction.create') }}'">
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <table>
+                    @foreach($transactions as $transaction)
+                    <tr>
+                        <td class="td-item">
+                            <span class="td-content">
+                                {{ $transaction->transaction_date->format('d/m/Y') }} | {{ $transaction->netValue(true) }} | {{ $transaction->title }}
+                                <span class="tag">{{ $transaction->sourceWallet->name }}</span>
+                                <span class="tag">{{ __($transaction->relevance->name)}}</span>
+                            </span>
+                            <form method="get" id="form-update-{{$transaction->id}}" action="{{route('transaction-type.edit', ['id' => $transaction->id])}}"></form>
+                            <form method="post" id="form-delete-{{$transaction->id}}" action="{{route('transaction-type.destroy')}}"> @csrf @method('DELETE') </form>
+                            <div class="td-buttons">
+                                <button type="submit" form="form-update-{{$transaction->id}}">{{__('Edit')}}</button>
+                                <input type="hidden" form="form-delete-{{$transaction->id}}" name="id" value={{$transaction->id}}>
+                                <button type="submit" form="form-delete-{{$transaction->id}}">{{__('Delete')}}</button>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
     </div>
 @endsection

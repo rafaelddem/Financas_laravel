@@ -479,6 +479,26 @@ input, select {
     border: var(--form-components-border-dm);
 }
 
+.textarea {
+    background-color: var(--form-components);
+    color: var(--form-components-font);
+    border: var(--form-components-border);
+    width: 100%;
+    resize: vertical;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    max-width: 100vw;
+    box-sizing: border-box;
+    transition: 0.3s;
+    font-size: 14px;
+}
+.dark-mode .textarea {
+    background-color: var(--form-components-dm);
+    color: var(--form-components-font-dm);
+    border: var(--form-components-border-dm);
+}
+
 .radio-container {
     display: flex;
     align-items: center;
@@ -533,26 +553,6 @@ input[type="checkbox"]:checked {
 }
 .dark-mode input[type="checkbox"]:checked {
     background-color: var(--button-dm);
-}
-
-.textarea {
-    background-color: var(--form-components);
-    color: var(--form-components-font);
-    border: var(--form-components-border);
-    width: 100%;
-    resize: vertical;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    max-width: 100vw;
-    box-sizing: border-box;
-    transition: 0.3s;
-    font-size: 14px;
-}
-.dark-mode .textarea {
-    background-color: var(--form-components-dm);
-    color: var(--form-components-font-dm);
-    border: var(--form-components-border-dm);
 }
 
 /* formulario fim */

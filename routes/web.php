@@ -8,7 +8,7 @@ use App\Http\Controllers\TransactionTypeController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {return view('index');});
+Route::get('/', function () { return view('index'); });
 
 Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
     Route::get('/', [TransactionController::class, 'index'])->name('list');

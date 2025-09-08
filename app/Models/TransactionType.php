@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\Relevance;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TransactionType extends Model
 {
@@ -11,5 +13,22 @@ class TransactionType extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'relevance', 'active'];
+    protected $fillable = [
+        'name', 
+        'relevance', 
+        'active'
+    ];
+
+    protected $casts = [
+        'relevance' => Relevance::class, 
+        'active' => 'boolean', 
+    ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

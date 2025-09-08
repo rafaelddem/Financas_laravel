@@ -19,22 +19,22 @@ class PaymentMethodSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Dinheiro físico',
-                'type' => PaymentType::notes->name,
+                'type' => PaymentType::Notes->value,
             ],
             [
                 'id' => 2,
                 'name' => 'Transação bancária',
-                'type' => PaymentType::transfer->name,
+                'type' => PaymentType::Transfer->value,
             ],
             [
                 'id' => 3,
-                'name' => 'Cartão débito',
-                'type' => PaymentType::debit->name,
+                'name' => 'Débito (cartão)',
+                'type' => PaymentType::Debit->value,
             ],
             [
                 'id' => 4,
-                'name' => 'Cartão crédito',
-                'type' => PaymentType::credit->name,
+                'name' => 'Crédito (cartão)',
+                'type' => PaymentType::Credit->value,
             ],
         ]);
     }

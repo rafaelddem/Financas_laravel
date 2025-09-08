@@ -17,8 +17,8 @@ use App\Enums\PaymentType;
                 <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
                 <label for="type">{{__('Type')}}:</label>
                 <select form="form-insert" name="type" id="type">
-                    @foreach (PaymentType::values() as $value => $presentation)
-                        <option value='{{ $value }}'>{{ $presentation }}</option>
+                    @foreach (PaymentType::cases() as $paymentType)
+                        <option value='{{ $paymentType->value }}'>{{ __($paymentType->name) }}</option>
                     @endforeach
                 </select>
             </div>

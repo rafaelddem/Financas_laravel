@@ -27,7 +27,7 @@ A entidade *Pessoa* (internamente ao sistema, identificada como "owner") é a en
 - nome (name):
     - objetivo:             Manter o nome pelo qual a entidade será identificada;
     - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, hiféns e espaços);
     - tamanho:              De 3 a 30 caracteres;
     - alteração:            Não permitida.
 - ativo (active):
@@ -104,7 +104,7 @@ A entidade *Carteira* (internamente ao sistema, identificada como "wallet") é a
 - nome (name):
     - objetivo:             Manter o nome pelo qual a entidade será identificada;
     - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, hiféns e espaços);
     - tamanho:              De 3 a 30 caracteres;
     - alteração:            Não permitida.
 - dono (owner_id):
@@ -121,7 +121,7 @@ A entidade *Carteira* (internamente ao sistema, identificada como "wallet") é a
 - descrição (description): 
     - objetivo:             Salvar uma pequena descrição sobre o registro;
     - obrigatório:          Não;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, vírgulas e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, hiféns, vírgulas e espaços);
     - tamanho:              Entre 0 e 255 caracteres;
     - alteração:            Permitida.
 - ativo (active):
@@ -231,7 +231,7 @@ A entidade *Cartão* (internamente ao sistema, identificada como "card") é a en
 - nome (name):
     - objetivo:             Manter o nome pelo qual a entidade será identificada;
     - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, hiféns e espaços);
     - tamanho:              De 3 a 20 caracteres;
     - alteração:            Não permitida.
 - crédito (card_type):
@@ -512,7 +512,7 @@ A entidade *Método de Pagamento* (internamente ao sistema, identificada como "p
 - nome (name):
     - objetivo:             Manter o nome pelo qual a entidade será identificada;
     - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, hiféns e espaços);
     - tamanho:              De 3 a 30 caracteres;
     - alteração:            Não permitida.
 - tipo (type):
@@ -598,7 +598,7 @@ A entidade *Tipo de Transação* (internamente ao sistema, identificada como "tr
 - nome (name):
     - objetivo:             Manter o nome pelo qual a entidade será identificada;
     - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, hiféns e espaços);
     - tamanho:              De 3 a 45 caracteres;
     - alteração:            Não permitida.
 - relevância (relevance):
@@ -680,7 +680,7 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
 - título (title):
     - objetivo:             Manter o nome pelo qual a *Transação* será identificada;
     - obrigatório:          Sim;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, hiféns e espaços);
     - tamanho:              De 3 a 50 caracteres;
     - alteração:            Não permitida.
 - data da transação (transaction_date):
@@ -721,7 +721,7 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
     - alteração:            Permitida em algumas circunstâncias (ver características #9, #10).
 - carteira origem (source_wallet_id):
     - objetivo:             Manter o código de identificação da *Carteira* de origem dos valores transacionados por essa *Parcela*;
-    - obrigatório:          Não (ver exceção em Característica #8);
+    - obrigatório:          Sim;
     - tipo dado:            Numérico;
     - tamanho:              (condicionado ao tamanho do identificador da entidade referenciada);
     - alteração:            Permitida em algumas circunstâncias (ver características #9, #10 e #11).
@@ -743,8 +743,20 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
     - tipo dado:            Decimal;
     - formato:              00000.00;
     - alteração:            Permitida em algumas circunstâncias (ver características #1 e #5).
+- juros (interest_value): 
+    - objetivo:             Registrar o valor do juro aplicado ao pagamento da *Transação*;
+    - obrigatório:          Não;
+    - tipo dado:            Decimal;
+    - formato:              00000.00;
+    - alteração:            Permitida em algumas circunstâncias (ver características #1 e #5).
+- arredondamento (rounding_value): 
+    - objetivo:             Registrar o valor do arredondamento aplicado ao pagamento da *Transação*;
+    - obrigatório:          Não;
+    - tipo dado:            Decimal;
+    - formato:              00000.00;
+    - alteração:            Permitida em algumas circunstâncias (ver características #1 e #5).
 - valor líquido (net_value): 
-    - objetivo:             Manter o valor líquido da Parcela. Não será informado pelo usuário, ao invés disso, será calculado como descrito em Característica #6;
+    - objetivo:             Manter o valor líquido da *Transação*. Não será informado pelo usuário, ao invés disso, será calculado como descrito em Característica #6;
     - obrigatório:          Não;
     - tipo dado:            Decimal;
     - formato:              00000.00;
@@ -752,7 +764,7 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
 - descrição (description): 
     - objetivo:             Salvar uma pequena descrição sobre o registro;
     - obrigatório:          Não;
-    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9 e espaços);
+    - tipo dado:            Alfanumérico (a-z, A-Z, 0-9, pontos, vírgulas, hiféns e espaços);
     - tamanho:              Entre 0 e 255 caracteres;
     - alteração:            Permitida.
 
@@ -808,6 +820,14 @@ Nome da tabela: transactions.
     - tipo: double;
     - tamanho: 5 sendo 2 casas decimais;
     - não permite valor nulo (quando a entidade não possuir este valor, utilizar o valor padrão 0).
+- interest_value: Referente ao atributo "juros". Terá as seguintes características:
+    - tipo: double;
+    - tamanho: 5 sendo 2 casas decimais.
+    - não permite valor nulo (quando a entidade não possuir este valor, utilizar o valor padrão 0).
+- rounding_value: Referente ao atributo "arredondamento". Terá as seguintes características:
+    - tipo: double;
+    - tamanho: 5 sendo 2 casas decimais.
+    - não permite valor nulo (quando a entidade não possuir este valor, utilizar o valor padrão 0).
 - description: Referente ao atributo "descrição". Terá as seguintes características:
     - tipo: varchar;
     - tamanho: 255.
@@ -834,7 +854,7 @@ Nome da tabela: transactions.
 
 - Característica #5: Alterações nos valores de uma *Transação*, além de estarem condicionadas a Característica #1, sempre implicará no recálculo dos valores de suas *Parcela*s, e portanto, os novos valores devem ser validados (Tarefa #4, item 1.1.7.5).
 
-- Característica #6: O *valor líquido* da *Transação* não será mantido no sistema, ao invés disso, será calculado no momento que for solicitado. Seu cálculo será feito somando o *valor líquido* de cada uma das *Parcela*s da *Transação* em questão.
+- Característica #6: O *valor líquido* da *Transação* não será informado pelo usuário, ao invés disso, será calculado sempre que for solicitado através do seguinte cálculo: *valor líquido* = *valor bruto* - *valor de desconto* - *juros* - *arredondamento*. O *valor líquido* nunca deverá ser maior que o *valor bruto*, se assim ocorrer, alguns dos valores (*valor de desconto*, *juros* e *arredondamento*) está incorreto, e deverá ser corrigido;
 
 - Característica #7: Por padrão, o valor do atributo *relevância* será igual ao valor do mesmo atributo da entidade *Tipo de Transação* selecionado, porém, esse valor pode ser alterado a qualquer momento.
 

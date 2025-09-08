@@ -18,13 +18,15 @@ return new class extends Migration
             $table->date('transaction_date')->nullable(false);
             $table->date('processing_date')->nullable(false);
             $table->integer('transaction_type_id')->unsigned()->nullable(false);
-            $table->enum('relevance', Relevance::names())->nullable(false);
+            $table->enum('relevance', Relevance::values())->nullable(false);
             $table->integer('payment_method_id')->unsigned()->nullable(false);
             $table->integer('card_id')->unsigned()->nullable(true);
             $table->integer('source_wallet_id')->unsigned()->nullable(false);
             $table->integer('destination_wallet_id')->unsigned()->nullable(false);
-            $table->decimal('gross_value', 5, 2);
-            $table->decimal('discount_value', 5, 2)->default(0.0);
+            $table->decimal('gross_value', 8, 2);
+            $table->decimal('discount_value', 8, 2)->default(0.0);
+            $table->decimal('interest_value', 8, 2)->default(0.0);
+            $table->decimal('rounding_value', 8, 2)->default(0.0);
             $table->string('description', 255)->nullable();
 
             $table->foreign('transaction_type_id')->references('id')->on('transaction_types');

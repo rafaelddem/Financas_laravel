@@ -72,7 +72,7 @@ class CardService extends BaseService
     public function listDebit(int $wallet_id)
     {
         try {
-            return $this->repository->listDebitCredit($wallet_id, PaymentType::debit->name);
+            return $this->repository->listDebitCredit($wallet_id, PaymentType::Debit->value);
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
@@ -85,7 +85,7 @@ class CardService extends BaseService
     public function listCredit(int $wallet_id)
     {
         try {
-            return $this->repository->listDebitCredit($wallet_id, PaymentType::credit->name);
+            return $this->repository->listDebitCredit($wallet_id, PaymentType::Credit->value);
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {

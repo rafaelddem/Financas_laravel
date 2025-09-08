@@ -60,12 +60,15 @@
     "Payment Method": "Método de Pagamento",
     "Notes": "Cédulas e/ou Moedas",
     "Transfer": "Transações Bancárias",
-    "Debit": "Débito",
-    "Credit": "Crédito",
+    "Debit": "Débito (cartão)",
+    "Credit": "Crédito (cartão)",
     "It is not allowed to remove a payment method that is linked to a transaction.": "Não é permitido remover um Método de Pagamento que esteja vinculado a uma Transação.",
 
     "Transaction Type": "Tipo de Transação",
     "Relevance": "Relevância",
+    "Banal": "Banal",
+    "Relevant": "Relevante",
+    "Indispensable": "Indispensavel",
     "It is not allowed to remove a transaction type that is linked to a transaction.": "Não é permitido remover um Tipo de Transação que esteja vinculado a uma Transação.",
 
     "Card": "Cartão",
@@ -92,15 +95,24 @@
     "Interest Value": "Juros",
     "Rounding Value": "Arredondamento",
     "Net Value": "Valor Líquido",
+    "Gross Value (Installment)": "Valor Bruto (Parcela)",
+    "Discount Value (Installment)": "Desconto (Parcela)",
+    "Interest Value (Installment)": "Juros (Parcela)",
+    "Rounding Value (Installment)": "Arredondamento (Parcela)",
     "Description": "Descrição",
     "Source Wallet": "Carteira Origem",
     "Destination Wallet": "Carteira Destino",
     "A value needs to be entered": "Um valor precisa ser informado",
+    "A card needs to be entered": "Um Cartão precisa ser informado",
+    "The value must have two decimal places and be between min and max.": "O :value deve ter duas casas decimais e estar entre :min e :max.",
+    "The sum of the Gross Values of the Installments cannot be greater than the Net Value of the Transaction.": "A soma dos Valores Brutos das Parcelas não poderá ser maior que o Valor Líquido da Transação.",
 
     "Installments": "Parcelas",
     "Installments Data": "Dados da(s) Parcela(s)",
     "Installment Date": "Data da Parcela",
     "Payment Date": "Data do Pagamento",
+    "Invalid value for field of installment installmentNumber.": "Valor inválido para o campo :field da Parcela #:installmentNumber.",
+    "Sum of installment installmentNumber cannot be negative.": "Somatório da Parcela #:installmentNumber não pode ser negativo.",
 
     "": ""
 }

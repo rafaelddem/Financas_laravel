@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\PaymentMethod;
 
+use App\Enums\PaymentType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -17,7 +18,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:payment_methods|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
-            'type' => 'required|in:notes,transfer,debit,credit',
+            'type' => 'required|in:' . implode(',', PaymentType::values()),
             'active' => 'required|boolean',
         ];
     }

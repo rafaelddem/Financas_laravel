@@ -76,11 +76,10 @@ class PaymentMethodTest extends TestCase
 
     public function test_create_fail_invalid_type(): void
     {
-        $paymentMethodData = PaymentMethod::factory()->make([
-            'type' => '12345'
-        ]);
+        $paymentMethodData = PaymentMethod::factory()->make()->toArray();
+        $paymentMethodData['type'] = '12345';
 
-        $this->post(route('payment-method.store'), $paymentMethodData->toArray())
+        $this->post(route('payment-method.store'), $paymentMethodData)
             ->assertSessionHasErrors(['type' => __('validation.in', ['attribute' => 'Tipo'])]);
     }
 
@@ -95,7 +94,7 @@ class PaymentMethodTest extends TestCase
         $paymentMethodDataOriginalData = $paymentMethodData->toArray();
         $paymentMethodUpdatedData = $paymentMethodData->refresh();
         $this->assertEquals($paymentMethodUpdatedData['name'], $paymentMethodDataOriginalData['name']);         // Atributo não pode ser modificado
-        $this->assertEquals($paymentMethodUpdatedData['type'], $paymentMethodDataOriginalData['type']);         // Atributo não pode ser modificado
+        $this->assertEquals($paymentMethodUpdatedData->type->value, $paymentMethodDataOriginalData['type']);         // Atributo não pode ser modificado
 
         $this->assertEquals($paymentMethodUpdatedData['active'], $paymentMethodUpdateData['active']);
     }
@@ -111,7 +110,7 @@ class PaymentMethodTest extends TestCase
         $paymentMethodDataOriginalData = $paymentMethodData->toArray();
         $paymentMethodUpdatedData = $paymentMethodData->refresh();
         $this->assertEquals($paymentMethodUpdatedData['name'], $paymentMethodDataOriginalData['name']);         // Atributo não pode ser modificado
-        $this->assertEquals($paymentMethodUpdatedData['type'], $paymentMethodDataOriginalData['type']);         // Atributo não pode ser modificado
+        $this->assertEquals($paymentMethodUpdatedData->type->value, $paymentMethodDataOriginalData['type']);         // Atributo não pode ser modificado
 
         $this->assertEquals($paymentMethodUpdatedData['active'], $paymentMethodUpdateData['active']);
     }

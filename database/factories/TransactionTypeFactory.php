@@ -19,7 +19,7 @@ class TransactionTypeFactory extends Factory
     {
         return [
             'name' => substr($this->faker->name(), 0, 45),
-            'relevance' => $this->faker->randomElement(Relevance::names()),
+            'relevance' => $this->faker->randomElement(Relevance::values()),
             'active' => true,
         ];
     }

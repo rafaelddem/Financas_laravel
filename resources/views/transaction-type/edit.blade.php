@@ -18,9 +18,9 @@ use App\Enums\Relevance;
                     <label><strong>{{$transactionType->name}}</strong></label>
                 </div>
                 <label for="relevance">{{__('Relevance')}}:</label>
-                <select form="form-update" name="relevance" id="relevance">
-                    @foreach (Relevance::values() as $value => $presentation)
-                        <option value='{{ $value }}' @if ($transactionType->relevance == $value) selected @endif>{{ $presentation }}</option>
+                <select name="relevance" form="form-update" id="relevance">
+                    @foreach (Relevance::cases() as $relevance)
+                        <option value='{{ $relevance->value }}' @if ($transactionType->relevance->value == $relevance->value) selected @endif>{{ __($relevance->name) }}</option>
                     @endforeach
                 </select>
                 <label>{{_('Status')}}:</label>

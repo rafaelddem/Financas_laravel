@@ -76,11 +76,10 @@ class TransactionTypeTest extends TestCase
 
     public function test_create_fail_invalid_relevance(): void
     {
-        $transactionTypeData = TransactionType::factory()->make([
-            'relevance' => '12345'
-        ]);
+        $transactionTypeData = TransactionType::factory()->make()->toArray();
+        $transactionTypeData['relevance'] = '12345';
 
-        $this->post(route('transaction-type.store'), $transactionTypeData->toArray())
+        $this->post(route('transaction-type.store'), $transactionTypeData)
             ->assertSessionHasErrors(['relevance' => __('validation.in', ['attribute' => 'Relevância'])]);
     }
 

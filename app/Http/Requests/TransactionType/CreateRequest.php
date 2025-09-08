@@ -18,7 +18,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:transaction_types|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
-            'relevance' => 'required|in:' . implode(',', Relevance::names()),
+            'relevance' => 'required|in:' . implode(',', Relevance::values()),
             'active' => 'required|boolean',
         ];
     }

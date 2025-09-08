@@ -11,9 +11,17 @@ class Wallet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'owner_id', 'main_wallet', 'active', 'description'];
+    protected $fillable = [
+        'name', 
+        'owner_id', 
+        'main_wallet', 
+        'active', 
+        'description'
+    ];
 
-    protected $casts = ['active' => 'boolean'];
+    protected $casts = [
+        'active' => 'boolean'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -29,5 +37,21 @@ class Wallet extends Model
     public function cards(): HasMany
     {
         return $this->hasMany(Card::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function outgoing(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'source_wallet_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function incoming(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'destination_wallet_id');
     }
 }

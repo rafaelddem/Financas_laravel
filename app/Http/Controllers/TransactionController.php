@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\BaseException;
-use App\Services\CardService;
+use App\Http\Requests\Transaction\CreateRequest;
 use App\Services\PaymentMethodService;
 use App\Services\TransactionService;
 use App\Services\TransactionTypeService;
@@ -47,7 +47,6 @@ class TransactionController extends Controller
         $paymentMethods = [];
         $sourceWallets = [];
         $destinationWallets = [];
-        $cards = [];
 
         try {
             $transactionTypes = $this->transactionTypeService->list();
@@ -64,8 +63,19 @@ class TransactionController extends Controller
         return redirect(route('transaction.list', compact('message')));
     }
 
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        return view('transaction.create');
+        try {
+            $this->service->create($request->all());
+
+            $message = __('Data created successfully.');
+            return redirect(route('transaction.list', compact('message')));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 }

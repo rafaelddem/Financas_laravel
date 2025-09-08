@@ -10,7 +10,14 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['card_id', 'start_date', 'end_date', 'due_date', 'value', 'status'];
+    protected $fillable = [
+        'card_id', 
+        'start_date', 
+        'end_date', 
+        'due_date', 
+        'value', 
+        'status'
+    ];
 
     protected $casts = [
         'start_date' => 'datetime',

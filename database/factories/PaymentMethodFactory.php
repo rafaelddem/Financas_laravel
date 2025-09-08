@@ -19,7 +19,7 @@ class PaymentMethodFactory extends Factory
     {
         return [
             'name' => substr($this->faker->name(), 0, 30),
-            'type' => $this->faker->randomElement(PaymentType::names()),
+            'type' => $this->faker->randomElement(PaymentType::values()),
             'active' => true,
         ];
     }

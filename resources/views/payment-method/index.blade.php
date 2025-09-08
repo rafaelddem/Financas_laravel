@@ -22,7 +22,7 @@ use App\Enums\PaymentType;
                         <td class="td-item">
                             <span class="td-content">
                                 {{ $paymentMethod->name }}
-                                <span class="tag">{{PaymentType::get($paymentMethod->type)}}</span>
+                                <span class="tag">{{ __($paymentMethod->type->name) }}</span>
                                 @if(!$paymentMethod->active)
                                     <span class="tag">{{__('Inactive')}}</span>
                                 @endif
