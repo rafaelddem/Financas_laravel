@@ -95,13 +95,14 @@ class TransactionTypeController extends Controller
             $this->service->delete($request->get('id'));
 
             $message = __('Data deleted successfully.');
+            return redirect(route('transaction-type.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('transaction-type.list', compact('message')));
+        return redirect(route('transaction-type.list'))->withErrors(compact('message'));
     }
 
 }

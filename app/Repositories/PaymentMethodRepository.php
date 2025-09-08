@@ -22,11 +22,8 @@ class PaymentMethodRepository extends BaseRepository
             ->get();
     }
 
-    /**
-     * Implementar função após implementação da Transação
-     */
-    public function hasRelatedTransactions(int $paymentMethodId)
+    public function hasRelatedTransactions(int $paymentMethodId): bool
     {
-        return false;
+        return $this->model->with('transactions')->find($paymentMethodId)->transactions->count();
     }
 }

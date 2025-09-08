@@ -37,6 +37,6 @@ class GenerateInvoices extends Command
             $resultMessage = __('An error occurred while performing the action. Please try again or contact support.');
         }
 
-        print($resultMessage . PHP_EOL);
+        $this->info($resultMessage);
     }
 }

@@ -5,11 +5,13 @@ namespace Database\Seeders;
 use App\Enums\PaymentType;
 use App\Enums\Relevance;
 use App\Models\Card;
+use App\Models\Invoice;
 use App\Models\Owner;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
 use App\Models\TransactionType;
 use App\Models\Wallet;
+use App\Services\CardService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -75,6 +77,15 @@ class TestSeed extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+            $cardDebitNubank = Card::create([
+                'wallet_id' => $walletNuBank->id,
+                'name' => 'NuBank Débito',
+                'card_type' => 'debit',
+                'first_day_month' => 1,
+                'days_to_expiration' => 1,
+                'active' => true,
+            ]);
+
             $cardCreditNubank = Card::create([
                 'wallet_id' => $walletNuBank->id,
                 'name' => 'NuBank Crédito',
@@ -83,6 +94,14 @@ class TestSeed extends Seeder
                 'days_to_expiration' => 10,
                 'active' => true,
             ]);
+            $endDate = CardService::calculateEndDate($cardCreditNubank->first_day_month);
+            Invoice::create([
+                'card_id' => $cardCreditNubank->id,
+                'start_date' => $endDate->clone()->subMonth()->startOfDay(),
+                'end_date' => $endDate,
+                'due_date' => $endDate->clone()->addDays($cardCreditNubank->days_to_expiration),
+            ]);
+
             $cardCreditNubank_2 = Card::create([
                 'wallet_id' => $walletNuBank->id,
                 'name' => 'NuBank Black',
@@ -91,13 +110,12 @@ class TestSeed extends Seeder
                 'days_to_expiration' => 10,
                 'active' => true,
             ]);
-            $cardDebitNubank = Card::create([
-                'wallet_id' => $walletNuBank->id,
-                'name' => 'NuBank Débito',
-                'card_type' => 'debit',
-                'first_day_month' => 1,
-                'days_to_expiration' => 1,
-                'active' => true,
+            $endDate = CardService::calculateEndDate($cardCreditNubank_2->first_day_month);
+            Invoice::create([
+                'card_id' => $cardCreditNubank_2->id,
+                'start_date' => $endDate->clone()->subMonth()->startOfDay(),
+                'end_date' => $endDate,
+                'due_date' => $endDate->clone()->addDays($cardCreditNubank_2->days_to_expiration),
             ]);
 
         $walletSicoob = Wallet::create([
@@ -109,6 +127,15 @@ class TestSeed extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+            $cardDebitSicoob = Card::create([
+                'wallet_id' => $walletSicoob->id,
+                'name' => 'Sicoob Débito',
+                'card_type' => 'debit',
+                'first_day_month' => 1,
+                'days_to_expiration' => 1,
+                'active' => true,
+            ]);
+
             $cardCreditSicoob = Card::create([
                 'wallet_id' => $walletSicoob->id,
                 'name' => 'Sicoob Crédito',
@@ -117,13 +144,12 @@ class TestSeed extends Seeder
                 'days_to_expiration' => 10,
                 'active' => true,
             ]);
-            $cardDebitSicoob = Card::create([
-                'wallet_id' => $walletSicoob->id,
-                'name' => 'Sicoob Débito',
-                'card_type' => 'debit',
-                'first_day_month' => 1,
-                'days_to_expiration' => 1,
-                'active' => true,
+            $endDate = CardService::calculateEndDate($cardCreditSicoob->first_day_month);
+            Invoice::create([
+                'card_id' => $cardCreditSicoob->id,
+                'start_date' => $endDate->clone()->subMonth()->startOfDay(),
+                'end_date' => $endDate,
+                'due_date' => $endDate->clone()->addDays($cardCreditSicoob->days_to_expiration),
             ]);
 
         $walletSantander = Wallet::create([
@@ -439,7 +465,7 @@ class TestSeed extends Seeder
             DB::table('installments')->insert([
                 'transaction_id' => $transactionCreditOneMonthAgoTenis->id,
                 'installment_number' => 2,
-                'installment_date' => (new Carbon($transactionCreditOneMonthAgoTenis->transaction_date))->addMonth()->startOfMonth()->setDay($transactionCreditOneMonthAgoTenis->card->first_day_month),
+                'installment_date' => (new Carbon($transactionCreditOneMonthAgoTenis->transaction_date))->addMonth(),
                 'gross_value' => 59.98,
                 'discount_value' => 0.00,
                 'interest_value' => 0.00,
@@ -448,7 +474,7 @@ class TestSeed extends Seeder
             DB::table('installments')->insert([
                 'transaction_id' => $transactionCreditOneMonthAgoTenis->id,
                 'installment_number' => 3,
-                'installment_date' => (new Carbon($transactionCreditOneMonthAgoTenis->transaction_date))->addMonths(2)->startOfMonth()->setDay($transactionCreditOneMonthAgoTenis->card->first_day_month),
+                'installment_date' => (new Carbon($transactionCreditOneMonthAgoTenis->transaction_date))->addMonths(2),
                 'gross_value' => 59.97,
                 'discount_value' => 0.00,
                 'interest_value' => 0.00,
@@ -457,7 +483,7 @@ class TestSeed extends Seeder
             DB::table('installments')->insert([
                 'transaction_id' => $transactionCreditOneMonthAgoTenis->id,
                 'installment_number' => 4,
-                'installment_date' => (new Carbon($transactionCreditOneMonthAgoTenis->transaction_date))->addMonths(3)->startOfMonth()->setDay($transactionCreditOneMonthAgoTenis->card->first_day_month),
+                'installment_date' => (new Carbon($transactionCreditOneMonthAgoTenis->transaction_date))->addMonths(3),
                 'gross_value' => 59.97,
                 'discount_value' => 0.00,
                 'interest_value' => 0.00,
