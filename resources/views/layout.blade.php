@@ -21,6 +21,7 @@
             <li onclick="toggleSubmenu('transactions')">{{__('Transactions')}}</li>
             <ul class="submenu transactions">
                 <li><a href="{{route('transaction.list')}}">{{__('Transaction Entry')}}</a></li>
+                <li><a href="{{route('invoice.list')}}">{{__('Invoices')}}</a></li>
             </ul>
             <li onclick="toggleSubmenu('entries')">{{__('Entries')}}</li>
             <ul class="submenu entries">

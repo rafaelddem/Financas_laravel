@@ -1052,3 +1052,7 @@ Considerar manter Transação e Parcela como uma entidade só, mas manter elas s
 Ao invés de fazer apenas a inativição, utilizar também o softdelete, dessa forma a inativação seria apenas para organização dos dados, e o softdelete para quando não for mais necessário o registro
 
 Manter o controle dos imprestimos através de relatórios, como faço no sistema antigo
+
+Trocar Tipo de Transação por Categoria
+
+

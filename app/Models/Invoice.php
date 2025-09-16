@@ -33,4 +33,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Card::class);
     }
+
+    public function getValueFormattedAttribute(): string
+    {
+        return 'R$ ' . number_format($this->value, 2, ',', '.');
+    }
 }

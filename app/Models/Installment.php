@@ -37,4 +37,14 @@ class Installment extends Model
     {
         return $this->belongsTo(Transaction::class);
     }
+
+    public function getNetValueAttribute(): float
+    {
+        return $this->gross_value - $this->discount_value + $this->interest_value + $this->rounding_value;
+    }
+
+    public function getNetValueFormattedAttribute(): string
+    {
+        return 'R$ ' . number_format($this->net_value, 2, ',', '.');
+    }
 }

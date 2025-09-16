@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentType;
 use App\Enums\Relevance;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -89,11 +90,15 @@ class Transaction extends Model
         return $this->belongsTo(Card::class);
     }
 
-    public function netValue(bool $formated = false): float|string
+    public function getNetValueAttribute(): float
     {
-        $net_value = $this->gross_value - $this->discount_value + $this->interest_value + $this->rounding_value;
-        return $formated
-            ? 'R$ ' . number_format($net_value, 2, ',', '.')
-            : $net_value;
+        return $this->paymentMethod->type->value == PaymentType::Credit->value
+            ? $this->installments->sum('net_value')
+            : $this->gross_value - $this->discount_value + $this->interest_value + $this->rounding_value;
+    }
+
+    public function getNetValueFormattedAttribute(): string
+    {
+        return 'R$ ' . number_format($this->net_value, 2, ',', '.');
     }
 }

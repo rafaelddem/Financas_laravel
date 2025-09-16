@@ -5,16 +5,19 @@ namespace App\Services;
 use App\Exceptions\BaseException;
 use App\Exceptions\ServiceException;
 use App\Repositories\InstallmentRepository;
+use App\Repositories\InvoiceRepository;
 use App\Repositories\TransactionRepository;
 
 class TransactionService extends BaseService
 {
     private InstallmentRepository $installmentRepository;
+    private InvoiceRepository $invoiceRepository;
 
     public function __construct()
     {
         $this->repository = app(TransactionRepository::class);
         $this->installmentRepository = app(InstallmentRepository::class);
+        $this->invoiceRepository = app(InvoiceRepository::class);
     }
 
     public function create(array $input)
@@ -25,9 +28,11 @@ class TransactionService extends BaseService
             $transaction = $this->repository->create($input);
 
             if (isset($input['installments'])) {
-                $this->validateInstallmentsValues($transaction->netValue(), $input['installments']);
+                $this->validateInstallmentsValues($transaction->net_value, $input['installments']);
 
                 $this->installmentRepository->insertMultiples($transaction->id, $input['installments']);
+
+                $this->invoiceRepository->addValueToInvoice($transaction->card_id, $transaction->installments()->orderBy('installment_date')->first()->net_value);
             }
 
             \DB::commit();

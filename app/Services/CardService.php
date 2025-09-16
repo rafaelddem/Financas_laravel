@@ -27,13 +27,13 @@ class CardService extends BaseService
             $card = $this->repository->create($input);
 
             if ($card->card_type == 'credit') {
-                $end_date = self::calculateEndDate($card->first_day_month);
-
+                $startDate = self::calculateStartDate($card->first_day_month);
+                $endDate = $startDate->clone()->addMonth()->subDay()->endOfDay();
                 $this->invoiceRepository->create([
                     'card_id' => $card->id,
-                    'start_date' => now()->startOfDay(),
-                    'end_date' => $end_date,
-                    'due_date' => $end_date->clone()->addDays($card->days_to_expiration),
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'due_date' => $endDate->clone()->addDays($card->days_to_expiration),
                 ]);
             }
 
@@ -92,13 +92,13 @@ class CardService extends BaseService
         return [];
     }
 
-    public static function calculateEndDate(int $first_day_month): Carbon
+    public static function calculateStartDate(int $first_day_month): Carbon
     {
-        $endDate = now()->endOfDay()->setDay($first_day_month)->subDay();
-        if (Carbon::now()->greaterThan($endDate)) {
-            $endDate->addMonth();
+        $startDate = now()->startOfDay()->setDay($first_day_month);
+        if ($startDate->greaterThan(Carbon::now())) {
+            $startDate->subMonth();
         }
 
-        return $endDate;
+        return $startDate;
     }
 }

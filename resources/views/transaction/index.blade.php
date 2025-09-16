@@ -17,7 +17,7 @@
                     <tr>
                         <td class="td-item">
                             <span class="td-content">
-                                {{ $transaction->transaction_date->format('d/m/Y') }} | {{ $transaction->netValue(true) }} | {{ $transaction->title }}
+                                {{ $transaction->transaction_date->format('d/m/Y') }} | {{ $transaction->net_value_formatted }} | {{ $transaction->title }}
                                 <span class="tag">{{ $transaction->sourceWallet->name }}</span>
                                 <span class="tag">{{ __($transaction->relevance->name)}}</span>
                             </span>

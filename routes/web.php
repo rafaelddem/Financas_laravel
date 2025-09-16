@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionController;
@@ -14,6 +15,11 @@ Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
     Route::get('/', [TransactionController::class, 'index'])->name('list');
     Route::get('/novo', [TransactionController::class, 'create'])->name('create');
     Route::post('/', [TransactionController::class, 'store'])->name('store');
+});
+
+Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {
+    Route::get('/', [InvoiceController::class, 'index'])->name('list');
+    Route::post('/', [InvoiceController::class, 'pay'])->name('pay');
 });
 
 Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {

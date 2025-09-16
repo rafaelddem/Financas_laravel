@@ -28,7 +28,7 @@ class GenerateInvoices extends Command
     public function handle()
     {
         try {
-            app(InvoiceService::class)->generateInvoices();
+            app(InvoiceService::class)->createNecessaryInvoices();
 
             $resultMessage = __('Invoices created successfully.');
         } catch (BaseException $exception) {

@@ -18,6 +18,8 @@
     "Data deleted successfully.": "Registro removido com sucesso.",
 
     "Fill out the form": "Preencha o formulário",
+    "Yes": "Sim",
+    "No": "Não",
     "Save": "Salvar",
     "Edit": "Editar",
     "Delete": "Excluir",
@@ -84,7 +86,15 @@
 
     "Invoice": "Fatura",
     "Invoices": "Faturas",
+    "Open Invoices": "Faturas Abertas",
+    "Unpaid Invoice": "Faturas Pendentes",
+    "Paid Invoices": "Faturas Pagas",
     "Invoices created successfully.": "Faturas criadas com sucesso.",
+    "Open": "Aberta",
+    "Closed": "Fechada",
+    "Overdue": "Vencida",
+    "Paid": "Paga",
+    "Pay": "Pagar",
 
     "Transaction Entry": "Lançamento de Transações",
     "Title": "Título",
@@ -113,6 +123,8 @@
     "Payment Date": "Data do Pagamento",
     "Invalid value for field of installment installmentNumber.": "Valor inválido para o campo :field da Parcela #:installmentNumber.",
     "Sum of installment installmentNumber cannot be negative.": "Somatório da Parcela #:installmentNumber não pode ser negativo.",
+
+    "Do you confirm the invoice payment? This action cannot be undone.": "Você confirma o pagamento da Fatura? Esta ação não poderá ser desfeita.",
 
     "": ""
 }
