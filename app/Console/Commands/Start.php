@@ -28,7 +28,7 @@ class Start extends Command
     {
         $this->info('Removing tables...');
 
-        Artisan::call('migrate:rollback');
+        Artisan::call('migrate:reset');
 
         $this->info('Running migrations...');
 

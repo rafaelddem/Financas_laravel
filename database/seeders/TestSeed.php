@@ -455,7 +455,7 @@ class TestSeed extends Seeder
             ]);
             $twoMonthsAgoInvoiceValue += $installment->net_value;
 
-        Invoice::create([
+        $invoiceTwoMonthsAgo = Invoice::create([
             'card_id' => $cardCreditNubank->id,
             'start_date' => $twoMonthsAgo->clone(),
             'end_date' => $twoMonthsAgo->clone()->lastOfMonth()->endOfDay(),
@@ -463,6 +463,60 @@ class TestSeed extends Seeder
             'value' => $twoMonthsAgoInvoiceValue,
             'status' => InvoiceStatus::Paid->value,
         ]);
+
+        Transaction::create([
+            'title' => 'Boleto Crédito + Débito',
+            'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'relevance' => Relevance::Indispensable->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletSantander->id,
+            'destination_wallet_id' => $walletNuBank->id,
+            'gross_value' => $invoiceTwoMonthsAgo->value + 89.90,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Pix para pagamento do boleto e valor adicional para movimentação no débito (dois meses atrás)',
+        ]);
+
+        Transaction::create([
+            'title' => 'Pagamento Boleto Crédito',
+            'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'relevance' => Relevance::Indispensable->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletSystem->id,
+            'gross_value' => $invoiceTwoMonthsAgo->value,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Pagamento do boleto (dois meses atrás)',
+        ]);
+
+        /* Débits */
+
+        $twoMonthsAgoDebits = new Collection();
+
+        $twoMonthsAgoDebits->push(
+            Transaction::create([
+                'title' => 'Ingresso show',
+                'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+                'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'relevance' => Relevance::Banal->value,
+                'payment_method_id' => $paymentMethodPix->id,
+                'source_wallet_id' => $walletNuBank->id,
+                'destination_wallet_id' => $walletSystem->id,
+                'gross_value' => 89.90,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+                'description' => 'Ingresso show (dois meses atrás)',
+            ])
+        );
 
         /* Um mês atrás */
         $oneMonthAgo = $today->clone()->startOfMonth()->subMonth(1);
@@ -740,7 +794,7 @@ class TestSeed extends Seeder
         $twoMonthsAgoCredits->each(function ($transaction) use (&$oneMonthsAgoInvoiceValue) {
             $oneMonthsAgoInvoiceValue += $transaction?->installments()->get()->get(1)?->net_value;
         });
-        Invoice::create([
+        $invoiceOneMonthAgo = Invoice::create([
             'card_id' => $cardCreditNubank->id,
             'start_date' => $oneMonthAgo->clone(),
             'end_date' => $oneMonthAgo->clone()->lastOfMonth()->endOfDay(),
@@ -749,7 +803,79 @@ class TestSeed extends Seeder
             'status' => InvoiceStatus::Closed->value,
         ]);
 
-        /* Um mês atrás */
+        Transaction::create([
+            'title' => 'Pix Boleto Crédito',
+            'transaction_date' => $invoiceOneMonthAgo->end_date->clone()->addDay(),
+            'processing_date' => $invoiceOneMonthAgo->end_date->clone()->addDay(),
+            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'relevance' => Relevance::Indispensable->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletSantander->id,
+            'destination_wallet_id' => $walletNuBank->id,
+            'gross_value' => $invoiceOneMonthAgo->value,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Pix para pagamento do boleto (um mês atrás)',
+        ]);
+
+        /* Débits */
+
+        Transaction::create([
+            'title' => 'Pix para eventuais débitos',
+            'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'relevance' => Relevance::Indispensable->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletSantander->id,
+            'destination_wallet_id' => $walletNuBank->id,
+            'gross_value' => 1000.00,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Pix para que a carteira tenha valores disponíveis para transações no no débito (um mês atrás)',
+        ]);
+
+        $oneMonthAgoDebits = new Collection();
+
+        $oneMonthAgoDebits->push(
+            Transaction::create([
+                'title' => 'Cinema',
+                'transaction_date' => $oneMonthAgo->clone()->addDays(10),
+                'processing_date' => $oneMonthAgo->clone()->addDays(10),
+                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'relevance' => Relevance::Banal->value,
+                'payment_method_id' => $paymentMethodPix->id,
+                'source_wallet_id' => $walletNuBank->id,
+                'destination_wallet_id' => $walletSystem->id,
+                'gross_value' => 159.90,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+                'description' => 'Ingressos para o Cinema e pipoca (um mês atrás)',
+            ])
+        );
+
+        $oneMonthAgoDebits->push(
+            Transaction::create([
+                'title' => 'Mercado',
+                'transaction_date' => $oneMonthAgo->clone()->addDays(15),
+                'processing_date' => $oneMonthAgo->clone()->addDays(15),
+                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'relevance' => Relevance::Banal->value,
+                'payment_method_id' => $paymentMethodPix->id,
+                'source_wallet_id' => $walletNuBank->id,
+                'destination_wallet_id' => $walletSystem->id,
+                'gross_value' => 29.90,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.10,
+                'description' => 'Mercado (um mês atrás)',
+            ])
+        );
+
+        /* Mês atual */
 
         $startOfMonth = $today->clone()->startOfMonth();
 
@@ -878,6 +1004,28 @@ class TestSeed extends Seeder
             'value' => $thisMonthInvoiceValue,
             'status' => InvoiceStatus::Open->value,
         ]);
+
+        /* Débito */
+
+        $thisMonthAgoDebits = new Collection();
+
+        $thisMonthAgoDebits->push(
+            Transaction::create([
+                'title' => 'Gasolina',
+                'transaction_date' => $startOfMonth->clone()->addDays(7),
+                'processing_date' => $startOfMonth->clone()->addDays(7),
+                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'relevance' => Relevance::Banal->value,
+                'payment_method_id' => $paymentMethodPix->id,
+                'source_wallet_id' => $walletNuBank->id,
+                'destination_wallet_id' => $walletSystem->id,
+                'gross_value' => 50.00,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+                'description' => 'Gasolina (este mês)',
+            ])
+        );
     }
 
     // private function generateValues(float &$gross, float &$discount, float &$interest, float &$rounding)

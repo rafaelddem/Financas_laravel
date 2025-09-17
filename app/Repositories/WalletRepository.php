@@ -42,7 +42,7 @@ class WalletRepository extends BaseRepository
     public function guaranteesSingleMainWallet(Wallet $wallet)
     {
         if ($wallet->main_wallet) {
-            Wallet::query()
+            $this->model::query()
                 ->where('owner_id', $wallet->owner_id)
                 ->where('id', '!=', $wallet->id)
                 ->update([ 'main_wallet' => false ]);
@@ -51,7 +51,7 @@ class WalletRepository extends BaseRepository
 
     public function activateMainWalletFromOwner(int $ownerId)
     {
-        Wallet::query()
+        $this->model::query()
             ->where('owner_id', $ownerId)
             ->where('main_wallet', true)
             ->update([ 'active' => true ]);
@@ -59,9 +59,16 @@ class WalletRepository extends BaseRepository
 
     public function inactivateWalletsByOwner(int $ownerId)
     {
-        Wallet::query()
+        $this->model::query()
             ->where('owner_id', $ownerId)
             ->update([ 'active' => false ]);
+    }
+
+    public function getValue(int $invoiceId): float
+    {
+        $resultado = \DB::select('CALL calculate_wallet_value(?)', [$invoiceId]);
+
+        return $resultado[0]->total ?? 0;
     }
 
     /**

@@ -16,6 +16,7 @@
     "Data created successfully.": "Registro criado com sucesso.",
     "Data updated successfully.": "Registro atualizado com sucesso.",
     "Data deleted successfully.": "Registro removido com sucesso.",
+    "Action executed successfully.": "Ação executada com sucesso.",
 
     "Fill out the form": "Preencha o formulário",
     "Yes": "Sim",
@@ -125,6 +126,9 @@
     "Sum of installment installmentNumber cannot be negative.": "Somatório da Parcela #:installmentNumber não pode ser negativo.",
 
     "Do you confirm the invoice payment? This action cannot be undone.": "Você confirma o pagamento da Fatura? Esta ação não poderá ser desfeita.",
+    "The wallet does not have enough value for payment.": "A carteira não possui valor suficiente para pagamento.",
+    "Invoice Payment Transaction Title": "Boleto do cartão",
+    "Invoice Payment Transaction Description": "Pagamento referente a fatura do cartão :cardName, período :invoiceStartDate a :invoiceEndDate",
 
     "": ""
 }

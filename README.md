@@ -1055,4 +1055,4 @@ Manter o controle dos imprestimos através de relatórios, como faço no sistema
 
 Trocar Tipo de Transação por Categoria
 
-
+Criar um arquivo de configurações para dados default como um método de pagamento para o pagamento de faturas

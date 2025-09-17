@@ -44,9 +44,9 @@ class InvoiceController extends Controller
         $message = '';
 
         try {
-            throw new BaseException("Função ainda não implementada");
+            $this->service->pay($request->id);
 
-            $message = __('Data created successfully.');
+            $message = __('Action executed successfully.');
             return redirect(route('invoice.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
