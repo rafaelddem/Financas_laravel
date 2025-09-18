@@ -31,8 +31,7 @@ class InstallmentRepository extends BaseRepository
     public function updateInstallmentDate(Invoice $invoice): float
     {
         try {
-            $installments = $this->model::select('transactions.*')
-                ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
+            $installments = $this->model::join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->where('transactions.card_id', $invoice->card_id)
                 ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date]);
             $installments->update(['installments.installment_date' => $invoice->start_date]);
@@ -46,8 +45,7 @@ class InstallmentRepository extends BaseRepository
     public function updateInstallmentPaymentDate(Invoice $invoice, Carbon $paymentDate)
     {
         try {
-            $this->model::select('transactions.*')
-                ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
+            $this->model::join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->where('transactions.card_id', $invoice->card_id)
                 ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date])
                 ->update(['installments.payment_date' => $paymentDate]);

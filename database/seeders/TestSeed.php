@@ -462,7 +462,7 @@ class TestSeed extends Seeder
             'start_date' => $twoMonthsAgo->clone(),
             'end_date' => $twoMonthsAgo->clone()->lastOfMonth()->endOfDay(),
             'due_date' => $twoMonthsAgo->clone()->lastOfMonth()->endOfDay()->addDays($cardCreditNubank->days_to_expiration),
-            'payment_date' => $twoMonthsAgo->clone()->addDay(),
+            'payment_date' => $twoMonthsAgo->clone()->lastOfMonth()->endOfDay()->addDay(),
             'value' => $twoMonthsAgoInvoiceValue,
             'status' => InvoiceStatus::Paid->value,
         ]);
@@ -711,7 +711,7 @@ class TestSeed extends Seeder
             Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 2,
-                'installment_date' => (new Carbon($oneMonthsAgoCredits->last()->transaction_date))->addMonth()->startOfMonth(),
+                'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonth()->startOfMonth(),
                 'gross_value' => 59.98,
                 'discount_value' => 0.00,
                 'interest_value' => 0.00,
@@ -720,7 +720,7 @@ class TestSeed extends Seeder
             Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 3,
-                'installment_date' => (new Carbon($oneMonthsAgoCredits->last()->transaction_date))->addMonths(2),
+                'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonths(2),
                 'gross_value' => 59.97,
                 'discount_value' => 0.00,
                 'interest_value' => 0.00,
@@ -729,7 +729,7 @@ class TestSeed extends Seeder
             Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 4,
-                'installment_date' => (new Carbon($oneMonthsAgoCredits->last()->transaction_date))->addMonths(3),
+                'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonths(3),
                 'gross_value' => 59.97,
                 'discount_value' => 0.00,
                 'interest_value' => 0.00,
@@ -1017,6 +1017,26 @@ class TestSeed extends Seeder
                 'title' => 'Gasolina',
                 'transaction_date' => $startOfMonth->clone()->addDays(7),
                 'processing_date' => $startOfMonth->clone()->addDays(7),
+                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'relevance' => Relevance::Banal->value,
+                'payment_method_id' => $paymentMethodPix->id,
+                'source_wallet_id' => $walletNuBank->id,
+                'destination_wallet_id' => $walletSystem->id,
+                'gross_value' => 50.00,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+                'description' => 'Gasolina (este mês)',
+            ])
+        );
+
+        /* Transações previstas */
+
+        $thisMonthAgoDebits->push(
+            Transaction::create([
+                'title' => 'Gasolina',
+                'transaction_date' => Carbon::now()->addMonth(),
+                'processing_date' => Carbon::now()->addMonth(),
                 'transaction_type_id' => $transactionTypeGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodPix->id,

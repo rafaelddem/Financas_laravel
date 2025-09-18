@@ -86,10 +86,8 @@ class InvoiceService extends BaseService
 
             $newInvoice->save();
         } catch (BaseException $exception) {
-            \DB::rollBack();
             throw $exception;
         } catch (\Throwable $th) {
-            \DB::rollBack();
             throw new ServiceException();
         }
     }

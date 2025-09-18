@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\BaseException;
 use App\Exceptions\ServiceException;
+use App\Repositories\CardRepository;
 use App\Repositories\InstallmentRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\TransactionRepository;
@@ -12,12 +13,14 @@ class TransactionService extends BaseService
 {
     private InstallmentRepository $installmentRepository;
     private InvoiceRepository $invoiceRepository;
+    private CardRepository $cardRepository;
 
     public function __construct()
     {
         $this->repository = app(TransactionRepository::class);
         $this->installmentRepository = app(InstallmentRepository::class);
         $this->invoiceRepository = app(InvoiceRepository::class);
+        $this->cardRepository = app(CardRepository::class);
     }
 
     public function create(array $input)
@@ -26,6 +29,14 @@ class TransactionService extends BaseService
             \DB::beginTransaction();
 
             $transaction = $this->repository->create($input);
+
+            if (isset($input['card_id'])) {
+                $card = $this->cardRepository->find($input['card_id']);
+
+                if ($input['source_wallet_id'] != $card->wallet) {
+                    throw new ServiceException(__('The selected Card must belong to the Source Wallet.'));
+                }
+            }
 
             if (isset($input['installments'])) {
                 $this->validateInstallmentsValues($transaction->net_value, $input['installments']);
