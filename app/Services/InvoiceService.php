@@ -117,16 +117,19 @@ class InvoiceService extends BaseService
     {
         try {
             \DB::beginTransaction();
-
+            
+            $paymentDate = Carbon::now();
             $invoice = $this->repository->find($invoiceId, ['card']);
 
             if ($this->walletRepository->getValue($invoiceId) < $invoice->value) 
                 throw new ServiceException(__('The wallet does not have enough value for payment.'));
 
+            $this->installmentRepository->updateInstallmentPaymentDate($invoice, $paymentDate);
+
             $this->transactionRepository->create([
                 'title' => __('Invoice Payment Transaction Title'),
-                'transaction_date' => Carbon::now(),
-                'processing_date' => Carbon::now(),
+                'transaction_date' => $paymentDate,
+                'processing_date' => $paymentDate,
                 'transaction_type_id' => env('INVOICE_DEFAULT_TRANSACTION_TYPE'),
                 'relevance' => Relevance::Indispensable->value,
                 'payment_method_id' => env('INVOICE_DEFAULT_PAYMENT_METHOD'),
@@ -139,7 +142,8 @@ class InvoiceService extends BaseService
                 'description' => __('Invoice Payment Transaction Description', ['cardName' => $invoice->card->name, 'invoiceStartDate' => $invoice->start_date->format('d/m/Y'), 'invoiceEndDate' => $invoice->end_date->format('d/m/Y')]),
             ]);
 
-            $this->repository->update($invoice->id, [
+            $invoice->update([
+                'payment_date' => $paymentDate,
                 'status' => InvoiceStatus::Paid->value
             ]);
 

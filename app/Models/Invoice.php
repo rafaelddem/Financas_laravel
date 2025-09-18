@@ -15,6 +15,7 @@ class Invoice extends Model
         'start_date', 
         'end_date', 
         'due_date', 
+        'payment_date', 
         'value', 
         'status'
     ];
@@ -23,6 +24,7 @@ class Invoice extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'due_date' => 'datetime',
+        'payment_date' => 'datetime',
         'value' => 'double',
     ];
 

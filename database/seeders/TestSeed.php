@@ -124,6 +124,7 @@ class TestSeed extends Seeder
                 'start_date' => $startDate,
                 'end_date' => $endDate,
                 'due_date' => $endDate->clone()->addDays($cardCreditNubank_2->days_to_expiration),
+                'payment_date' => $endDate->clone()->addDay(),
             ]);
 
         $walletSicoob = Wallet::create([
@@ -159,6 +160,7 @@ class TestSeed extends Seeder
                 'start_date' => $startDate,
                 'end_date' => $endDate,
                 'due_date' => $endDate->clone()->addDays($cardCreditSicoob->days_to_expiration),
+                'payment_date' => $endDate->clone()->addDay(),
             ]);
 
         $walletSantander = Wallet::create([
@@ -460,6 +462,7 @@ class TestSeed extends Seeder
             'start_date' => $twoMonthsAgo->clone(),
             'end_date' => $twoMonthsAgo->clone()->lastOfMonth()->endOfDay(),
             'due_date' => $twoMonthsAgo->clone()->lastOfMonth()->endOfDay()->addDays($cardCreditNubank->days_to_expiration),
+            'payment_date' => $twoMonthsAgo->clone()->addDay(),
             'value' => $twoMonthsAgoInvoiceValue,
             'status' => InvoiceStatus::Paid->value,
         ]);

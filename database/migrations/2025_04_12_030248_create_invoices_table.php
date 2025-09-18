@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('card_id')->unsigned()->nullable(false);
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
-            $table->dateTime('due_date');
+            $table->dateTime('start_date')->nullable(false);
+            $table->dateTime('end_date')->nullable(false);
+            $table->dateTime('due_date')->nullable(false);
+            $table->dateTime('payment_date')->nullable(true);
             $table->decimal('value', 8, 2)->default(0.0);
             $table->enum('status', ['open', 'closed', 'overdue', 'paid'])->default('open');
             $table->timestamps();

@@ -1037,7 +1037,9 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 Possíveis alterações no projeto:
 
-No tipo de transações, ver a necessidade de um ca po 'descrição' e um campo 'nome abreviado'.
+Trocar Tipo de Transação por Categoria
+
+No tipo de transações, ver a necessidade de um campo 'descrição' e um campo 'nome abreviado'.
 
 No tipo de transações, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
 
@@ -1053,6 +1055,6 @@ Ao invés de fazer apenas a inativição, utilizar também o softdelete, dessa f
 
 Manter o controle dos imprestimos através de relatórios, como faço no sistema antigo
 
-Trocar Tipo de Transação por Categoria
-
 Criar um arquivo de configurações para dados default como um método de pagamento para o pagamento de faturas
+
+Implementar pagamento parcial de fatura

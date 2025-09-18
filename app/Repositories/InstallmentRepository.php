@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\RepositoryException;
 use App\Models\Installment;
 use App\Models\Invoice;
+use Carbon\Carbon;
 
 class InstallmentRepository extends BaseRepository
 {
@@ -37,6 +38,19 @@ class InstallmentRepository extends BaseRepository
             $installments->update(['installments.installment_date' => $invoice->start_date]);
 
             return $installments->get()->sum('net_value');
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function updateInstallmentPaymentDate(Invoice $invoice, Carbon $paymentDate)
+    {
+        try {
+            $this->model::select('transactions.*')
+                ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
+                ->where('transactions.card_id', $invoice->card_id)
+                ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date])
+                ->update(['installments.payment_date' => $paymentDate]);
         } catch (\Throwable $th) {
             throw new RepositoryException();
         }
