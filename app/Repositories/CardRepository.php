@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\RepositoryException;
 use App\Models\Card;
 
 class CardRepository extends BaseRepository
@@ -13,12 +14,16 @@ class CardRepository extends BaseRepository
 
     public function listDebitCredit(int $wallet_id, ?string $enum = null)
     {
-        return $this->model
-            ->when($enum, function ($query) use ($enum) {
-                $query->where('card_type', $enum);
-            })
-            ->where('wallet_id', $wallet_id)
-            ->where('active', true)
-            ->get();
+        try {
+            return $this->model
+                ->when($enum, function ($query) use ($enum) {
+                    $query->where('card_type', $enum);
+                })
+                ->where('wallet_id', $wallet_id)
+                ->where('active', true)
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 }

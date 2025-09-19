@@ -19,6 +19,16 @@ class CardService extends BaseService
         $this->invoiceRepository = app(InvoiceRepository::class);
     }
 
+    public static function calculateStartDate(int $first_day_month): Carbon
+    {
+        $startDate = now()->startOfDay()->setDay($first_day_month);
+        if ($startDate->greaterThan(Carbon::now())) {
+            $startDate->subMonth();
+        }
+
+        return $startDate;
+    }
+
     public function create(array $input)
     {
         try {
@@ -90,15 +100,5 @@ class CardService extends BaseService
         }
 
         return [];
-    }
-
-    public static function calculateStartDate(int $first_day_month): Carbon
-    {
-        $startDate = now()->startOfDay()->setDay($first_day_month);
-        if ($startDate->greaterThan(Carbon::now())) {
-            $startDate->subMonth();
-        }
-
-        return $startDate;
     }
 }

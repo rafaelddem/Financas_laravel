@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\RepositoryException;
 use App\Models\Wallet;
 
 class WalletRepository extends BaseRepository
@@ -13,62 +14,86 @@ class WalletRepository extends BaseRepository
 
     public function list(bool $onlyActive = true)
     {
-        return $this->model
-            ->with('owner')
-            ->when($onlyActive, function ($query) {
-                $query->where('active', true);
-            })
-            ->orderby('owner_id', 'asc')
-            ->orderby('main_wallet', 'desc')
-            ->orderby('active', 'desc')
-            ->orderby('name', 'asc')
-            ->get();
+        try {
+            return $this->model
+                ->with('owner')
+                ->when($onlyActive, function ($query) {
+                    $query->where('active', true);
+                })
+                ->orderby('owner_id', 'asc')
+                ->orderby('main_wallet', 'desc')
+                ->orderby('active', 'desc')
+                ->orderby('name', 'asc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     public function listWalletsFromOwner(int $ownerId)
     {
-        return $this->model
-            ->with('owner')
-            ->when($ownerId, function ($query, $ownerId) {
-                $query->where('owner_id', $ownerId);
-            })
-            ->orderby('owner_id', 'asc')
-            ->orderby('main_wallet', 'desc')
-            ->orderby('active', 'desc')
-            ->orderby('name', 'asc')
-            ->get();
+        try {
+            return $this->model
+                ->with('owner')
+                ->when($ownerId, function ($query, $ownerId) {
+                    $query->where('owner_id', $ownerId);
+                })
+                ->orderby('owner_id', 'asc')
+                ->orderby('main_wallet', 'desc')
+                ->orderby('active', 'desc')
+                ->orderby('name', 'asc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     public function guaranteesSingleMainWallet(Wallet $wallet)
     {
-        if ($wallet->main_wallet) {
-            $this->model::query()
-                ->where('owner_id', $wallet->owner_id)
-                ->where('id', '!=', $wallet->id)
-                ->update([ 'main_wallet' => false ]);
+        try {
+            if ($wallet->main_wallet) {
+                $this->model::query()
+                    ->where('owner_id', $wallet->owner_id)
+                    ->where('id', '!=', $wallet->id)
+                    ->update([ 'main_wallet' => false ]);
+            }
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
         }
     }
 
     public function activateMainWalletFromOwner(int $ownerId)
     {
-        $this->model::query()
-            ->where('owner_id', $ownerId)
-            ->where('main_wallet', true)
-            ->update([ 'active' => true ]);
+        try {
+            $this->model::query()
+                ->where('owner_id', $ownerId)
+                ->where('main_wallet', true)
+                ->update([ 'active' => true ]);
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     public function inactivateWalletsByOwner(int $ownerId)
     {
-        $this->model::query()
-            ->where('owner_id', $ownerId)
-            ->update([ 'active' => false ]);
+        try {
+            $this->model::query()
+                ->where('owner_id', $ownerId)
+                ->update([ 'active' => false ]);
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     public function getValue(int $invoiceId): float
     {
-        $resultado = \DB::select('CALL calculate_wallet_value(?)', [$invoiceId]);
+        try {
+            $resultado = \DB::select('CALL calculate_wallet_value(?)', [$invoiceId]);
 
-        return $resultado[0]->total ?? 0;
+            return $resultado[0]->total ?? 0;
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     /**

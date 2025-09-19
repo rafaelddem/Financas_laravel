@@ -39,19 +39,18 @@ class OwnerController extends Controller
             $this->service->create($request->all());
 
             $message = __('Data created successfully.');
+            return redirect(route('owner.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.list', compact('message')));
+        return redirect(route('owner.list'))->withErrors(compact('message'))->withInput();
     }
 
     public function update(UpdateRequest $request)
     {
-        $message = '';
-
         try {
             if ($request->get('active')) {
                 $this->service->activate($request->get('id'));
@@ -60,12 +59,13 @@ class OwnerController extends Controller
             }
 
             $message = __('Data updated successfully.');
+            return redirect(route('owner.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.list', compact('message')));
+        return redirect(route('owner.list'))->withErrors(compact('message'))->withInput();
     }
 }

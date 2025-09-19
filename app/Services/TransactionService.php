@@ -60,7 +60,7 @@ class TransactionService extends BaseService
         }
     }
 
-    public function validateInstallmentsValues(float $netValue, array $installmentsData): bool
+    private function validateInstallmentsValues(float $netValue, array $installmentsData): bool
     {
         $total = 0.0;
 
@@ -74,7 +74,7 @@ class TransactionService extends BaseService
         throw new ServiceException(__('The sum of the Gross Values of the Installments cannot be greater than the Net Value of the Transaction.'));
     }
 
-    public function validateInstallmentValues(int $installmentNumber, array $installmentData): float
+    private function validateInstallmentValues(int $installmentNumber, array $installmentData): float
     {
         if ($installmentData['gross_value'] <= $installmentData['discount_value']) 
             throw new ServiceException(__('Invalid value for field of installment installmentNumber.', ['field' => __('Discount Value'), 'installmentNumber' => $installmentNumber]));

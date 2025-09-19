@@ -14,11 +14,11 @@ use App\Enums\PaymentType;
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <input type="hidden" form="form-insert" name="active" value=true>
                 <label for="name">{{__('Name')}}:</label>
-                <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
+                <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" value="{{old('name')}}" required>
                 <label for="type">{{__('Type')}}:</label>
                 <select form="form-insert" name="type" id="type">
                     @foreach (PaymentType::cases() as $paymentType)
-                        <option value='{{ $paymentType->value }}'>{{ __($paymentType->name) }}</option>
+                        <option value='{{ $paymentType->value }}' @if(old('type') == $paymentType->value) selected @endif>{{ __($paymentType->name) }}</option>
                     @endforeach
                 </select>
             </div>

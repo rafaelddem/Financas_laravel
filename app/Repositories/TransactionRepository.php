@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\RepositoryException;
 use App\Models\Transaction;
 
 class TransactionRepository extends BaseRepository
@@ -13,14 +14,18 @@ class TransactionRepository extends BaseRepository
 
     public function list(bool $onlyActive = true)
     {
-        return $this->model
-            ->with([
-                'paymentMethod', 
-                'transactionType', 
-                'sourceWallet', 
-                'destinationWallet', 
-            ])
-            ->orderBy('transaction_date', 'desc')
-            ->get();
+        try {
+            return $this->model
+                ->with([
+                    'paymentMethod', 
+                    'transactionType', 
+                    'sourceWallet', 
+                    'destinationWallet', 
+                ])
+                ->orderBy('transaction_date', 'desc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 }

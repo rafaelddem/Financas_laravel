@@ -31,7 +31,8 @@ class InstallmentRepository extends BaseRepository
     public function updateInstallmentDate(Invoice $invoice): float
     {
         try {
-            $installments = $this->model::join('transactions', 'transactions.id', '=', 'installments.transaction_id')
+            $installments = $this->model
+                ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->where('transactions.card_id', $invoice->card_id)
                 ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date]);
             $installments->update(['installments.installment_date' => $invoice->start_date]);
@@ -45,7 +46,8 @@ class InstallmentRepository extends BaseRepository
     public function updateInstallmentPaymentDate(Invoice $invoice, Carbon $paymentDate)
     {
         try {
-            $this->model::join('transactions', 'transactions.id', '=', 'installments.transaction_id')
+            $this->model
+                ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->where('transactions.card_id', $invoice->card_id)
                 ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date])
                 ->update(['installments.payment_date' => $paymentDate]);
@@ -56,12 +58,16 @@ class InstallmentRepository extends BaseRepository
 
     public function getSumByInvoice(Invoice $invoice)
     {
-        return $this->model
-            ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
-            ->join('cards', 'cards.id', '=', 'transactions.card_id')
-            ->selectRaw('SUM(installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) as sum')
-            ->where('card_id', $invoice->card_id)
-            ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date])
-            ->value('sum');
+        try {
+            return $this->model
+                ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
+                ->join('cards', 'cards.id', '=', 'transactions.card_id')
+                ->selectRaw('SUM(installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) as sum')
+                ->where('card_id', $invoice->card_id)
+                ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date])
+                ->value('sum');
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 }

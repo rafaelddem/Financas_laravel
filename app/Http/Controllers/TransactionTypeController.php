@@ -44,13 +44,14 @@ class TransactionTypeController extends Controller
             $this->service->create($request->all());
 
             $message = __('Data created successfully.');
+            return redirect(route('transaction-type.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('transaction-type.list', compact('message')));
+        return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 
     public function edit(int $id, Request $request)
@@ -67,7 +68,7 @@ class TransactionTypeController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('transaction-type.list', compact('message')));
+        return redirect(route('transaction-type.list'))->withErrors(compact('message'));
     }
 
     public function update(UpdateRequest $request)
@@ -80,13 +81,14 @@ class TransactionTypeController extends Controller
             ]));
 
             $message = __('Data updated successfully.');
+            return redirect(route('transaction-type.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('transaction-type.list', compact('message')));
+        return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 
     public function destroy(Request $request)

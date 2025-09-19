@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\RepositoryException;
 use App\Models\Owner;
 
 class OwnerRepository extends BaseRepository
@@ -13,13 +14,17 @@ class OwnerRepository extends BaseRepository
 
     public function list(bool $onlyActive = true)
     {
-        return $this->model
-            ->when($onlyActive, function ($query) {
-                $query->where('active', true);
-            })
-            ->orderby('active', 'desc')
-            ->orderby('name', 'asc')
-            ->get();
+        try {
+            return $this->model
+                ->when($onlyActive, function ($query) {
+                    $query->where('active', true);
+                })
+                ->orderby('active', 'desc')
+                ->orderby('name', 'asc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     /**

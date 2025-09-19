@@ -60,7 +60,7 @@ class TransactionController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('transaction.list', compact('message')));
+        return redirect(route('transaction.list'))->withErrors(compact('message'));
     }
 
     public function store(CreateRequest $request)

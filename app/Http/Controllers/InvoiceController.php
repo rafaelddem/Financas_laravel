@@ -54,6 +54,6 @@ class InvoiceController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('invoice.list'))->withErrors(compact('message'))->withInput();
+        return redirect(route('invoice.list'))->withErrors(compact('message'));
     }
 }

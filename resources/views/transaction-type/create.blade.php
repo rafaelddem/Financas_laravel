@@ -13,11 +13,11 @@ use App\Enums\Relevance;
             <div class="col">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <label for="name">{{__('Name')}}:</label>
-                <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
+                <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" value="{{old('name')}}" required>
                 <label for="relevance">{{__('Relevance')}}:</label>
                 <select name="relevance" form="form-insert" id="relevance">
                     @foreach (Relevance::cases() as $relevance)
-                        <option value='{{ $relevance->value }}'>{{ __($relevance->name) }}</option>
+                        <option value='{{ $relevance->value }}' @if(old('relevance') == $relevance->value) selected @endif>{{ __($relevance->name) }}</option>
                     @endforeach
                 </select>
                 <label>{{__('Status')}}:</label>

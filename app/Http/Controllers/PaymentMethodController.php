@@ -44,13 +44,14 @@ class PaymentMethodController extends Controller
             $this->service->create($request->all());
 
             $message = __('Data created successfully.');
+            return redirect(route('payment-method.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('payment-method.list', compact('message')));
+        return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 
     public function update(UpdateRequest $request)
@@ -61,13 +62,14 @@ class PaymentMethodController extends Controller
             $this->service->update($request->get('id'), $request->only(['active']));
 
             $message = __('Data updated successfully.');
+            return redirect(route('payment-method.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('payment-method.list', compact('message')));
+        return redirect(route('payment-method.list'))->withErrors(compact('message'));
     }
 
     public function destroy(Request $request)

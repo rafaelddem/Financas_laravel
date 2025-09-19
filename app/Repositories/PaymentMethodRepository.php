@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\RepositoryException;
 use App\Models\PaymentMethod;
 
 class PaymentMethodRepository extends BaseRepository
@@ -13,17 +14,25 @@ class PaymentMethodRepository extends BaseRepository
 
     public function list(bool $onlyActive = true)
     {
-        return $this->model
-            ->when($onlyActive, function ($query) {
-                $query->where('active', true);
-            })
-            ->orderby('active', 'desc')
-            ->orderby('id', 'asc')
-            ->get();
+        try {
+            return $this->model
+                ->when($onlyActive, function ($query) {
+                    $query->where('active', true);
+                })
+                ->orderby('active', 'desc')
+                ->orderby('id', 'asc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     public function hasRelatedTransactions(int $paymentMethodId): bool
     {
-        return $this->model->with('transactions')->find($paymentMethodId)->transactions->count();
+        try {
+            return $this->model->with('transactions')->find($paymentMethodId)->transactions->count();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 }

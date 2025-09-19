@@ -17,11 +17,15 @@ abstract class BaseRepository
 
     public function list(bool $onlyActive = true)
     {
-        return $this->model
-            ->when($onlyActive, function ($query) {
-                $query->where('active', true);
-            })
-            ->get();
+        try {
+            return $this->model
+                ->when($onlyActive, function ($query) {
+                    $query->where('active', true);
+                })
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 
     public function find(int $id, array $with = [])
