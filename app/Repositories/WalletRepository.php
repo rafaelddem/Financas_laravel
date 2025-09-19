@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Enums\PaymentType;
 use App\Exceptions\RepositoryException;
 use App\Models\Wallet;
+use Carbon\Carbon;
 
 class WalletRepository extends BaseRepository
 {
@@ -96,11 +98,31 @@ class WalletRepository extends BaseRepository
         }
     }
 
-    /**
-     * Implementar função após implementação da Transação
-     */
     public function hasOutstandingMonetaryBalancesOnWallet(int $walletId)
     {
-        return false;
+        try {
+            $plannedTransactions = $this->model
+                ->join('transactions', function ($join) {
+                    $join->on('transactions.source_wallet_id', '=', 'wallets.id')
+                        ->orOn('transactions.destination_wallet_id', '=', 'wallets.id');
+                })
+                ->where('wallets.id', $walletId)
+                ->where('transactions.transaction_date', '>', Carbon::today())
+                ->distinct('transactions.id')
+                ->count();
+
+            $futureInstallments = $this->model
+                ->join('cards', 'cards.wallet_id', '=', 'wallets.id')
+                ->join('transactions', 'transactions.card_id', '=', 'cards.id')
+                ->leftJoin('installments', 'installments.transaction_id', '=', 'transactions.id')
+                ->where('cards.card_type', PaymentType::Credit->value)
+                ->whereNotNull('installments.payment_date')
+                ->where('cards.wallet_id', $walletId)
+                ->count();
+
+            return $plannedTransactions + $futureInstallments;
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
     }
 }

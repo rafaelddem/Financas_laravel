@@ -33,7 +33,7 @@ class TransactionService extends BaseService
             if (isset($input['card_id'])) {
                 $card = $this->cardRepository->find($input['card_id']);
 
-                if ($input['source_wallet_id'] != $card->wallet) {
+                if ($input['source_wallet_id'] != $card->wallet_id) {
                     throw new ServiceException(__('The selected Card must belong to the Source Wallet.'));
                 }
             }

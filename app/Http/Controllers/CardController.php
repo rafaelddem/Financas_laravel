@@ -102,7 +102,7 @@ class CardController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.card.list', compact('owner_id', 'wallet_id')))->withErrors(compact('message'))->withInput();
+        return redirect(route('owner.wallet.card.list', compact('owner_id', 'wallet_id')))->withErrors(compact('message'));
     }
 
     public function update(int $owner_id, int $wallet_id, UpdateRequest $request)
