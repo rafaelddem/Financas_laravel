@@ -33,11 +33,11 @@
                 <div class="flex-container">
                     <div class="col_25">
                         <label for="first_day_month" id="first_day_month_label">{{__('First day of month')}}</label>
-                        <input type="number" form="form-edit" name="first_day_month" id="first_day_month" value="{{$card->first_day_month}}" min="1" max="28" required>
+                        <input type="number" form="form-edit" name="first_day_month" id="first_day_month" value="{{old('first_day_month', $card->first_day_month)}}" min="1" max="28" required>
                     </div>
                     <div class="col_25">
                         <label for="days_to_expiration" id="days_to_expiration_label">{{__('Days to expiration')}}</label>
-                        <input type="number" form="form-edit" name="days_to_expiration" id="days_to_expiration" value="{{$card->days_to_expiration}}" min="1" max="20" required>
+                        <input type="number" form="form-edit" name="days_to_expiration" id="days_to_expiration" value="{{old('days_to_expiration', $card->days_to_expiration)}}" min="1" max="20" required>
                     </div>
                 </div>
             @else

@@ -54,7 +54,7 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+        return redirect()->back()->withErrors(compact('message'));
     }
 
     public function store(int $owner_id, CreateRequest $request)
@@ -63,13 +63,14 @@ class WalletController extends Controller
             $this->service->create(array_merge($request->all(), ['owner_id' => $owner_id]));
 
             $message = __('Data created successfully.');
+            return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+        return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 
     public function edit(int $owner_id, int $id, Request $request)
@@ -84,7 +85,7 @@ class WalletController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+        return redirect(route('owner.wallet.list', compact('owner_id')))->withErrors(compact('message'));
     }
 
     public function update(int $owner_id, UpdateRequest $request)
@@ -93,13 +94,14 @@ class WalletController extends Controller
             $this->service->update($request->get('id'), $request->only('main_wallet', 'active', 'description'));
 
             $message = __('Data updated successfully.');
+            return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+        return redirect()->back()->withErrors(compact('message'));
     }
 
     public function destroy(int $owner_id, Request $request)
@@ -108,12 +110,13 @@ class WalletController extends Controller
             $this->service->delete($request->get('id'));
 
             $message = __('Data deleted successfully.');
+            return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.list', compact('message', 'owner_id')));
+        return redirect(route('owner.wallet.list', compact('owner_id')))->withErrors(compact('message'));
     }
 }

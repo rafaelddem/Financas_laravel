@@ -71,7 +71,7 @@ class CardController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.card.list', compact('owner_id', 'wallet_id', 'message')));
+        return redirect(route('owner.wallet.card.list', compact('owner_id', 'wallet_id')))->withErrors(compact('message'));
     }
 
     public function store(int $owner_id, int $wallet_id, CreateRequest $request)
@@ -80,13 +80,14 @@ class CardController extends Controller
             $this->service->create(array_merge($request->all(), ['wallet_id' => $wallet_id]));
 
             $message = __('Data created successfully.');
+            return redirect(route('owner.wallet.card.list', compact('owner_id', 'wallet_id', 'message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.card.list', compact('owner_id', 'wallet_id', 'message')));
+        return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 
     public function edit(int $owner_id, int $wallet_id, int $id)
@@ -101,7 +102,7 @@ class CardController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.card.list', compact('message', 'owner_id', 'wallet_id')));
+        return redirect(route('owner.wallet.card.list', compact('owner_id', 'wallet_id')))->withErrors(compact('message'))->withInput();
     }
 
     public function update(int $owner_id, int $wallet_id, UpdateRequest $request)
@@ -110,12 +111,13 @@ class CardController extends Controller
             $this->service->update($request->get('id'), $request->only('first_day_month', 'days_to_expiration', 'active'));
 
             $message = __('Data updated successfully.');
+            return redirect(route('owner.wallet.card.list', compact('message', 'owner_id', 'wallet_id')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('owner.wallet.card.list', compact('message', 'owner_id', 'wallet_id')));
+        return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 }
