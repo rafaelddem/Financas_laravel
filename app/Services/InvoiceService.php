@@ -27,10 +27,10 @@ class InvoiceService extends BaseService
         $this->transactionRepository = app(TransactionRepository::class);
     }
 
-    public function listInvoices(?InvoiceStatus $status = null)
+    public function listInvoices(Carbon $startDate, Carbon $endDate, ?InvoiceStatus $status = null, ?int $walletId = null, ?int $cardId = null)
     {
         try {
-            return $this->repository->listInvoices($status);
+            return $this->repository->listInvoices($startDate, $endDate, $status, $walletId, $cardId);
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {

@@ -68,6 +68,19 @@ class WalletService extends BaseService
         return [];
     }
 
+    public function listWalletsWithCreditCards()
+    {
+        try {
+            return $this->repository->listWalletsWithCreditCards();
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return [];
+    }
+
     public function delete(int $id)
     {
         try {

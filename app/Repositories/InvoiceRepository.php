@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Enums\InvoiceStatus;
 use App\Exceptions\RepositoryException;
 use App\Models\Invoice;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class InvoiceRepository extends BaseRepository
@@ -14,13 +15,22 @@ class InvoiceRepository extends BaseRepository
         parent::__construct(Invoice::class);
     }
 
-    public function listInvoices(?InvoiceStatus $status = null)
+    public function listInvoices(Carbon $startDate, Carbon $endDate, ?InvoiceStatus $status = null, ?int $walletId = null, ?int $cardId = null)
     {
         try {
             return $this->model
                 ->with('card')
+                ->join('cards', 'cards.id', '=', 'invoices.card_id')
+                ->where('invoices.start_date', '<=', $endDate)
+                ->where('invoices.end_date', '>=', $startDate)
                 ->when($status, function ($query) use ($status) {
-                    $query->where('status', $status->value);
+                    $query->where('invoices.status', $status->value);
+                })
+                ->when($walletId, function ($query) use ($walletId) {
+                    $query->where('cards.wallet_id', $walletId);
+                })
+                ->when($cardId, function ($query) use ($cardId) {
+                    $query->where('invoices.card_id', $cardId);
                 })
                 ->get();
         } catch (\Throwable $th) {

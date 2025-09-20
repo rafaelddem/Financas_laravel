@@ -13,6 +13,73 @@ use App\Enums\InvoiceStatus;
         <h1>{{__('Invoices')}}</h1>
     </div>
     <div class="presentation">
+        <h2 class="card-title">{{__('Filters')}}</h2>
+        <div class="flex-container">
+            <div class="col_20">
+                <label for="title">{{__('Title')}}:</label>
+                <input type="date" form="form-filter" name="start_date" value="{{$startDate->format('Y-m-d')}}" required>
+            </div>
+            <div class="col_20">
+                <label for="title">{{__('Title')}}:</label>
+                <input type="date" form="form-filter" name="end_date" value="{{$endDate->format('Y-m-d')}}" required>
+            </div>
+            <div class="col_20">
+                <label for="wallet_id">{{__('Source Wallet')}}:</label>
+                <select name="wallet_id" form="form-filter" id="wallet_id">
+                    <option value='0' data-owner="" data-wallet=""> {{ "Todos as Carteiras" }} </option>
+                    @foreach ($wallets as $wallet)
+                        <option value='{{ $wallet->id }}' data-owner="{{ $wallet->owner_id }}" data-wallet="{{ $wallet->id }}" @if($walletId == $wallet->id) selected @endIf>
+                            {{ $wallet->owner->name }} > {{ $wallet->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div id="div_card" class="col_20">
+                <label for="card_id">{{__('Card')}}:</label>
+                <select form="form-filter" name="card_id" id="card_id" required>
+                    <option value='0' data-owner="" data-wallet=""> {{ "Todos os Cartões" }} </option>
+                    @foreach ($cards as $card)
+                        <option value='{{ $card->id }}' @if($cardId == $card->id) selected @endIf> {{ $card->name }} </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col_20">
+                <input class="button-as-input" type="submit" form="form-filter" value="{{__('Filter')}}">
+            </div>
+            <form method="get" id="form-filter" action="{{route('invoice.list')}}"></form>
+        </div>
+    </div>
+    @if(!$closedInvoices->isEmpty())
+        <div class="presentation">
+            <h2 class="card-title">{{__('Unpaid Invoice')}}</h2>
+            <div class="row">
+                <div class="col">
+                    <table>
+                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                        @foreach($closedInvoices as $invoice)
+                        <tr>
+                            <td class="td-item">
+                                <span class="td-content">
+                                    {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
+                                    @if($invoice->status == InvoiceStatus::Overdue->value)
+                                        <span class="tag">{{__('Overdue')}}</span>
+                                    @endif
+                                </span>
+                                <button type="button"
+                                    class="open-confirm"
+                                    data-id="{{ $invoice->id }}"
+                                    data-subtitle="{{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }}">
+                                    {{ __('Pay') }}
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
+    <div class="presentation">
         <h2 class="card-title">{{__('Open Invoices')}}</h2>
         <div class="row">
             <div class="col">
@@ -23,34 +90,6 @@ use App\Enums\InvoiceStatus;
                             <span class="td-content">
                                 {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
                             </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="presentation">
-        <h2 class="card-title">{{__('Unpaid Invoice')}}</h2>
-        <div class="row">
-            <div class="col">
-                <table>
-                    <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-                    @foreach($closedInvoices as $invoice)
-                    <tr>
-                        <td class="td-item">
-                            <span class="td-content">
-                                {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
-                                @if($invoice->status == InvoiceStatus::Overdue->value)
-                                    <span class="tag">{{__('Overdue')}}</span>
-                                @endif
-                            </span>
-                            <button type="button"
-                                class="open-confirm"
-                                data-id="{{ $invoice->id }}"
-                                data-subtitle="{{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }}">
-                                {{ __('Pay') }}
-                            </button>
                         </td>
                     </tr>
                     @endforeach

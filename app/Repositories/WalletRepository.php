@@ -50,6 +50,24 @@ class WalletRepository extends BaseRepository
         }
     }
 
+    public function listWalletsWithCreditCards()
+    {
+        try {
+            return $this->model
+                ->select('wallets.*')
+                ->distinct('wallets.id')
+                ->join('cards', 'cards.wallet_id', '=', 'wallets.id')
+                ->where('cards.card_type', PaymentType::Credit->value)
+                ->orderby('owner_id', 'asc')
+                ->orderby('main_wallet', 'desc')
+                ->orderby('active', 'desc')
+                ->orderby('name', 'asc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
     public function guaranteesSingleMainWallet(Wallet $wallet)
     {
         try {

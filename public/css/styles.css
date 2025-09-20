@@ -374,6 +374,10 @@ label {
     height: 75px;
     align-content: center;
 }
+.button-as-input {
+    margin-top: 24px;
+    align-content: center;
+}
 
 table {
     width: 100%;
