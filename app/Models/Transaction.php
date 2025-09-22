@@ -92,9 +92,7 @@ class Transaction extends Model
 
     public function getNetValueAttribute(): float
     {
-        return $this->paymentMethod->type->value == PaymentType::Credit->value
-            ? $this->installments->sum('net_value')
-            : $this->gross_value - $this->discount_value + $this->interest_value + $this->rounding_value;
+        return $this->gross_value - $this->discount_value + $this->interest_value + $this->rounding_value;
     }
 
     public function getNetValueFormattedAttribute(): string
