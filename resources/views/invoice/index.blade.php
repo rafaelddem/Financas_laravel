@@ -1,5 +1,6 @@
 @php
 use App\Enums\InvoiceStatus;
+use Carbon\Carbon;
 @endphp
 
 @push('head-script')
@@ -61,7 +62,7 @@ use App\Enums\InvoiceStatus;
                             <td class="td-item">
                                 <span class="td-content">
                                     {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
-                                    @if($invoice->status == InvoiceStatus::Overdue->value)
+                                    @if($invoice->end_date < Carbon::now())
                                         <span class="tag">{{__('Overdue')}}</span>
                                     @endif
                                 </span>
