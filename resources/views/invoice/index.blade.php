@@ -17,11 +17,11 @@ use App\Enums\InvoiceStatus;
         <div class="flex-container">
             <div class="col_20">
                 <label for="title">{{__('Title')}}:</label>
-                <input type="date" form="form-filter" name="start_date" value="{{$startDate->format('Y-m-d')}}" required>
+                <input type="date" form="form-filter" name="start_date" id="start_date" value="{{$startDate->format('Y-m-d')}}" required>
             </div>
             <div class="col_20">
                 <label for="title">{{__('Title')}}:</label>
-                <input type="date" form="form-filter" name="end_date" value="{{$endDate->format('Y-m-d')}}" required>
+                <input type="date" form="form-filter" name="end_date" id="end_date" value="{{$endDate->format('Y-m-d')}}" required>
             </div>
             <div class="col_20">
                 <label for="wallet_id">{{__('Source Wallet')}}:</label>
@@ -124,6 +124,10 @@ use App\Enums\InvoiceStatus;
             <form method="POST" id="confirmation-form" action="{{ route('invoice.pay') }}">
                 @csrf
                 <input type="hidden" name="id" id="popup-id">
+                <input type="hidden" name="filter_start_date" id="popup-filter-start-date">
+                <input type="hidden" name="filter_end_date" id="popup-filter-end-date">
+                <input type="hidden" name="filter_wallet" id="popup-filter-wallet">
+                <input type="hidden" name="filter_card" id="popup-filter-card">
                 <div class="td-buttons">
                     <button type="submit" class="confirm">{{ __('Yes') }}</button>
                     <button type="button" class="cancel" onclick="closePopup()">{{ __('No') }}</button>

@@ -19,6 +19,7 @@ class InvoiceRepository extends BaseRepository
     {
         try {
             return $this->model
+                ->select('invoices.*')
                 ->with('card')
                 ->join('cards', 'cards.id', '=', 'invoices.card_id')
                 ->where('invoices.start_date', '<=', $endDate)

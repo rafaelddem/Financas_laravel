@@ -30,6 +30,13 @@
                                 @endif
                             </div>
                             <div class="td-buttons">
+                                @if($card->card_type == 'credit')
+                                    <form method="get" id="form-invoice-{{$card->id}}" action="{{route('invoice.list')}}"></form>
+                                    <input type="hidden" form="form-invoice-{{$card->id}}" name="wallet_id" value="{{$wallet->id}}">
+                                    <input type="hidden" form="form-invoice-{{$card->id}}" name="card_id" value="{{$card->id}}">
+                                    <button type="submit" form="form-invoice-{{$card->id}}">{{__('Invoices')}}</button>
+                                @endif
+
                                 <form method="get" id="form-edit-{{$card->id}}" action="{{route('owner.wallet.card.edit', ['owner_id' => $wallet->owner_id, 'wallet_id' => $wallet->id, 'id' => $card->id])}}"></form>
                                 <button type="submit" form="form-edit-{{$card->id}}">{{__('Edit')}}</button>
                             </div>

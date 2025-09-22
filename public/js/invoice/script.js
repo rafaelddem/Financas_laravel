@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.display = 'flex';
             modal.querySelector('h4').textContent = button.dataset.subtitle;
             document.getElementById('popup-id').value = button.dataset.id;
+            document.getElementById('popup-filter-start-date').value = document.getElementById('start_date').value;
+            document.getElementById('popup-filter-end-date').value = document.getElementById('end_date').value;
+            document.getElementById('popup-filter-wallet').value = document.getElementById('wallet_id').value;
+            document.getElementById('popup-filter-card').value = document.getElementById('card_id').value;
         });
     });
 });

@@ -71,14 +71,19 @@ class InvoiceController extends Controller
         try {
             $this->service->pay($request->id);
 
+            $start_date = $request->get('filter_start_date');
+            $end_date = $request->get('filter_end_date');
+            $wallet_id = $request->get('filter_wallet');
+            $card_id = $request->get('filter_card');
+
             $message = __('Action executed successfully.');
-            return redirect(route('invoice.list', compact('message')));
+            return redirect(route('invoice.list', compact('message', 'start_date', 'end_date', 'wallet_id', 'card_id')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('invoice.list'))->withErrors(compact('message'));
+        return redirect(route('invoice.list', compact('start_date', 'end_date', 'wallet_id', 'card_id')))->withErrors(compact('message'));
     }
 }
