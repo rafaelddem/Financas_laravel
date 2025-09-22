@@ -43,14 +43,6 @@ class Card extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function last_invoice(): Invoice
-    {
-        return $this->invoices()->last();
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);

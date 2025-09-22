@@ -6,6 +6,7 @@ use App\Exceptions\RepositoryException;
 use App\Models\Installment;
 use App\Models\Invoice;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class InstallmentRepository extends BaseRepository
 {
@@ -43,6 +44,20 @@ class InstallmentRepository extends BaseRepository
         }
     }
 
+    public function futureInstallmentsByCard(int $cardId, Carbon $lastInvoiceEndDate): Collection
+    {
+        try {
+            return $this->model
+                ->select('installments.*')
+                ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
+                ->where('transactions.card_id', $cardId)
+                ->where('installment_date', '>', $lastInvoiceEndDate)
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
     public function updateInstallmentPaymentDate(Invoice $invoice, Carbon $paymentDate)
     {
         try {
@@ -56,13 +71,13 @@ class InstallmentRepository extends BaseRepository
         }
     }
 
-    public function getSumByInvoice(Invoice $invoice)
+    public function getSumByInvoice(Invoice $invoice): float
     {
         try {
             return $this->model
                 ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->join('cards', 'cards.id', '=', 'transactions.card_id')
-                ->selectRaw('SUM(installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) as sum')
+                ->selectRaw('COALESCE(SUM(installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value), 0) as sum')
                 ->where('card_id', $invoice->card_id)
                 ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date])
                 ->value('sum');
