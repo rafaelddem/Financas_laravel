@@ -147,7 +147,7 @@ class WalletTest extends TestCase
         $newDataWallet['main_wallet'] = false;
 
         $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $wallet->id]), $newDataWallet)
-            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('The main wallet of an account cannot be unmarked as such.')]));
+            ->assertSessionHasErrors(['message' => __('The main wallet of an account cannot be unmarked as such.')]);
     }
 
     public function test_update_inactivate_secondary_wallet(): void
@@ -189,12 +189,12 @@ class WalletTest extends TestCase
         $newDataWallet['active'] = true;
 
         $this->put(route('owner.wallet.update', ['owner_id' => $owner->id, 'id' => $wallet->id]), $newDataWallet)
-            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $owner->id, 'message' => __('It is not allowed to activate a Wallet whose Owner is inactive.')]));
+        ->assertSessionHasErrors(['message' => __('It is not allowed to activate a Wallet whose Owner is inactive.')]);
     }
 
     /**
      * O método para verifição de pendências de uma Carteira ainda não foi implementado
-     * Por esse motivo, os testes reverentes a remoção de registros (softDelete) não foram implementados
-     * Assim como os testes referêntes a inativação de uma Carteira quando a mesma possuir pendências
+     * Por esse motivo, os testes referentes a remoção de registros (softDelete) não foram implementados
+     * Assim como os testes referentes a inativação de uma Carteira quando a mesma possuir pendências
      */
 }
