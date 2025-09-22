@@ -132,6 +132,10 @@ body {
 .sidebar ul li a {
     text-decoration: none;
     color: var(--sidebar-font);
+    display: block;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
 }
 .dark-mode .sidebar ul li a {
     color: var(--sidebar-font-dm);
