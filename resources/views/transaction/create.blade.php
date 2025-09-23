@@ -15,19 +15,19 @@ use App\Enums\Relevance;
     <div class="presentation">
         <h2 class="card-title">{{__('Fill out the form')}}</h2>
         <div class="flex-container">
-            <div class="col_50">
+            <div class="col_50 md_col">
                 <label for="title">{{__('Title')}}:</label>
                 <input type="text" form="form-insert" name="title" id="title" value="{{old('title')}}" placeholder="{{__('Title')}}" required>
             </div>
-            <div class="col_25">
+            <div class="col_25 md_col_50 sm_col">
                 <label for="transaction_date">{{__('Transaction Date')}}:</label>
                 <input type="date" form="form-insert" name="transaction_date" id="transaction_date" value="{{old('transaction_date')}}" placeholder="{{__('Transaction Date')}}" required>
             </div>
-            <div class="col_25">
+            <div class="col_25 md_col_50 sm_col">
                 <label for="processing_date">{{__('Processing Date')}}:</label>
                 <input type="date" form="form-insert" name="processing_date" id="processing_date" value="{{old('processing_date')}}" placeholder="{{__('Processing Date')}}" required>
             </div>
-            <div class="col_33">
+            <div class="col_33 sm_col">
                 <label for="category_id">{{__('Category')}}:</label>
                 <select name="category_id" form="form-insert" id="category_id">
                     @foreach ($categories as $presentation)
@@ -35,7 +35,7 @@ use App\Enums\Relevance;
                     @endforeach
                 </select>
             </div>
-            <div class="col_33">
+            <div class="col_33 sm_col">
                 <label for="relevance">{{__('Relevance')}}:</label>
                 <select name="relevance" form="form-insert" id="relevance">
                     @foreach (Relevance::cases() as $relevance)
@@ -43,7 +43,7 @@ use App\Enums\Relevance;
                     @endforeach
                 </select>
             </div>
-            <div class="col_33">
+            <div class="col_33 sm_col">
                 <label for="payment_method_id">{{__('Payment Method')}}:</label>
                 <select name="payment_method_id" form="form-insert" id="payment_method_id">
                     @foreach ($paymentMethods as $paymentMethod)
@@ -54,7 +54,7 @@ use App\Enums\Relevance;
         </div>
 
         <div class="flex-container">
-            <div class="col_25">
+            <div class="col_25 md_col_50 sm_col">
                 <label for="source_wallet_id">{{__('Source Wallet')}}:</label>
                 <select name="source_wallet_id" form="form-insert" id="source_wallet_id">
                     @foreach ($sourceWallets as $sourceWallet)
@@ -64,7 +64,7 @@ use App\Enums\Relevance;
                     @endforeach
                 </select>
             </div>
-            <div class="col_25">
+            <div class="col_25 md_col_50 sm_col">
                 <label for="destination_wallet_id">{{__('Destination Wallet')}}:</label>
                 <select name="destination_wallet_id" form="form-insert" id="destination_wallet_id">
                     @foreach ($destinationWallets as $destinationWallet)
@@ -74,34 +74,34 @@ use App\Enums\Relevance;
                     @endforeach
                 </select>
             </div>
-            <div id="div_card" class="col_25">
+            <div id="div_card" class="col_25 md_col_50 sm_col">
                 <label for="card_id">{{__('Card')}}:</label>
                 <select name="card_id" form="form-insert" id="card_id" required>
                 </select>
             </div>
-            <div id="div_installments" class="col_25">
+            <div id="div_installments" class="col_25 md_col_50 sm_col">
                 <label for="installments">{{__('Installments')}}:</label>
                 <input type="number" form="form-insert" id="installments" value="1" min="1" max="36" required>
             </div>
         </div>
         <div class="flex-container">
-            <div class="col_20">
+            <div class="col_20 md_col_50 sm_col">
                 <label for="gross_value">{{__('Gross Value')}}:</label>
                 <input type="text" form="form-insert" name="gross_value" data-name="gross_value" class="money" value="0,00" placeholder="{{__('Gross Value')}}" required pattern="^(?!0,00$).+" title="{{__('A value needs to be entered')}}">
             </div>
-            <div class="col_20">
+            <div class="col_20 md_col_50 sm_col">
                 <label for="discount_value">{{__('Discount Value')}}:</label>
                 <input type="text" form="form-insert" name="discount_value" data-name="discount_value" class="money" value="0,00" placeholder="{{__('Discount Value')}}" required>
             </div>
-            <div class="col_20">
+            <div class="col_20 md_col_50 sm_col">
                 <label for="interest_value">{{__('Interest Value')}}:</label>
                 <input type="text" form="form-insert" name="interest_value" data-name="interest_value" class="money" value="0,00" placeholder="{{__('Interest Value')}}" required>
             </div>
-            <div class="col_20">
+            <div class="col_20 md_col_50 sm_col">
                 <label for="rounding_value">{{__('Rounding Value')}}:</label>
                 <input type="text" form="form-insert" name="rounding_value" data-name="rounding_value" class="money" value="0,00" placeholder="{{__('Rounding Value')}}" required>
             </div>
-            <div class="col_20">
+            <div class="col_20 md_col_50 sm_col">
                 <label>{{__('Net Value')}}:</label>
                 <input type="text" form="form-insert" name="net_value" data-name="net_value" class="money" value="0,00" placeholder="{{__('Net Value')}}" disabled>
             </div>
@@ -111,32 +111,32 @@ use App\Enums\Relevance;
 
         <div id="transction_credit_template" style="display: none;">
             <div class="flex-container">
-                <div class="col_10">
+                <div class="col_10 md_col_20 sm_col">
                     <h4><label id="installmentData" class="label-as-input">Parcela #1</label></h4>
                 </div>
-                <div class="col_15">
+                <div class="col_15 md_col_40 sm_col">
+                    <label>{{__('Installment Date')}}:</label>
+                    <input type="date" form="form-insert" data-name="installment_date" placeholder="{{__('Installment Date')}}">
+                </div>
+                <div class="col_15 md_col_40 sm_col">
                     <label>{{__('Gross Value')}}:</label>
                     <input type="text" form="form-insert" data-name="gross_value" class="money" value="0,00" placeholder="{{__('Gross Value')}}" required>
                 </div>
-                <div class="col_15">
+                <div class="col_15 md_col_50 sm_col">
                     <label>{{__('Discount Value')}}:</label>
                     <input type="text" form="form-insert" data-name="discount_value" class="money" value="0,00" placeholder="{{__('Discount Value')}}" required>
                 </div>
-                <div class="col_15">
+                <div class="col_15 md_col_50 sm_col">
                     <label>{{__('Interest Value')}}:</label>
                     <input type="text" form="form-insert" data-name="interest_value" class="money" value="0,00" placeholder="{{__('Interest Value')}}" required>
                 </div>
-                <div class="col_15">
+                <div class="col_15 md_col_50 sm_col">
                     <label>{{__('Rounding Value')}}:</label>
                     <input type="text" form="form-insert" data-name="rounding_value" class="money" value="0,00" placeholder="{{__('Rounding Value')}}" required>
                 </div>
-                <div class="col_15">
+                <div class="col_15 md_col_50 sm_col">
                     <label>{{__('Net Value')}}:</label>
                     <input type="text" form="form-insert" data-name="net_value" class="money" value="0,00" placeholder="{{__('Net Value')}}" disabled>
-                </div>
-                <div class="col_15">
-                    <label>{{__('Installment Date')}}:</label>
-                    <input type="date" form="form-insert" data-name="installment_date" placeholder="{{__('Installment Date')}}">
                 </div>
             </div>
         </div>

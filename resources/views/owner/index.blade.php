@@ -6,7 +6,7 @@
     </div>
     <div class="presentation">
         <div class="flex-container">
-            <div class="col_50">
+            <div class="col_50 md_col">
                 <h2 class="card-title">{{__('Fill out the form')}}</h2>
                 <label for="name">{{__('Name')}}:</label>
                 <input type="text" form="form-insert" name="name" id="name" placeholder="{{__('Name')}}" required>
@@ -22,7 +22,7 @@
                 </div>
                 <form method="post" id="form-insert" action="{{route('owner.store')}}"> @csrf </form>
             </div>
-            <div class="col_50">
+            <div class="col_50 md_col">
                 <h2 class="card-title">{{__('Owner List')}}</h2>
                 <table>
                     @foreach($owners as $owner)

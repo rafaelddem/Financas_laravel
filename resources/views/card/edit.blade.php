@@ -22,7 +22,7 @@
         </div>
         @if($card->card_type == 'credit')
             <div class="flex-container">
-                <div class="col_25">
+                <div class="col">
                     <label for="card_type">{{__('Type')}}:</label>
                     <div class="flex-container">
                         <label><strong>{{__('Credit')}}</strong></label>
@@ -31,24 +31,24 @@
             </div>
             @if($card->active)
                 <div class="flex-container">
-                    <div class="col_25">
+                    <div class="col_25 md_col_50 sm_col">
                         <label for="first_day_month" id="first_day_month_label">{{__('First day of month')}}</label>
                         <input type="number" form="form-edit" name="first_day_month" id="first_day_month" value="{{old('first_day_month', $card->first_day_month)}}" min="1" max="28" required>
                     </div>
-                    <div class="col_25">
+                    <div class="col_25 md_col_50 sm_col">
                         <label for="days_to_expiration" id="days_to_expiration_label">{{__('Days to expiration')}}</label>
                         <input type="number" form="form-edit" name="days_to_expiration" id="days_to_expiration" value="{{old('days_to_expiration', $card->days_to_expiration)}}" min="1" max="20" required>
                     </div>
                 </div>
             @else
                 <div class="flex-container">
-                    <div class="col_25">
+                    <div class="col_25 md_col_50 sm_col">
                         <label for="first_day_month" id="first_day_month_label">{{__('First day of month')}}</label>
                         <div class="flex-container">
                             <label><strong>{{$card->first_day_month}}</strong></label>
                         </div>
                     </div>
-                    <div class="col_25">
+                    <div class="col_25 md_col_50 sm_col">
                         <label for="days_to_expiration" id="days_to_expiration_label">{{__('Days to expiration')}}</label>
                         <div class="flex-container">
                             <label><strong>{{$card->days_to_expiration}}</strong></label>
@@ -59,7 +59,7 @@
             @endif
         @else
             <div class="flex-container">
-                <div class="col_25">
+                <div class="col">
                     <label for="card_type">{{__('Type')}}:</label>
                     <div class="flex-container">
                         <label><strong>{{__('Debit')}}</strong></label>
@@ -69,7 +69,7 @@
         @endif
         @if($card->active)
             <div class="flex-container">
-                <div class="col_25">
+                <div class="col">
                     <label>{{__('Status')}}:</label>
                     <div class="radio-container">
                         <label class="radio-option"><input type="radio" form="form-edit" name="active" value="1" checked>{{__('Active')}}</label>

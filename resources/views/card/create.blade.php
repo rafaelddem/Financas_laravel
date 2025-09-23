@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="flex-container">
-            <div class="col_25">
+            <div class="col">
                 <label for="card_type">{{__('Type')}}:</label>
                 <div class="radio-container">
                     <label class="radio-option"><input type="radio" form="form-insert" name="card_type" id="card_type_credit" value="credit" checked>{{ __('Credit') }}</label>
@@ -27,18 +27,18 @@
             </div>
         </div>
         <div class="flex-container">
-            <div class="col_25">
+            <div class="col_25 md_col_50 sm_col">
                 <label for="first_day_month" id="first_day_month_label">{{__('First day of month')}}</label>
                 <input type="number" form="form-insert" name="first_day_month" id="first_day_month" value="{{old('first_day_month', 1)}}" min="1" max="28" required>
             </div>
-            <div class="col_25">
+            <div class="col_25 md_col_50 sm_col">
                 <label for="days_to_expiration" id="days_to_expiration_label">{{__('Days to expiration')}}</label>
                 <input type="number" form="form-insert" name="days_to_expiration" id="days_to_expiration" value="{{old('days_to_expiration', 10)}}" min="1" max="20" required>
             </div>
         </div>
         <div class="flex-container">
-            <div class="col_25">
-                <label>{{__('Status')}}:</label>
+            <div class="col">
+                <label for="active">{{__('Status')}}:</label>
                 <div class="radio-container">
                     <label class="radio-option"><input type="radio" form="form-insert" name="active" value="1" checked>{{__('Active')}}</label>
                     <label class="radio-option"><input type="radio" form="form-insert" name="active" value="0">{{__('Inactive')}}</label>
