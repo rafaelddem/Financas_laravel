@@ -5,7 +5,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\TransactionTypeController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,11 +55,11 @@ Route::group(['prefix' => 'metodo-de-pagamento', 'as' => 'payment-method.'], fun
     Route::delete('/', [PaymentMethodController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['prefix' => 'tipo-de-transacao', 'as' => 'transaction-type.'], function () {
-    Route::get('/', [TransactionTypeController::class, 'index'])->name('list');
-    Route::get('/novo', [TransactionTypeController::class, 'create'])->name('create');
-    Route::post('/', [TransactionTypeController::class, 'store'])->name('store');
-    Route::get('/{id}', [TransactionTypeController::class, 'edit'])->name('edit');
-    Route::put('/', [TransactionTypeController::class, 'update'])->name('update');
-    Route::delete('/', [TransactionTypeController::class, 'destroy'])->name('destroy');
+Route::group(['prefix' => 'categoria', 'as' => 'category.'], function () {
+    Route::get('/', [CategoryController::class, 'index'])->name('list');
+    Route::get('/novo', [CategoryController::class, 'create'])->name('create');
+    Route::post('/', [CategoryController::class, 'store'])->name('store');
+    Route::get('/{id}', [CategoryController::class, 'edit'])->name('edit');
+    Route::put('/', [CategoryController::class, 'update'])->name('update');
+    Route::delete('/', [CategoryController::class, 'destroy'])->name('destroy');
 });

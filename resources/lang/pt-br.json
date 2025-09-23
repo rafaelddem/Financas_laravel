@@ -32,6 +32,8 @@
     "Filter": "Filtrar",
     "Filters": "Filtros",
 
+    "Default Placeholder": "Digite aqui...",
+
     "Name": "Nome",
     "Type": "Tipo",
 
@@ -69,12 +71,12 @@
     "Credit": "Crédito (cartão)",
     "It is not allowed to remove a payment method that is linked to a transaction.": "Não é permitido remover um Método de Pagamento que esteja vinculado a uma Transação.",
 
-    "Transaction Type": "Tipo de Transação",
+    "Category": "Categoria",
     "Relevance": "Relevância",
     "Banal": "Banal",
     "Relevant": "Relevante",
     "Indispensable": "Indispensavel",
-    "It is not allowed to remove a transaction type that is linked to a transaction.": "Não é permitido remover um Tipo de Transação que esteja vinculado a uma Transação.",
+    "It is not allowed to remove a Category that is linked to a transaction.": "Não é permitido remover uma Categoria que esteja vinculado a uma Transação.",
 
     "Card": "Cartão",
     "New card": "Novo cartão",

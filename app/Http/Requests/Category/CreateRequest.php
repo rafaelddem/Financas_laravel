@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\TransactionType;
+namespace App\Http\Requests\Category;
 
 use App\Enums\Relevance;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,9 +17,10 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:transaction_types|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
+            'name' => 'required|unique:categories|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
             'relevance' => 'required|in:' . implode(',', Relevance::values()),
             'active' => 'required|boolean',
+            'description' => 'max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-., ]+$"',
         ];
     }
 
@@ -34,6 +35,8 @@ class CreateRequest extends FormRequest
             'relevance.in' => __('validation.in', ['attribute' => 'Relevância']),
             'active.required' => __('validation.required', ['attribute' => 'Ativo']),
             'active.boolean' => __('validation.boolean', ['attribute' => 'Ativo']),
+            'description.max' => __('validation.max', ['attribute' => __('Category')]),
+            'description.regex' => __('The :attribute field must contain only letters, numbers, periods, dashes and spaces.', ['attribute' => __('Category')]),
         ];
     }
 }

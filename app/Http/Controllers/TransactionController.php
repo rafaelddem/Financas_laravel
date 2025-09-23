@@ -6,21 +6,21 @@ use App\Exceptions\BaseException;
 use App\Http\Requests\Transaction\CreateRequest;
 use App\Services\PaymentMethodService;
 use App\Services\TransactionService;
-use App\Services\TransactionTypeService;
+use App\Services\CategoryService;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
     private TransactionService $service;
-    private TransactionTypeService $transactionTypeService;
+    private CategoryService $categoryService;
     private PaymentMethodService $paymentMethodService;
     private WalletService $walletService;
 
     public function __construct()
     {
         $this->service = app(TransactionService::class);
-        $this->transactionTypeService = app(TransactionTypeService::class);
+        $this->categoryService = app(CategoryService::class);
         $this->paymentMethodService = app(PaymentMethodService::class);
         $this->walletService = app(WalletService::class);
     }
@@ -43,17 +43,17 @@ class TransactionController extends Controller
 
     public function create(Request $request)
     {
-        $transactionTypes = [];
+        $categories = [];
         $paymentMethods = [];
         $sourceWallets = [];
         $destinationWallets = [];
 
         try {
-            $transactionTypes = $this->transactionTypeService->list();
+            $categories = $this->categoryService->list();
             $paymentMethods = $this->paymentMethodService->list();
             $sourceWallets = $destinationWallets = $this->walletService->list();
 
-            return view('transaction.create', compact('transactionTypes', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
+            return view('transaction.create', compact('categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

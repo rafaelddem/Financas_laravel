@@ -6,7 +6,7 @@ use App\Enums\Relevance;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TransactionTypeSeeder extends Seeder
+class CategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class TransactionTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('transaction_types')->insert([
+        DB::table('categories')->insert([
             [
                 'id' => 1,
                 'name' => 'Entradas diversas',

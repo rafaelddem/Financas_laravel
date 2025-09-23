@@ -3,13 +3,13 @@
 namespace App\Repositories;
 
 use App\Exceptions\RepositoryException;
-use App\Models\TransactionType;
+use App\Models\Category;
 
-class TransactionTypeRepository extends BaseRepository
+class CategoryRepository extends BaseRepository
 {
     public function __construct()
     {
-        parent::__construct(TransactionType::class);
+        parent::__construct(Category::class);
     }
 
     public function list(bool $onlyActive = true)
@@ -27,10 +27,10 @@ class TransactionTypeRepository extends BaseRepository
         }
     }
 
-    public function hasRelatedTransactions(int $transactionTypeId): bool
+    public function hasRelatedTransactions(int $categoryId): bool
     {
         try {
-            return $this->model->with('transactions')->find($transactionTypeId)->transactions->count();
+            return $this->model->with('transactions')->find($categoryId)->transactions->count();
         } catch (\Throwable $th) {
             throw new RepositoryException();
         }

@@ -28,10 +28,10 @@ use App\Enums\Relevance;
                 <input type="date" form="form-insert" name="processing_date" id="processing_date" value="{{old('processing_date')}}" placeholder="{{__('Processing Date')}}" required>
             </div>
             <div class="col_33">
-                <label for="transaction_type_id">{{__('Transaction Type')}}:</label>
-                <select name="transaction_type_id" form="form-insert" id="transaction_type_id">
-                    @foreach ($transactionTypes as $presentation)
-                        <option value='{{ $presentation->id }}' data-relevance="{{ $presentation->relevance }}" {{ old('transaction_type_id') == $presentation->id ? 'selected' : '' }}>{{ $presentation->name }}</option>
+                <label for="category_id">{{__('Category')}}:</label>
+                <select name="category_id" form="form-insert" id="category_id">
+                    @foreach ($categories as $presentation)
+                        <option value='{{ $presentation->id }}' data-relevance="{{ $presentation->relevance }}" {{ old('category_id') == $presentation->id ? 'selected' : '' }}>{{ $presentation->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -143,8 +143,8 @@ use App\Enums\Relevance;
 
         <div class="flex-container">
             <div class="col">
-                <label for="gross_value">{{__('Description')}}:</label>
-                <textarea class="textarea" rows="3" placeholder="Digite aqui..."></textarea>
+                <label for="description">{{__('Description')}}:</label>
+                <textarea form="form-insert" class="textarea" name="description" rows="3" placeholder="{{__('Default Placeholder')}}"></textarea>
             </div>
         </div>
         <div class="flex-container">

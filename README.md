@@ -19,7 +19,7 @@ Obs.: Optei por utilizar os nomes de entidades, atributos e funções em inglês
 
 #### 1.1.1.1. Descrição
 
-A entidade *Pessoa* (internamente ao sistema, identificada como "owner") é a entidade que representa cada pessoa (física ou jurídica) a qual será atribuída a propriedade de determinadas transações, assim como dos valores dessas transações. Por exemplo, caso o usuário de nome "Rafael" opte por cadastrar uma transação de depósito referente a um pagamento dele para outra pessoa, de nome "Marcos", este usuário deverá possuir dois cadastros de *Pessoa*, um para ele próprio (o qual será criado junto a conta no sistema) e outro para o destinatário do valor. Dessa forma, o sistema saberá que o valor foi transferido de uma pessoa para outra, e poderá calcular os novos valores após a transação.
+A entidade *Pessoa* (internamente ao sistema identificada como "owner") é a entidade que representa cada pessoa (física ou jurídica) a qual será atribuída a propriedade de determinadas transações, assim como dos valores dessas transações. Por exemplo, caso o usuário de nome "Rafael" opte por cadastrar uma transação de depósito referente a um pagamento dele para outra pessoa, de nome "Marcos", este usuário deverá possuir dois cadastros de *Pessoa*, um para ele próprio (o qual será criado junto a conta no sistema) e outro para o destinatário do valor. Dessa forma, o sistema saberá que o valor foi transferido de uma pessoa para outra, e poderá calcular os novos valores após a transação.
 
 
 #### 1.1.1.2. Atributos da entidade
@@ -96,7 +96,7 @@ Na implantação do sistema, os seguintes registros devem ser cadastrados nesta 
 
 #### 1.1.2.1. Descrição
 
-A entidade *Carteira* (internamente ao sistema, identificada como "wallet") é a entidade que representa os locais onde os valores estão armazenados, como contas em bancos ou mesmo a carteira pessoal do usuário. Será possível que uma *Pessoa* tenha mais de uma *Carteira*. Por exemplo, o usuário "Rafael" poderá cadastrar três *Carteira*s, de nomes "Conta Corrente", "Carteira" e "Poupança", e dessa forma ele poderá separar os valores que estão em sua conta corrente dos valores que estão em sua poupança e do dinheiro que ele possui em sua carteira pessoal.
+A entidade *Carteira* (internamente ao sistema identificada como "wallet") é a entidade que representa os locais onde os valores estão armazenados, como contas em bancos ou mesmo a carteira pessoal do usuário. Será possível que uma *Pessoa* tenha mais de uma *Carteira*. Por exemplo, o usuário "Rafael" poderá cadastrar três *Carteira*s, de nomes "Conta Corrente", "Carteira" e "Poupança", e dessa forma ele poderá separar os valores que estão em sua conta corrente dos valores que estão em sua poupança e do dinheiro que ele possui em sua carteira pessoal.
 
 
 #### 1.1.2.2. Atributos da entidade
@@ -217,7 +217,7 @@ Na implantação do sistema, os seguintes registros devem ser cadastrados nesta 
 
 #### 1.1.3.1. Descrição
 
-A entidade *Cartão* (internamente ao sistema, identificada como "card") é a entidade que representa os cartões de pagamento. Será possível criar um registro *Cartão* do tipo crédito ou débito, mas não será permitido um que possua as duas funções. O *Cartão* sempre será relacionada a uma entidade *Carteira*, de onde os valores movimentados pelo *Cartão* serão subtraídos. Ex.: Considere um *Cartão* de nome "NuBank débito", e que está relacionado a *Carteira* "NuBank". Considere também uma compra feita de R$ 10,00, e que foi paga com esse *Cartão*. Nesse caso, a *Carteira* que será relacionada à venda, e portanto, de onde será subtraído o valor da transação, será a de nome "NuBank".
+A entidade *Cartão* (internamente ao sistema identificada como "card") é a entidade que representa os cartões de pagamento. Será possível criar um registro *Cartão* do tipo crédito ou débito, mas não será permitido um que possua as duas funções. O *Cartão* sempre será relacionada a uma entidade *Carteira*, de onde os valores movimentados pelo *Cartão* serão subtraídos. Ex.: Considere um *Cartão* de nome "NuBank débito", e que está relacionado a *Carteira* "NuBank". Considere também uma compra feita de R$ 10,00, e que foi paga com esse *Cartão*. Nesse caso, a *Carteira* que será relacionada à venda, e portanto, de onde será subtraído o valor da transação, será a de nome "NuBank".
 
 
 #### 1.1.3.2. Atributos da entidade
@@ -320,7 +320,7 @@ Nome da tabela: cards
 
 #### 1.1.4.1. Descrição
 
-A entidade *Fatura* (internamente ao sistema, identificada como "invoice") é a entidade que representa a fatura dos cartões de crédito. Ela mantém os períodos de início e fim de cada fatura, assim como a data de vencimento e o seu valor.
+A entidade *Fatura* (internamente ao sistema identificada como "invoice") é a entidade que representa a fatura dos cartões de crédito. Ela mantém os períodos de início e fim de cada fatura, assim como a data de vencimento e o seu valor.
 
 
 #### 1.1.4.2. Atributos da entidade
@@ -504,7 +504,7 @@ Nesse caso, a primeira *Parcela* será mantida com o mesmo valor, pois se trata 
 
 #### 1.1.5.1. Descrição
 
-A entidade *Método de Pagamento* (internamente ao sistema, identificada como "payment method") é a entidade que representa os métodos de pagamento utilizados em cada transação, como por exemplo "Crédito", "Débito" e "Transferência".
+A entidade *Método de Pagamento* (internamente ao sistema identificada como "payment method") é a entidade que representa os métodos de pagamento utilizados em cada transação, como por exemplo "Crédito", "Débito" e "Transferência".
 
 
 #### 1.1.5.2. Atributos da entidade
@@ -585,12 +585,12 @@ Na implantação do sistema, os seguintes registros devem ser cadastrados nesta 
 > Obs. 2: O valor do atributo *active* pode ser **1** ou **true**, dependendo do banco de dados utilizado.
 
 
-#### 1.1.6. Tipo de Transação (Transaction Type)
+#### 1.1.6. Categoria (Category)
 
 
 #### 1.1.6.1. Descrição
 
-A entidade *Tipo de Transação* (internamente ao sistema, identificada como "transaction type") é a entidade que representa os tipos de transação. Será utilizado como forma de organizar as entidades *Transação* em grupos. Possíveis registros seriam "vendas", "compras", "empréstimos", "mensalidade", etc...
+A entidade *Categoria* (internamente ao sistema identificada como "category") é a entidade que representa os tipos de transação. Será utilizado como forma de organizar as entidades *Transação* em grupos. Possíveis registros seriam "vendas", "compras", "empréstimos", "mensalidade", etc...
 
 
 #### 1.1.6.2. Atributos da entidade
@@ -616,7 +616,7 @@ A entidade *Tipo de Transação* (internamente ao sistema, identificada como "tr
 
 #### 1.1.6.3. Banco de dados
 
-Nome da tabela: transaction_type.
+Nome da tabela: categories.
 
 - id: Identificador da entidade. Terá as seguintes características:
     - tipo: int;
@@ -643,24 +643,24 @@ Nome da tabela: transaction_type.
 
 #### 1.1.6.4. Características da entidade
 
-- Característica #1: Não é permitido que duas entidades *Tipo de Transação* possuam o mesmo nome;
+- Característica #1: Não é permitido que duas entidades *Categoria* possuam o mesmo nome;
 
 - Característica #2: Os valores aceitos para o campo 'relevância' são: 'banal' para 'Banal', 'relevant' para 'Relevante' ou 'indispensable' para 'Indispensável';
 
 - Característica #3: Não será permitida a alteração do atributo 'name';
 
-- Característica #4: Caso seja necessário a exclusão de algum *Tipo de Transação*, ela somente será permitida se o registro em questão não tiver referência em nenhuma *Transação*. Se for o caso, a *Transação* terá que ter seu *Tipo de Transação* alterado para outro registro ativo para liberar a exclusão do *Tipo de Transação* antigo.
+- Característica #4: Caso seja necessário a exclusão de algum *Categoria*, ela somente será permitida se o registro em questão não tiver referência em nenhuma *Transação*. Se for o caso, a *Transação* terá que ter seu *Categoria* alterado para outro registro ativo para liberar a exclusão do *Categoria* antigo.
 
 
 #### 1.1.6.5. Valores pré cadastrados
 
-Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (transaction_type):
+Na implantação do sistema, os seguintes registros devem ser cadastrados nesta tabela (categories):
 
 | Registro | id  | name                         | relevance | active | Objetivo                                                                                                                                                                  |
 | :------: | :-: | :--------------------------- | :-------: | :----: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| #1       | 1   | Entradas diversas            | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de entrada, (considerando o usuário como recebedor), como recebimento de salário e empréstimos                                                                                                                                      |
-| #2       | 2   | Saídas diversas              | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de saída, (considerando o usuário como quem paga), como pagamento de contas e devolução de empréstimos                                                                                                                            |
-| #3       | 3   | Movimentação entre carteiras | banal     | true   | Tipo de Transação padrão para movimentações que transferem valores de uma carteira para outra, de um mesmo dono                                                                                                                                                                      |
+| #1       | 1   | Entradas diversas            | banal     | true   | Categoria padrão para movimentações que transferem valores de entrada, (considerando o usuário como recebedor), como recebimento de salário e empréstimos                                                                                                                                      |
+| #2       | 2   | Saídas diversas              | banal     | true   | Categoria padrão para movimentações que transferem valores de saída, (considerando o usuário como quem paga), como pagamento de contas e devolução de empréstimos                                                                                                                            |
+| #3       | 3   | Movimentação entre carteiras | banal     | true   | Categoria padrão para movimentações que transferem valores de uma carteira para outra, de um mesmo dono                                                                                                                                                                      |
 
 > Obs. 1: Como o atributo *id* é auto incrementado, cuidar para que na inserção dos valores o valor aqui definido seja respeitado, além de atualizar o auto incremento para a partir do maior 'id'.
 
@@ -672,7 +672,7 @@ Na implantação do sistema, os seguintes registros devem ser cadastrados nesta 
 
 #### 1.1.7.1. Descrição
 
-A entidade *Transação* (internamente ao sistema, identificada como "transaction") é utilizada (junto com a entidade Parcela, item 1.1.8) para representar as diversas transações salvas no sistema.
+A entidade *Transação* (internamente ao sistema identificada como "transaction") é utilizada (junto com a entidade Parcela, item 1.1.8) para representar as diversas transações salvas no sistema.
 
 
 #### 1.1.7.2. Atributos da entidade
@@ -695,7 +695,7 @@ A entidade *Transação* (internamente ao sistema, identificada como "transactio
     - tipo de dado:         Data;
     - formato:              yyyy-mm-dd;
     - alteração:            Permitida em algumas circunstâncias (ver características #1, #2 e #3).
-- tipo da transação (transaction_type_id):
+- tipo da transação (category_id):
     - objetivo:             Manter o código de identificação do *Tipo da Transação*;
     - obrigatório:          Sim;
     - tipo dado:            Numérico;
@@ -789,7 +789,7 @@ Nome da tabela: transactions.
 - processing_date: Referente ao atributo "data de processamento". Terá as seguintes características:
     - tipo: date;
     - não permite valor nulo.
-- transaction_type_id: Referente ao atributo "tipo da transação". Terá as seguintes características:
+- category_id: Referente ao atributo "tipo da transação". Terá as seguintes características:
     - tipo: int;
     - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
     - não permite valor nulo.
@@ -835,7 +835,7 @@ Nome da tabela: transactions.
 - chave primária: 
     - id
 - chave estrangeira: 
-    - transaction_type_id faz referência ao atributo "id" da tabela "transaction_type"
+    - category_id faz referência ao atributo "id" da tabela "categories"
     - payment_method_id faz referência ao atributo "id" da tabela "payment_method"
     - card_id faz referência ao atributo "id" da tabela "card"
     - source_wallet_id faz referência ao atributo "id" da tabela "wallet"
@@ -856,7 +856,7 @@ Nome da tabela: transactions.
 
 - Característica #6: O *valor líquido* da *Transação* não será informado pelo usuário, ao invés disso, será calculado sempre que for solicitado através do seguinte cálculo: *valor líquido* = *valor bruto* - *valor de desconto* - *juros* - *arredondamento*. O *valor líquido* nunca deverá ser maior que o *valor bruto*, se assim ocorrer, alguns dos valores (*valor de desconto*, *juros* e *arredondamento*) está incorreto, e deverá ser corrigido;
 
-- Característica #7: Por padrão, o valor do atributo *relevância* será igual ao valor do mesmo atributo da entidade *Tipo de Transação* selecionado, porém, esse valor pode ser alterado a qualquer momento.
+- Característica #7: Por padrão, o valor do atributo *relevância* será igual ao valor do mesmo atributo da entidade *Categoria* selecionado, porém, esse valor pode ser alterado a qualquer momento.
 
 - Característica #8: Quando feita uma exclusão de uma *Transação* (rever Característica #1), sua(s) *Parcela*(s) serão excluídas também, bem como será feito o recalculo da(s) *Fatura*(s) relacionada(s);
 
@@ -894,7 +894,7 @@ Tarefa #3: Definir se o valor das *Parcela*s confere com o valor da *Transação
 
 #### 1.1.8.1. Descrição
 
-A entidade *Parcela* (internamente ao sistema, identificada como "installment") é utilizada (junto com a entidade Transação, item 1.1.7) para representar as diversas transações salvas no sistema. Mas especificamente seus valores e data de vencimento (quando necessário) e pagamento. Quando a transação original for do tipo "Crédito", será possível que ela possua mais de uma *Parcela*, e portanto, mas de um registro relacionado a esta Transação. Nas demais situações (vendas no débito, transferências, movimentações...) existirá somente um registro por transação. Na prática, vendas a vista não possuem parcelas, no entanto, por uma questão de organização e padronização, sempre que se falar da entidade que mantém os valores de uma *Transação*, será utilizado o nome "Parcela", independente se o pagamento for à vista, débito ou crédito.
+A entidade *Parcela* (internamente ao sistema identificada como "installment") é utilizada (junto com a entidade Transação, item 1.1.7) para representar as diversas transações salvas no sistema. Mas especificamente seus valores e data de vencimento (quando necessário) e pagamento. Quando a transação original for do tipo "Crédito", será possível que ela possua mais de uma *Parcela*, e portanto, mas de um registro relacionado a esta Transação. Nas demais situações (vendas no débito, transferências, movimentações...) existirá somente um registro por transação. Na prática, vendas a vista não possuem parcelas, no entanto, por uma questão de organização e padronização, sempre que se falar da entidade que mantém os valores de uma *Transação*, será utilizado o nome "Parcela", independente se o pagamento for à vista, débito ou crédito.
 
 
 #### 1.1.8.2. Atributos da entidade
@@ -1037,11 +1037,14 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 Possíveis alterações no projeto:
 
-Trocar Tipo de Transação por Categoria
+Na Categoria, ver a necessidade de um campo 'descrição' e um campo 'nome abreviado'.
 
-No tipo de transações, ver a necessidade de um campo 'descrição' e um campo 'nome abreviado'.
+Na Categoria, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
 
-No tipo de transações, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
+
+
+
+
 
 Bloqueei a alterações dos nomes por que creio que isso cria a possibilidade de que o usuário fique trocando o nome de uma determinada entidade, e depois de algum tempo o histórico de movimentos da entidade tenha valores misturados. Por exemplo: Nomear um Cartão como "Banco A" e depois renomear para "Banco B". Tal alteração faria com que os movimentos relativos ao primeiro cartão "se misturassem" com os movimentos do segundo, já que para o sistema, os dois cartões sempre foram o mesmo cartão, apenas com nomes diferentes. No entanto, isso cria um cenário onde o usuário não pode corrigir erros de digitação, depois de a entidade salva, sendo necessário (para a correção) a exclusão e recriação da entidade. Uma alternativa de correção seria criar uma tabela adicional, com o registro dos nomes das entidades, antigos e o atual. Nesse caso, a tabela não teria o registro do nome da entidade, mas sim, uma referência a um registro na tabela "Nomes".
 

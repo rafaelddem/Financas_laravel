@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class TransactionType extends Model
+class Category extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,8 @@ class TransactionType extends Model
     protected $fillable = [
         'name', 
         'relevance', 
-        'active'
+        'active', 
+        'description'
     ];
 
     protected $casts = [

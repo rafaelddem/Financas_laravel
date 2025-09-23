@@ -27,7 +27,7 @@
             <ul class="submenu entries">
                 <li><a href="{{route('owner.list')}}">{{__('Owner')}}</a></li>
                 <li><a href="{{route('payment-method.list')}}">{{__('Payment Method')}}</a></li>
-                <li><a href="{{route('transaction-type.list')}}">{{__('Transaction Type')}}</a></li>
+                <li><a href="{{route('category.list')}}">{{__('Category')}}</a></li>
             </ul>
         </ul>
     </nav>

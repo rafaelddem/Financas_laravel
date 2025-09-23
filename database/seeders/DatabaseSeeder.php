@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             OwnerSeeder::class,
             WalletSeeder::class,
             PaymentMethodSeeder::class,
-            TransactionTypeSeeder::class,
+            CategorySeeder::class,
         ]);
     }
 }

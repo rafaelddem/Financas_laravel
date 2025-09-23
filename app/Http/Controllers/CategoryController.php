@@ -3,26 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\BaseException;
-use App\Http\Requests\TransactionType\CreateRequest;
-use App\Http\Requests\TransactionType\UpdateRequest;
-use App\Services\TransactionTypeService;
+use App\Http\Requests\Category\CreateRequest;
+use App\Http\Requests\Category\UpdateRequest;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
-class TransactionTypeController extends Controller
+class CategoryController extends Controller
 {
-    private TransactionTypeService $service;
+    private CategoryService $service;
 
     public function __construct()
     {
-        $this->service = app(TransactionTypeService::class);
+        $this->service = app(CategoryService::class);
     }
 
     public function index(Request $request)
     {
-        $transactionTypes = [];
+        $categories = [];
 
         try {
-            $transactionTypes = $this->service->list();
+            $categories = $this->service->list(false);
             $message = $request->get('message');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
@@ -30,12 +30,12 @@ class TransactionTypeController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('transaction-type.index', compact('transactionTypes', 'message'));
+        return view('category.index', compact('categories', 'message'));
     }
 
     public function create()
     {
-        return view('transaction-type.create');
+        return view('category.create');
     }
 
     public function store(CreateRequest $request)
@@ -44,7 +44,7 @@ class TransactionTypeController extends Controller
             $this->service->create($request->all());
 
             $message = __('Data created successfully.');
-            return redirect(route('transaction-type.list', compact('message')));
+            return redirect(route('category.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -59,16 +59,16 @@ class TransactionTypeController extends Controller
         $message = '';
 
         try {
-            $transactionType = $this->service->find($id);
+            $category = $this->service->find($id);
 
-            return view('transaction-type.edit', compact('transactionType'));
+            return view('category.edit', compact('category'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('transaction-type.list'))->withErrors(compact('message'));
+        return redirect(route('category.list'))->withErrors(compact('message'));
     }
 
     public function update(UpdateRequest $request)
@@ -76,12 +76,12 @@ class TransactionTypeController extends Controller
         $message = '';
 
         try {
-            $transactionType = $this->service->update($request->get('id'), $request->only([
-                'relevance', 'active'
+            $category = $this->service->update($request->get('id'), $request->only([
+                'relevance', 'active', 'description'
             ]));
 
             $message = __('Data updated successfully.');
-            return redirect(route('transaction-type.list', compact('message')));
+            return redirect(route('category.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -97,14 +97,14 @@ class TransactionTypeController extends Controller
             $this->service->delete($request->get('id'));
 
             $message = __('Data deleted successfully.');
-            return redirect(route('transaction-type.list', compact('message')));
+            return redirect(route('category.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('transaction-type.list'))->withErrors(compact('message'));
+        return redirect(route('category.list'))->withErrors(compact('message'));
     }
 
 }

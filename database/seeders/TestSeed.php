@@ -11,7 +11,7 @@ use App\Models\Invoice;
 use App\Models\Owner;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
-use App\Models\TransactionType;
+use App\Models\Category;
 use App\Models\Wallet;
 use App\Services\CardService;
 use Carbon\Carbon;
@@ -26,26 +26,26 @@ class TestSeed extends Seeder
      */
     public function run(): void
     {
-        /* Transaction Types */
+        /* Categories */
         // case banal = "Banal";
         // case relevant = "Relevante";
         // case indispensable = "Indispensavel";
-        $transactionTypeGenericIn = TransactionType::find(1);
-        $transactionTypeGenericOut = TransactionType::find(2);
-        $transactionTypeGenericTransf = TransactionType::find(3);
-        $transactionTypeStudies = TransactionType::create([
+        $categoryGenericIn = Category::find(1);
+        $categoryGenericOut = Category::find(2);
+        $categoryGenericTransf = Category::find(3);
+        $categoryStudies = Category::create([
             'name' => 'Estudos',
             'relevance' => Relevance::Relevant->value,
         ]);
-        $transactionTypeInternet = TransactionType::create([
+        $categoryInternet = Category::create([
             'name' => 'Internet',
             'relevance' => Relevance::Indispensable->value,
         ]);
-        $transactionTypeSalary = TransactionType::create([
+        $categorySalary = Category::create([
             'name' => 'Salário',
             'relevance' => Relevance::Indispensable->value,
         ]);
-        $transactionTypeCar = TransactionType::create([
+        $categoryCar = Category::create([
             'name' => 'Carro',
             'relevance' => Relevance::Indispensable->value,
         ]);
@@ -187,7 +187,7 @@ class TestSeed extends Seeder
             'title' => 'Dinheiro inicial',
             'transaction_date' => $twoMonthsAgo,
             'processing_date' => $twoMonthsAgo,
-            'transaction_type_id' => $transactionTypeGenericIn->id,
+            'category_id' => $categoryGenericIn->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodNotes->id,
             'source_wallet_id' => $walletSystem->id,
@@ -203,7 +203,7 @@ class TestSeed extends Seeder
             'title' => 'Salário #1',
             'transaction_date' => $twoMonthsAgo,
             'processing_date' => $twoMonthsAgo,
-            'transaction_type_id' => $transactionTypeSalary->id,
+            'category_id' => $categorySalary->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSystem->id,
@@ -219,7 +219,7 @@ class TestSeed extends Seeder
             'title' => 'Internet',
             'transaction_date' => $twoMonthsAgo->clone()->addDays(4),
             'processing_date' => $twoMonthsAgo->clone()->addDays(4),
-            'transaction_type_id' => $transactionTypeInternet->id,
+            'category_id' => $categoryInternet->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSantander->id,
@@ -235,7 +235,7 @@ class TestSeed extends Seeder
             'title' => 'Gasolina',
             'transaction_date' => $twoMonthsAgo->clone()->addDays(4),
             'processing_date' => $twoMonthsAgo->clone()->addDays(4),
-            'transaction_type_id' => $transactionTypeCar->id,
+            'category_id' => $categoryCar->id,
             'relevance' => Relevance::Relevant->value,
             'payment_method_id' => $paymentMethodNotes->id,
             'source_wallet_id' => $walletMeDefault->id,
@@ -251,7 +251,7 @@ class TestSeed extends Seeder
             'title' => 'Gasolina',
             'transaction_date' => $twoMonthsAgo->clone()->addDays(23),
             'processing_date' => $twoMonthsAgo->clone()->addDays(23),
-            'transaction_type_id' => $transactionTypeCar->id,
+            'category_id' => $categoryCar->id,
             'relevance' => Relevance::Relevant->value,
             'payment_method_id' => $paymentMethodNotes->id,
             'source_wallet_id' => $walletMeDefault->id,
@@ -273,7 +273,7 @@ class TestSeed extends Seeder
                 'title' => 'Netflix',
                 'transaction_date' => $twoMonthsAgo->clone()->addDays(4),
                 'processing_date' => $twoMonthsAgo->clone()->addDays(4),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Relevant->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -303,7 +303,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $twoMonthsAgo->clone()->addDays(6),
                 'processing_date' => $twoMonthsAgo->clone()->addDays(6),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -333,7 +333,7 @@ class TestSeed extends Seeder
                 'title' => 'Cafeteria',
                 'transaction_date' => $twoMonthsAgo->clone()->addDays(8),
                 'processing_date' => $twoMonthsAgo->clone()->addDays(8),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -363,7 +363,7 @@ class TestSeed extends Seeder
                 'title' => 'Pizzaria',
                 'transaction_date' => $twoMonthsAgo->clone()->addDays(11),
                 'processing_date' => $twoMonthsAgo->clone()->addDays(12),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -393,7 +393,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $twoMonthsAgo->clone()->addDays(18),
                 'processing_date' => $twoMonthsAgo->clone()->addDays(18),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -432,7 +432,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $twoMonthsAgo->clone()->addDays(20),
                 'processing_date' => $twoMonthsAgo->clone()->addDays(20),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -471,7 +471,7 @@ class TestSeed extends Seeder
             'title' => 'Boleto Crédito + Débito',
             'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
             'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
-            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'category_id' => $categoryGenericTransf->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSantander->id,
@@ -487,7 +487,7 @@ class TestSeed extends Seeder
             'title' => 'Pagamento Boleto Crédito',
             'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
             'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
-            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'category_id' => $categoryGenericTransf->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletNuBank->id,
@@ -508,7 +508,7 @@ class TestSeed extends Seeder
                 'title' => 'Ingresso show',
                 'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
                 'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodPix->id,
                 'source_wallet_id' => $walletNuBank->id,
@@ -528,7 +528,7 @@ class TestSeed extends Seeder
             'title' => 'Salário #2',
             'transaction_date' => $oneMonthAgo,
             'processing_date' => $oneMonthAgo,
-            'transaction_type_id' => $transactionTypeSalary->id,
+            'category_id' => $categorySalary->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSystem->id,
@@ -544,7 +544,7 @@ class TestSeed extends Seeder
             'title' => 'Internet',
             'transaction_date' => $oneMonthAgo->clone()->addDays(4),
             'processing_date' => $oneMonthAgo->clone()->addDays(4),
-            'transaction_type_id' => $transactionTypeInternet->id,
+            'category_id' => $categoryInternet->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSantander->id,
@@ -560,7 +560,7 @@ class TestSeed extends Seeder
             'title' => 'Gasolina',
             'transaction_date' => $oneMonthAgo->clone()->addDays(4),
             'processing_date' => $oneMonthAgo->clone()->addDays(4),
-            'transaction_type_id' => $transactionTypeCar->id,
+            'category_id' => $categoryCar->id,
             'relevance' => Relevance::Relevant->value,
             'payment_method_id' => $paymentMethodNotes->id,
             'source_wallet_id' => $walletMeDefault->id,
@@ -576,7 +576,7 @@ class TestSeed extends Seeder
             'title' => 'Gasolina',
             'transaction_date' => $oneMonthAgo->clone()->addDays(23),
             'processing_date' => $oneMonthAgo->clone()->addDays(23),
-            'transaction_type_id' => $transactionTypeCar->id,
+            'category_id' => $categoryCar->id,
             'relevance' => Relevance::Relevant->value,
             'payment_method_id' => $paymentMethodNotes->id,
             'source_wallet_id' => $walletMeDefault->id,
@@ -598,7 +598,7 @@ class TestSeed extends Seeder
                 'title' => 'Netflix',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(4),
                 'processing_date' => $oneMonthAgo->clone()->addDays(4),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Relevant->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -627,7 +627,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(6),
                 'processing_date' => $oneMonthAgo->clone()->addDays(6),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -656,7 +656,7 @@ class TestSeed extends Seeder
                 'title' => 'Cafeteria',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(8),
                 'processing_date' => $oneMonthAgo->clone()->addDays(8),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -685,7 +685,7 @@ class TestSeed extends Seeder
                 'title' => 'Tênis',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(8),
                 'processing_date' => $oneMonthAgo->clone()->addDays(8),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -741,7 +741,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(15),
                 'processing_date' => $oneMonthAgo->clone()->addDays(15),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -770,7 +770,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(20),
                 'processing_date' => $oneMonthAgo->clone()->addDays(20),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -810,7 +810,7 @@ class TestSeed extends Seeder
             'title' => 'Pix Boleto Crédito',
             'transaction_date' => $invoiceOneMonthAgo->end_date->clone()->addDay(),
             'processing_date' => $invoiceOneMonthAgo->end_date->clone()->addDay(),
-            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'category_id' => $categoryGenericTransf->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSantander->id,
@@ -828,7 +828,7 @@ class TestSeed extends Seeder
             'title' => 'Pix para eventuais débitos',
             'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
             'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
-            'transaction_type_id' => $transactionTypeGenericTransf->id,
+            'category_id' => $categoryGenericTransf->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSantander->id,
@@ -847,7 +847,7 @@ class TestSeed extends Seeder
                 'title' => 'Cinema',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(10),
                 'processing_date' => $oneMonthAgo->clone()->addDays(10),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodPix->id,
                 'source_wallet_id' => $walletNuBank->id,
@@ -865,7 +865,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(15),
                 'processing_date' => $oneMonthAgo->clone()->addDays(15),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodPix->id,
                 'source_wallet_id' => $walletNuBank->id,
@@ -886,7 +886,7 @@ class TestSeed extends Seeder
             'title' => 'Salário #3',
             'transaction_date' => $startOfMonth,
             'processing_date' => $startOfMonth,
-            'transaction_type_id' => $transactionTypeSalary->id,
+            'category_id' => $categorySalary->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSystem->id,
@@ -902,7 +902,7 @@ class TestSeed extends Seeder
             'title' => 'Internet',
             'transaction_date' => $startOfMonth->clone()->addDays(4),
             'processing_date' => $startOfMonth->clone()->addDays(4),
-            'transaction_type_id' => $transactionTypeInternet->id,
+            'category_id' => $categoryInternet->id,
             'relevance' => Relevance::Indispensable->value,
             'payment_method_id' => $paymentMethodPix->id,
             'source_wallet_id' => $walletSantander->id,
@@ -918,7 +918,7 @@ class TestSeed extends Seeder
             'title' => 'Gasolina',
             'transaction_date' => $startOfMonth->clone()->addDays(4),
             'processing_date' => $startOfMonth->clone()->addDays(4),
-            'transaction_type_id' => $transactionTypeCar->id,
+            'category_id' => $categoryCar->id,
             'relevance' => Relevance::Relevant->value,
             'payment_method_id' => $paymentMethodNotes->id,
             'source_wallet_id' => $walletMeDefault->id,
@@ -940,7 +940,7 @@ class TestSeed extends Seeder
                 'title' => 'Mercado',
                 'transaction_date' => $startOfMonth->clone()->addDays(4),
                 'processing_date' => $startOfMonth->clone()->addDays(4),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -969,7 +969,7 @@ class TestSeed extends Seeder
                 'title' => 'Netflix',
                 'transaction_date' => $startOfMonth->clone()->addDays(4),
                 'processing_date' => $startOfMonth->clone()->addDays(4),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Relevant->value,
                 'payment_method_id' => $paymentMethodCredit->id,
                 'card_id' => $cardCreditNubank->id,
@@ -1017,7 +1017,7 @@ class TestSeed extends Seeder
                 'title' => 'Gasolina',
                 'transaction_date' => $startOfMonth->clone()->addDays(7),
                 'processing_date' => $startOfMonth->clone()->addDays(7),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodPix->id,
                 'source_wallet_id' => $walletNuBank->id,
@@ -1037,7 +1037,7 @@ class TestSeed extends Seeder
                 'title' => 'Gasolina',
                 'transaction_date' => Carbon::now()->addMonth(),
                 'processing_date' => Carbon::now()->addMonth(),
-                'transaction_type_id' => $transactionTypeGenericOut->id,
+                'category_id' => $categoryGenericOut->id,
                 'relevance' => Relevance::Banal->value,
                 'payment_method_id' => $paymentMethodPix->id,
                 'source_wallet_id' => $walletNuBank->id,
@@ -1072,7 +1072,7 @@ class TestSeed extends Seeder
     // private function createTransactions_notes(int $daysAgo = 25)
     // {
     //     $today = new Carbon();
-    //     $transactionTypeGenericOut = TransactionType::find(2);
+    //     $categoryGenericOut = Category::find(2);
     //     $paymentMethodNotes = PaymentMethod::find(1);
     //     $walletSystem = Wallet::find(1);
     //     $walletMeDefault = Wallet::find(2);
@@ -1085,7 +1085,7 @@ class TestSeed extends Seeder
     //             'title' => 'Transação simples #' . ($i + 1),
     //             'transaction_date' => $today->clone()->subDays($daysAgo - $i),
     //             'processing_date' => $today->clone()->subDays($daysAgo - $i),
-    //             'transaction_type_id' => $transactionTypeGenericOut->id,
+    //             'category_id' => $categoryGenericOut->id,
     //             'relevance' => Relevance::Banal->value,
     //             'payment_method_id' => $paymentMethodNotes->id,
     //             'source_wallet_id' => $walletMeDefault->id,
@@ -1101,11 +1101,11 @@ class TestSeed extends Seeder
     // private function createTransactions_debit(int $daysAgo = 25)
     // {
     //     $today = new Carbon();
-    //     $transactionTypeGenericOut = TransactionType::find(2);
+    //     $categoryGenericOut = Category::find(2);
     //     $paymentMethodDebit = PaymentMethod::where('type', PaymentType::Debit->value)->inRandomOrder()->first();
     //     $walletSystem = Wallet::find(1);
     //     // $baseDate = $today->setMonth($month)->startOfMonth()->startOfDay();
-    //     $transactionTypeGenericIn = TransactionType::find(1);
+    //     $categoryGenericIn = Category::find(1);
     //     $walletMeDefault = Wallet::find(2);
 
     //     for ($i=0; $i < $daysAgo; $i++) {
@@ -1116,7 +1116,7 @@ class TestSeed extends Seeder
     //             'title' => 'Transação simples #' . ($i + 1),
     //             'transaction_date' => $today->clone()->subDays($daysAgo - $i),
     //             'processing_date' => $today->clone()->subDays($daysAgo - $i),
-    //             'transaction_type_id' => $transactionTypeGenericOut->id,
+    //             'category_id' => $categoryGenericOut->id,
     //             'relevance' => Relevance::Banal->value,
     //             'payment_method_id' => $paymentMethodDebit->id,
     //             'source_wallet_id' => $walletMeDefault->id,
@@ -1139,7 +1139,7 @@ class TestSeed extends Seeder
     //     //         'title' => 'Netflix',
     //     //         'transaction_date' => $startOfMonth->clone()->addDays(4),
     //     //         'processing_date' => $startOfMonth->clone()->addDays(4),
-    //     //         'transaction_type_id' => $transactionTypeGenericOut->id,
+    //     //         'category_id' => $categoryGenericOut->id,
     //     //         'relevance' => Relevance::Relevant->value,
     //     //         'payment_method_id' => $paymentMethodCredit->id,
     //     //         'card_id' => $cardCreditNubank->id,

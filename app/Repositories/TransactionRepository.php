@@ -18,7 +18,7 @@ class TransactionRepository extends BaseRepository
             return $this->model
                 ->with([
                     'paymentMethod', 
-                    'transactionType', 
+                    'category', 
                     'sourceWallet', 
                     'destinationWallet', 
                 ])

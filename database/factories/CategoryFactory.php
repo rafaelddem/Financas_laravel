@@ -6,9 +6,9 @@ use App\Enums\Relevance;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TransactionType>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
  */
-class TransactionTypeFactory extends Factory
+class CategoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -21,6 +21,7 @@ class TransactionTypeFactory extends Factory
             'name' => substr($this->faker->name(), 0, 45),
             'relevance' => $this->faker->randomElement(Relevance::values()),
             'active' => true,
+            'description' => $this->faker->text(255),
         ];
     }
 }

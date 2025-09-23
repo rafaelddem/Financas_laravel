@@ -6,7 +6,7 @@ use App\Enums\Relevance;
 
 @section('page_content')
     <div class="presentation">
-        <h1>{{__('Transaction Type')}}</h1>
+        <h1>{{__('Category')}}</h1>
     </div>
     <div class="presentation">
         <div class="flex-container">
@@ -25,14 +25,16 @@ use App\Enums\Relevance;
                     <label class="radio-option"><input type="radio" form="form-insert" name="active" value="1" checked>{{__('Active')}}</label>
                     <label class="radio-option"><input type="radio" form="form-insert" name="active" value="0">{{__('Inactive')}}</label>
                 </div>
+                <label for="description">{{__('Description')}}:</label>
+                <textarea form="form-insert" class="textarea" name="description" rows="3" placeholder="{{__('Default Placeholder')}}"></textarea>
             </div>
         </div>
         <div class="flex-container">
             <div class="col">
                 <input type="submit" form="form-insert" value="{{__('Save')}}">
-                <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->route('transaction-type.list')}}'">
+                <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->route('category.list')}}'">
             </div>
         </div>
-        <form method="post" id="form-insert" action="{{route('transaction-type.store')}}"> @csrf </form>
+        <form method="post" id="form-insert" action="{{route('category.store')}}"> @csrf </form>
     </div>
 @endsection

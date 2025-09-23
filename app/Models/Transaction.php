@@ -19,7 +19,7 @@ class Transaction extends Model
         'title', 
         'transaction_date', 
         'processing_date', 
-        'transaction_type_id', 
+        'category_id', 
         'relevance', 
         'payment_method_id', 
         'source_wallet_id', 
@@ -53,9 +53,9 @@ class Transaction extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function transactionType(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(TransactionType::class);
+        return $this->belongsTo(Category::class);
     }
 
     /**

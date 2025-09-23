@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
     listCards();
 });
 
-const transaction_type = document.getElementById('transaction_type_id');
-transaction_type.addEventListener('change', function () {
-    const selectedOption = transaction_type.options[transaction_type.selectedIndex];
+const category = document.getElementById('category_id');
+category.addEventListener('change', function () {
+    const selectedOption = category.options[category.selectedIndex];
     document.getElementById('relevance').value = selectedOption.dataset.relevance;
 });
 

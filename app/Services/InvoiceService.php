@@ -125,7 +125,7 @@ class InvoiceService extends BaseService
                 'title' => __('Invoice Payment Transaction Title'),
                 'transaction_date' => $paymentDate,
                 'processing_date' => $paymentDate,
-                'transaction_type_id' => env('INVOICE_DEFAULT_TRANSACTION_TYPE'),
+                'category_id' => env('INVOICE_DEFAULT_CATEGORY'),
                 'relevance' => Relevance::Indispensable->value,
                 'payment_method_id' => env('INVOICE_DEFAULT_PAYMENT_METHOD'),
                 'source_wallet_id' => $invoice->card->wallet_id,

@@ -21,8 +21,8 @@
                                 <span class="tag">{{ $transaction->sourceWallet->name }}</span>
                                 <span class="tag">{{ __($transaction->relevance->name)}}</span>
                             </span>
-                            <form method="get" id="form-update-{{$transaction->id}}" action="{{route('transaction-type.edit', ['id' => $transaction->id])}}"></form>
-                            <form method="post" id="form-delete-{{$transaction->id}}" action="{{route('transaction-type.destroy')}}"> @csrf @method('DELETE') </form>
+                            <form method="get" id="form-update-{{$transaction->id}}" action="{{route('category.edit', ['id' => $transaction->id])}}"></form>
+                            <form method="post" id="form-delete-{{$transaction->id}}" action="{{route('category.destroy')}}"> @csrf @method('DELETE') </form>
                             <div class="td-buttons">
                                 <button type="submit" form="form-update-{{$transaction->id}}">{{__('Edit')}}</button>
                                 <input type="hidden" form="form-delete-{{$transaction->id}}" name="id" value={{$transaction->id}}>
