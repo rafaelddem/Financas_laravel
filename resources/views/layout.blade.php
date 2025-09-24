@@ -8,49 +8,54 @@
     <script src="{{ asset('js/dark-mode.js') }}"></script>
     <script src="{{ asset('js/script.js') }}" defer></script>
     @stack('head-script')
-    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
+    <header class="topbar">
+        <div class="menu-item" onclick="toggleNotificationsMenu()">Avisos
+            <span class="badge" id="notificationCount">3</span>
+            <ul class="topbar-dropdown notifications-options">
+                <li>Nova atualização disponível</li>
+                <li>Lembrete: reunião às 15h</li>
+                <li>Seu relatório foi aprovado</li>
+            </ul>
+        </div>
+        <div class="menu-item" onclick="toggleDarkMode()"><i id="darkModeIcon" class="fa-solid fa-moon"></i></div>
+    </header>
     <nav class="sidebar">
-        <ul>
-            <li><a href="/">{{__('Dashboard')}}</a></li>
-            <li><a href="/">{{__('Reports')}}</a></li>
-            <li onclick="toggleSubmenu('transactions')">{{__('Transactions')}}</li>
-            <ul class="submenu transactions">
-                <li><a href="{{route('transaction.list')}}">{{__('Transaction Entry')}}</a></li>
-                <li><a href="{{route('invoice.list')}}">{{__('Invoices')}}</a></li>
+        <div class="menu-scroll">
+            <ul class="menu-main">
+                <li class="navbar-item"><a href="/"><i class="fa-solid fa-house"></i>{{__('Dashboard')}}</a></li>
+                <li class="navbar-item"><a href="/"><i class="fa-solid fa-file-lines"></i>{{__('Reports')}}</a></li>
+                <li class="navbar-item" onclick="toggleSubmenu(event, 'transactions')"><i class="fa-solid fa-piggy-bank"></i>{{__('Transactions')}}<i class="fa-solid fa-caret-left"></i></li>
+                <ul class="submenu transactions">
+                    <li class="navbar-item"><a href="{{route('transaction.list')}}"><i class="fa-solid fa-money-bill-transfer"></i>{{__('Transaction Entry')}}</a></li>
+                    <li class="navbar-item"><a href="{{route('invoice.list')}}"><i class="fa-solid fa-file-invoice-dollar"></i>{{__('Invoices')}}</a></li>
+                </ul>
+                <li class="navbar-item" onclick="toggleSubmenu(event, 'entries')"><i class="fa-solid fa-file-circle-plus"></i>{{__('Entries')}}<i class="fa-solid fa-caret-left"></i></li>
+                <ul class="submenu entries">
+                    <li class="navbar-item"><a href="{{route('owner.list')}}"><i class="fa-solid fa-user-plus"></i>{{__('Owner')}}</a></li>
+                    <li class="navbar-item"><a href="{{route('payment-method.list')}}"><i class="fa-solid fa-money-check-dollar"></i>{{__('Payment Method')}}</a></li>
+                    <li class="navbar-item"><a href="{{route('category.list')}}"><i class="fa-solid fa-icons"></i>{{__('Category')}}</a></li>
+                </ul>
             </ul>
-            <li onclick="toggleSubmenu('entries')">{{__('Entries')}}</li>
-            <ul class="submenu entries">
-                <li><a href="{{route('owner.list')}}">{{__('Owner')}}</a></li>
-                <li><a href="{{route('payment-method.list')}}">{{__('Payment Method')}}</a></li>
-                <li><a href="{{route('category.list')}}">{{__('Category')}}</a></li>
+        </div>
+        <div class="menu-final">
+            <ul>
+                <li class="navbar-item" onclick="toggleSubmenu(event, 'login')"><i class="fa-solid fa-user"></i>{{__('Profile')}}<i class="fa-solid fa-caret-left"></i></li>
+                <ul class="submenu login">
+                    <li class="navbar-item"><a href="/"><i class="fa-solid fa-gear"></i>{{__('Configurations')}}</a></li>
+                    <li class="navbar-item"><a href="/"><i class="fa-solid fa-right-from-bracket"></i>{{__('Logout')}}</a></li>
+                </ul>
             </ul>
-        </ul>
+        </div>
     </nav>
 
     <div class="base-page">
-        <header class="topbar">
-            <div class="menu-item" onclick="toggleNotificationsMenu()">Avisos
-                <span class="badge" id="notificationCount">3</span>
-                <ul class="topbar-dropdown notifications-options">
-                    <li>Nova atualização disponível</li>
-                    <li>Lembrete: reunião às 15h</li>
-                    <li>Seu relatório foi aprovado</li>
-                </ul>
-            </div>
-            <div class="menu-item" onclick="toggleDarkMode()">{{ __('Dark Mode') }}</div>
-            <div class="menu-item" onclick="toggleLogoutMenu()">Logout
-                <ul class="topbar-dropdown logout-options">
-                    <li>Perfil</li>
-                    <li>Sair</li>
-                </ul>
-            </div>
-        </header>
-
         <section class="alerts">
             @if ($errors->any())
                 <div id="alertBox" class="alert alert-error">

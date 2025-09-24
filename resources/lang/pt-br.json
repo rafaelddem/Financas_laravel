@@ -31,7 +31,6 @@
     "Return": "Voltar",
     "Filter": "Filtrar",
     "Filters": "Filtros",
-
     "Default Placeholder": "Digite aqui...",
 
     "Name": "Nome",
@@ -101,7 +100,7 @@
     "Paid": "Paga",
     "Pay": "Pagar",
 
-    "Transaction Entry": "Lançamento de Transações",
+    "Transaction Entry": "Lançamentos",
     "Title": "Título",
     "Transaction Date": "Data da Transação",
     "Processing Date": "Data do Processamento",
@@ -134,6 +133,10 @@
     "The wallet does not have enough value for payment.": "A carteira não possui valor suficiente para pagamento.",
     "Invoice Payment Transaction Title": "Boleto do cartão",
     "Invoice Payment Transaction Description": "Pagamento referente a fatura do cartão :cardName, período :invoiceStartDate a :invoiceEndDate",
+
+    "Profile": "Perfil",
+    "Configurations": "Configurações",
+    "Logout": "Sair",
 
     "": ""
 }

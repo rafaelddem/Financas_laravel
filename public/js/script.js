@@ -1,24 +1,22 @@
-function toggleSubmenu(submenuClass) {
+function toggleSubmenu(event, submenuClass) {
     let submenu = document.querySelector('.' + submenuClass);
     submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-}
 
-function toggleDropdown(menuClass) {
-    let menu = document.querySelector(menuClass);
-    let otherMenu = menuClass === '.logout-options' 
-        ? document.querySelector('.notifications-options') 
-        : document.querySelector('.logout-options');
-
-    otherMenu.style.display = 'none';
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
-
-function toggleLogoutMenu() {
-    toggleDropdown('.logout-options');
+    const icons = event.target.closest('li').querySelectorAll('i');
+    if (icons.length >= 2) {
+      const secondIcon = icons[1];
+      if (secondIcon.classList.contains('fa-caret-left')) {
+          secondIcon.classList.replace("fa-caret-left", "fa-caret-down");
+        } else {
+          secondIcon.classList.replace("fa-caret-down", "fa-caret-left");
+      }
+    }
 }
 
 function toggleNotificationsMenu() {
-    toggleDropdown('.notifications-options');
+    let menu = document.querySelector('.notifications-options');
+
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
 document.addEventListener('click', function(event) {
