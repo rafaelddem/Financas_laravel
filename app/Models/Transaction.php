@@ -34,7 +34,6 @@ class Transaction extends Model
     protected $casts = [
         'transaction_date' => 'date', 
         'processing_date' => 'date', 
-        'category_id' => Category::class, 
         'relevance' => Relevance::class, 
         'gross_value' => 'float', 
         'discount_value' => 'float', 
