@@ -58,7 +58,7 @@ class CreateRequest extends FormRequest
             'source_wallet_id' => 'required|exists:wallets,id',
             'destination_wallet_id' => 'required|exists:wallets,id',
             'card_id' => 'required_if:payment_type,credit|required_if:payment_type,debit|exists:cards,id',
-            'description' => 'max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-., ]+$"',
+            'description' => 'nullable|max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-., ]+$"',
 
             'gross_value' => 'required|numeric|between:0.01,99999.99',
             'discount_value' => 'nullable|numeric|between:0.00,99999.99',

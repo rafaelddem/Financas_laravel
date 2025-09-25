@@ -1,5 +1,6 @@
 @php
 use App\Enums\Relevance;
+use Carbon\Carbon;
 @endphp
 
 @push('head-script')
@@ -21,11 +22,11 @@ use App\Enums\Relevance;
             </div>
             <div class="col_25 md_col_50 sm_col">
                 <label for="transaction_date">{{__('Transaction Date')}}:</label>
-                <input type="date" form="form-insert" name="transaction_date" id="transaction_date" value="{{old('transaction_date')}}" placeholder="{{__('Transaction Date')}}" required>
+                <input type="date" form="form-insert" name="transaction_date" id="transaction_date" value="{{old('transaction_date', Carbon::now()->format('Y-m-d'))}}" placeholder="{{__('Transaction Date')}}" required>
             </div>
             <div class="col_25 md_col_50 sm_col">
                 <label for="processing_date">{{__('Processing Date')}}:</label>
-                <input type="date" form="form-insert" name="processing_date" id="processing_date" value="{{old('processing_date')}}" placeholder="{{__('Processing Date')}}" required>
+                <input type="date" form="form-insert" name="processing_date" id="processing_date" value="{{old('processing_date', Carbon::now()->format('Y-m-d'))}}" placeholder="{{__('Processing Date')}}" required>
             </div>
             <div class="col_33 sm_col">
                 <label for="category_id">{{__('Category')}}:</label>
@@ -80,26 +81,26 @@ use App\Enums\Relevance;
                 </select>
             </div>
             <div id="div_installments" class="col_25 md_col_50 sm_col">
-                <label for="installments">{{__('Installments')}}:</label>
-                <input type="number" form="form-insert" id="installments" value="1" min="1" max="36" required>
+                <label for="installment_number">{{__('Installments')}}:</label>
+                <input type="number" form="form-insert" name="installment_number" id="installment_number" value="{{old('installment_number', 1)}}" min="1" max="36" required>
             </div>
         </div>
-        <div class="flex-container">
+        <div class="flex-container" id="base_values">
             <div class="col_20 md_col_50 sm_col">
                 <label for="gross_value">{{__('Gross Value')}}:</label>
-                <input type="text" form="form-insert" name="gross_value" data-name="gross_value" class="money" value="0,00" placeholder="{{__('Gross Value')}}" required pattern="^(?!0,00$).+" title="{{__('A value needs to be entered')}}">
+                <input type="text" form="form-insert" name="gross_value" data-name="gross_value" class="money" value="{{old('gross_value', '0,00')}}" placeholder="{{__('Gross Value')}}" required pattern="^(?!0,00$).+" title="{{__('A value needs to be entered')}}">
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <label for="discount_value">{{__('Discount Value')}}:</label>
-                <input type="text" form="form-insert" name="discount_value" data-name="discount_value" class="money" value="0,00" placeholder="{{__('Discount Value')}}" required>
+                <input type="text" form="form-insert" name="discount_value" data-name="discount_value" class="money" value="{{old('discount_value', '0,00')}}" placeholder="{{__('Discount Value')}}" required>
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <label for="interest_value">{{__('Interest Value')}}:</label>
-                <input type="text" form="form-insert" name="interest_value" data-name="interest_value" class="money" value="0,00" placeholder="{{__('Interest Value')}}" required>
+                <input type="text" form="form-insert" name="interest_value" data-name="interest_value" class="money" value="{{old('interest_value', '0,00')}}" placeholder="{{__('Interest Value')}}" required>
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <label for="rounding_value">{{__('Rounding Value')}}:</label>
-                <input type="text" form="form-insert" name="rounding_value" data-name="rounding_value" class="money" value="0,00" placeholder="{{__('Rounding Value')}}" required>
+                <input type="text" form="form-insert" name="rounding_value" data-name="rounding_value" class="money" value="{{old('rounding_value', '0,00')}}" placeholder="{{__('Rounding Value')}}" required>
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <label>{{__('Net Value')}}:</label>

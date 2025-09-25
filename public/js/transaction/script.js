@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     loadInstallmentForm();
     listCards();
+    recalculateNetValue(document.getElementById('base_values'));
+    if (getPaymentType() == 'credit') {
+        addInstallmentFields(document.getElementById('installment_number').value);
+    }
 });
 
 const category = document.getElementById('category_id');
@@ -35,7 +39,7 @@ function loadInstallmentForm() {
         case 'credit':
             document.getElementById('div_card').style.display = 'block';
             document.getElementById('div_installments').style.display = 'block';
-            addInstallmentFields(document.getElementById('installments').value);
+            addInstallmentFields(document.getElementById('installment_number').value);
             break;
 
         default:
@@ -99,7 +103,7 @@ function showCards(path) {
         });
 }
 
-document.getElementById('installments').addEventListener('change', function () {
+document.getElementById('installment_number').addEventListener('change', function () {
     addInstallmentFields(this.value);
 });
 
