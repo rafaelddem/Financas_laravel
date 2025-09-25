@@ -126,6 +126,9 @@ body {
     cursor: pointer;
     padding: 10px;
 }
+.menu-toggle-mobile {
+  display: none;
+}
 .badge {
     background: var(--topbar-badge);
     padding: 3px 6px;
@@ -200,17 +203,18 @@ body {
 }
 
 .navbar-item {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
 }
 .navbar-item i {
-  min-width: 35px;
-  text-align: center;
-  margin-right: 10px;
+    min-width: 35px;
+    text-align: center;
+    margin-right: 10px;
 }
 
 .sidebar ul {
-  list-style: none;
+    list-style: none;
 }
 .sidebar li {
     padding: 10px;
@@ -609,6 +613,20 @@ input[type="checkbox"]:checked {
 
 /* Tablet: entre 768px e 1024px */
 @media screen and (max-width: 1024px) {
+    .sidebar {
+        width: 55px;
+    }
+    .sidebar:hover {
+        width: 350px;
+    }
+    .sidebar:hover ul li a span {
+        display: inline;
+    }
+
+    .base-page {
+        margin-left: 55px;
+    }
+
     .md_col {
         width: 100%;
     }
@@ -646,6 +664,27 @@ input[type="checkbox"]:checked {
 
 /* Celular: abaixo de 768px */
 @media screen and (max-width: 767px) {
+    .sidebar {
+        display: none;
+    }
+    .sidebar.active {
+        display: flex;
+        width: 250px;
+        position: fixed;
+        z-index: 1001;
+    }
+
+    .base-page {
+        margin-left: 0;
+    }
+
+    .menu-toggle-mobile {
+        display: block;
+        cursor: pointer;
+        padding: 10px;
+        font-size: 24px;
+    }
+
     .sm_col {
         width: 100%;
     }

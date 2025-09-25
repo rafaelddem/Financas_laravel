@@ -1,3 +1,9 @@
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.fa-bars').addEventListener('click', function () {
+        document.querySelector('.sidebar').classList.toggle('active');
+    });
+});
+
 function toggleSubmenu(event, submenuClass) {
     let submenu = document.querySelector('.' + submenuClass);
     submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';

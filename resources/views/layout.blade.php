@@ -16,6 +16,7 @@
 </head>
 <body>
     <header class="topbar">
+        <div class="menu-toggle-mobile"><i class="fa-solid fa-bars"></i></div>
         <div class="menu-item" onclick="toggleNotificationsMenu()">Avisos
             <span class="badge" id="notificationCount">3</span>
             <ul class="topbar-dropdown notifications-options">
@@ -29,27 +30,27 @@
     <nav class="sidebar">
         <div class="menu-scroll">
             <ul class="menu-main">
-                <li class="navbar-item"><a href="/"><i class="fa-solid fa-house"></i>{{__('Dashboard')}}</a></li>
-                <li class="navbar-item"><a href="/"><i class="fa-solid fa-file-lines"></i>{{__('Reports')}}</a></li>
-                <li class="navbar-item" onclick="toggleSubmenu(event, 'transactions')"><i class="fa-solid fa-piggy-bank"></i>{{__('Transactions')}}<i class="fa-solid fa-caret-left"></i></li>
+                <li class="navbar-item"><a href="/"><i class="fa-solid fa-house"></i><span>{{__('Dashboard')}}</span></a></li>
+                <li class="navbar-item"><a href="/"><i class="fa-solid fa-file-lines"></i><span>{{__('Reports')}}</span></a></li>
+                <li class="navbar-item" onclick="toggleSubmenu(event, 'transactions')"><i class="fa-solid fa-piggy-bank"></i><span>{{__('Transactions')}}</span><i class="fa-solid fa-caret-left"></i></li>
                 <ul class="submenu transactions">
-                    <li class="navbar-item"><a href="{{route('transaction.list')}}"><i class="fa-solid fa-money-bill-transfer"></i>{{__('Transaction Entry')}}</a></li>
-                    <li class="navbar-item"><a href="{{route('invoice.list')}}"><i class="fa-solid fa-file-invoice-dollar"></i>{{__('Invoices')}}</a></li>
+                    <li class="navbar-item"><a href="{{route('transaction.list')}}"><i class="fa-solid fa-money-bill-transfer"></i><span>{{__('Transaction Entry')}}</span></a></li>
+                    <li class="navbar-item"><a href="{{route('invoice.list')}}"><i class="fa-solid fa-file-invoice-dollar"></i><span>{{__('Invoices')}}</span></a></li>
                 </ul>
-                <li class="navbar-item" onclick="toggleSubmenu(event, 'entries')"><i class="fa-solid fa-file-circle-plus"></i>{{__('Entries')}}<i class="fa-solid fa-caret-left"></i></li>
+                <li class="navbar-item" onclick="toggleSubmenu(event, 'entries')"><i class="fa-solid fa-file-circle-plus"></i><span>{{__('Entries')}}</span><i class="fa-solid fa-caret-left"></i></li>
                 <ul class="submenu entries">
-                    <li class="navbar-item"><a href="{{route('owner.list')}}"><i class="fa-solid fa-user-plus"></i>{{__('Owner')}}</a></li>
-                    <li class="navbar-item"><a href="{{route('payment-method.list')}}"><i class="fa-solid fa-money-check-dollar"></i>{{__('Payment Method')}}</a></li>
-                    <li class="navbar-item"><a href="{{route('category.list')}}"><i class="fa-solid fa-icons"></i>{{__('Category')}}</a></li>
+                    <li class="navbar-item"><a href="{{route('owner.list')}}"><i class="fa-solid fa-user-plus"></i><span>{{__('Owner')}}</span></a></li>
+                    <li class="navbar-item"><a href="{{route('payment-method.list')}}"><i class="fa-solid fa-money-check-dollar"></i><span>{{__('Payment Method')}}</span></a></li>
+                    <li class="navbar-item"><a href="{{route('category.list')}}"><i class="fa-solid fa-icons"></i><span>{{__('Category')}}</span></a></li>
                 </ul>
             </ul>
         </div>
         <div class="menu-final">
             <ul>
-                <li class="navbar-item" onclick="toggleSubmenu(event, 'login')"><i class="fa-solid fa-user"></i>{{__('Profile')}}<i class="fa-solid fa-caret-left"></i></li>
+                <li class="navbar-item" onclick="toggleSubmenu(event, 'login')"><i class="fa-solid fa-user"></i><span>{{__('Profile')}}</span><i class="fa-solid fa-caret-left"></i></li>
                 <ul class="submenu login">
-                    <li class="navbar-item"><a href="/"><i class="fa-solid fa-gear"></i>{{__('Configurations')}}</a></li>
-                    <li class="navbar-item"><a href="/"><i class="fa-solid fa-right-from-bracket"></i>{{__('Logout')}}</a></li>
+                    <li class="navbar-item"><a href="/"><i class="fa-solid fa-gear"></i><span>{{__('Configurations')}}</span></a></li>
+                    <li class="navbar-item"><a href="/"><i class="fa-solid fa-right-from-bracket"></i><span>{{__('Logout')}}</span></a></li>
                 </ul>
             </ul>
         </div>
