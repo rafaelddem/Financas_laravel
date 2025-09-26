@@ -134,6 +134,9 @@
     "Invoice Payment Transaction Title": "Boleto do cartão",
     "Invoice Payment Transaction Description": "Pagamento referente a fatura do cartão :cardName, período :invoiceStartDate a :invoiceEndDate",
 
+    "Transaction Base": "Base de Transação",
+    "Transaction Bases": "Bases de Transação",
+
     "Profile": "Perfil",
     "Configurations": "Configurações",
     "Logout": "Sair",

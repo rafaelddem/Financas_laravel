@@ -6,6 +6,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TransactionBaseController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,13 @@ Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
 Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {
     Route::get('/', [InvoiceController::class, 'index'])->name('list');
     Route::post('/', [InvoiceController::class, 'pay'])->name('pay');
+});
+
+Route::group(['prefix' => 'base-transacao', 'as' => 'transaction-base.'], function () {
+    Route::get('/', [TransactionBaseController::class, 'index'])->name('list');
+    Route::get('/novo', [TransactionBaseController::class, 'create'])->name('create');
+    Route::post('/', [TransactionBaseController::class, 'store'])->name('store');
+    Route::delete('/', [TransactionBaseController::class, 'destroy'])->name('destroy');
 });
 
 Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
