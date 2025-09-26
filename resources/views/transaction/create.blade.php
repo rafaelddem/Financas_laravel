@@ -16,23 +16,32 @@ use Carbon\Carbon;
     <div class="presentation">
         <h2 class="card-title">{{__('Fill out the form')}}</h2>
         <div class="flex-container">
-            <div class="col_50 md_col">
+            <div class="col_25 md_col">
                 <label for="title">{{__('Title')}}:</label>
-                <input type="text" form="form-insert" name="title" id="title" value="{{old('title')}}" placeholder="{{__('Title')}}" required>
+                <input type="text" form="form-insert" name="title" id="title" value="{{old('title', $transactionBase?->title)}}" placeholder="{{__('Title')}}" required>
             </div>
-            <div class="col_25 md_col_50 sm_col">
+            <div class="col_25 md_col_33 sm_col">
                 <label for="transaction_date">{{__('Transaction Date')}}:</label>
                 <input type="date" form="form-insert" name="transaction_date" id="transaction_date" value="{{old('transaction_date', Carbon::now()->format('Y-m-d'))}}" placeholder="{{__('Transaction Date')}}" required>
             </div>
-            <div class="col_25 md_col_50 sm_col">
+            <div class="col_25 md_col_33 sm_col">
                 <label for="processing_date">{{__('Processing Date')}}:</label>
                 <input type="date" form="form-insert" name="processing_date" id="processing_date" value="{{old('processing_date', Carbon::now()->format('Y-m-d'))}}" placeholder="{{__('Processing Date')}}" required>
+            </div>
+            <div class="col_25 md_col_33 sm_col">
+                <label for="transaction_base_id">{{__('Transaction Bases')}}:</label>
+                <select name="transaction_base_id" id="transaction_base_id">
+                    <option value=''>{{ __('Choose an Transaction Base (optional)') }}</option>
+                    @foreach ($transactionBases as $transactionBaseItem)
+                        <option value='{{ $transactionBaseItem->id }}'>{{ $transactionBaseItem->title }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col_33 sm_col">
                 <label for="category_id">{{__('Category')}}:</label>
                 <select name="category_id" form="form-insert" id="category_id">
                     @foreach ($categories as $presentation)
-                        <option value='{{ $presentation->id }}' data-relevance="{{ $presentation->relevance }}" {{ old('category_id') == $presentation->id ? 'selected' : '' }}>{{ $presentation->name }}</option>
+                        <option value='{{ $presentation->id }}' data-relevance="{{ $presentation->relevance }}" {{ old('category_id', $transactionBase?->category_id) == $presentation->id ? 'selected' : '' }}>{{ $presentation->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -40,7 +49,7 @@ use Carbon\Carbon;
                 <label for="relevance">{{__('Relevance')}}:</label>
                 <select name="relevance" form="form-insert" id="relevance">
                     @foreach (Relevance::cases() as $relevance)
-                        <option value='{{ $relevance->value }}' {{ old('relevance') == $relevance->value ? 'selected' : '' }}>{{ __($relevance->name) }}</option>
+                        <option value='{{ $relevance->value }}' {{ old('relevance', $transactionBase?->category->relevance->value) == $relevance->value ? 'selected' : '' }}>{{ __($relevance->name) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -48,7 +57,7 @@ use Carbon\Carbon;
                 <label for="payment_method_id">{{__('Payment Method')}}:</label>
                 <select name="payment_method_id" form="form-insert" id="payment_method_id">
                     @foreach ($paymentMethods as $paymentMethod)
-                        <option value='{{ $paymentMethod->id }}' data-type="{{ $paymentMethod->type }}" {{ old('payment_method_id') == $paymentMethod->id ? 'selected' : '' }}>{{ $paymentMethod->name }}</option>
+                        <option value='{{ $paymentMethod->id }}' data-type="{{ $paymentMethod->type }}" {{ old('payment_method_id', $transactionBase?->payment_method_id) == $paymentMethod->id ? 'selected' : '' }}>{{ $paymentMethod->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -59,7 +68,7 @@ use Carbon\Carbon;
                 <label for="source_wallet_id">{{__('Source Wallet')}}:</label>
                 <select name="source_wallet_id" form="form-insert" id="source_wallet_id">
                     @foreach ($sourceWallets as $sourceWallet)
-                        <option value='{{ $sourceWallet->id }}' data-owner="{{ $sourceWallet->owner_id }}" data-wallet="{{ $sourceWallet->id }}" {{ old('source_wallet_id') == $sourceWallet->id ? 'selected' : '' }}>
+                        <option value='{{ $sourceWallet->id }}' data-owner="{{ $sourceWallet->owner_id }}" data-wallet="{{ $sourceWallet->id }}" {{ old('source_wallet_id', $transactionBase?->source_wallet_id) == $sourceWallet->id ? 'selected' : '' }}>
                             {{ $sourceWallet->owner->name }} > {{ $sourceWallet->name }}
                         </option>
                     @endforeach
@@ -69,7 +78,7 @@ use Carbon\Carbon;
                 <label for="destination_wallet_id">{{__('Destination Wallet')}}:</label>
                 <select name="destination_wallet_id" form="form-insert" id="destination_wallet_id">
                     @foreach ($destinationWallets as $destinationWallet)
-                        <option value='{{ $destinationWallet->id }}' data-owner="{{ $destinationWallet->owner_id }}" data-wallet="{{ $destinationWallet->id }}" {{ old('destination_wallet_id') == $destinationWallet->id ? 'selected' : '' }}>
+                        <option value='{{ $destinationWallet->id }}' data-owner="{{ $destinationWallet->owner_id }}" data-wallet="{{ $destinationWallet->id }}" {{ old('destination_wallet_id', $transactionBase?->destination_wallet_id) == $destinationWallet->id ? 'selected' : '' }}>
                             {{ $destinationWallet->owner->name }} > {{ $destinationWallet->name }}
                         </option>
                     @endforeach
@@ -77,7 +86,7 @@ use Carbon\Carbon;
             </div>
             <div id="div_card" class="col_25 md_col_50 sm_col">
                 <label for="card_id">{{__('Card')}}:</label>
-                <select name="card_id" form="form-insert" id="card_id" required>
+                <select name="card_id" form="form-insert" id="card_id" data-selected="{{old('card_id', $transactionBase?->card_id)}}" required>
                 </select>
             </div>
             <div id="div_installments" class="col_25 md_col_50 sm_col">

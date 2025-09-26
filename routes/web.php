@@ -15,6 +15,7 @@ Route::get('/', function () { return view('index'); });
 Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
     Route::get('/', [TransactionController::class, 'index'])->name('list');
     Route::get('/novo', [TransactionController::class, 'create'])->name('create');
+    Route::get('/novo/{base}', [TransactionController::class, 'create'])->name('createByBase');
     Route::post('/', [TransactionController::class, 'store'])->name('store');
 });
 

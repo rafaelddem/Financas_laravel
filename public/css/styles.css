@@ -611,8 +611,8 @@ input[type="checkbox"]:checked {
 
 /* formulario fim */
 
-/* Tablet: entre 768px e 1024px */
-@media screen and (max-width: 1024px) {
+/* Tablet: abaixo de 1201px */
+@media screen and (max-width: 1200px) {
     .sidebar {
         width: 55px;
     }

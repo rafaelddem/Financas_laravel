@@ -7,12 +7,14 @@ use App\Http\Requests\Transaction\CreateRequest;
 use App\Services\PaymentMethodService;
 use App\Services\TransactionService;
 use App\Services\CategoryService;
+use App\Services\TransactionBaseService;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
     private TransactionService $service;
+    private TransactionBaseService $transactionBaseService;
     private CategoryService $categoryService;
     private PaymentMethodService $paymentMethodService;
     private WalletService $walletService;
@@ -20,6 +22,7 @@ class TransactionController extends Controller
     public function __construct()
     {
         $this->service = app(TransactionService::class);
+        $this->transactionBaseService = app(TransactionBaseService::class);
         $this->categoryService = app(CategoryService::class);
         $this->paymentMethodService = app(PaymentMethodService::class);
         $this->walletService = app(WalletService::class);
@@ -47,13 +50,19 @@ class TransactionController extends Controller
         $paymentMethods = [];
         $sourceWallets = [];
         $destinationWallets = [];
+        $transactionBases = [];
+        $transactionBase = null;
 
         try {
             $categories = $this->categoryService->list();
             $paymentMethods = $this->paymentMethodService->list();
             $sourceWallets = $destinationWallets = $this->walletService->list();
+            $transactionBases = $this->transactionBaseService->list();
+            if ($request->has('base')) {
+                $transactionBase = $this->transactionBaseService->find($request->get('base'));
+            }
 
-            return view('transaction.create', compact('categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
+            return view('transaction.create', compact('transactionBases', 'transactionBase', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

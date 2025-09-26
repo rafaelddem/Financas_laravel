@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+document.getElementById('transaction_base_id').addEventListener('change', function () {
+    window.location.href = `${window.location.origin}/transacoes/novo/?base=${this.value}`;
+});
+
 const category = document.getElementById('category_id');
 category.addEventListener('change', function () {
     const selectedOption = category.options[category.selectedIndex];
@@ -92,6 +96,7 @@ function showCards(path) {
                     const option = document.createElement("option");
                     option.value = card.id;
                     option.text = card.name;
+                    option.selected = document.getElementById('card_id').dataset.selected == card.id;
                     card_select.appendChild(option);
                 });
             } else {
