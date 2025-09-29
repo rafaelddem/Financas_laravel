@@ -36,6 +36,7 @@
                 <ul class="submenu transactions">
                     <li class="navbar-item"><a href="{{route('transaction.list')}}"><i class="fa-solid fa-money-bill-transfer"></i><span>{{__('Transaction Entry')}}</span></a></li>
                     <li class="navbar-item"><a href="{{route('transaction-base.list')}}"><i class="fa-solid fa-diagram-predecessor"></i><span>{{__('Transaction Base')}}</span></a></li>
+                    <li class="navbar-item"><a href="{{route('extract-module.index')}}"><i class="fa-solid fa-arrow-up-from-bracket"></i><span>{{__('Extract Module')}}</span></a></li>
                     <li class="navbar-item"><a href="{{route('invoice.list')}}"><i class="fa-solid fa-file-invoice-dollar"></i><span>{{__('Invoices')}}</span></a></li>
                 </ul>
                 <li class="navbar-item" onclick="toggleSubmenu(event, 'entries')"><i class="fa-solid fa-file-circle-plus"></i><span>{{__('Entries')}}</span><i class="fa-solid fa-caret-left"></i></li>

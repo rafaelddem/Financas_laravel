@@ -99,6 +99,8 @@
     "Overdue": "Vencida",
     "Paid": "Paga",
     "Pay": "Pagar",
+    "All Wallets": "Todas as Carteiras",
+    "All Cards": "Todas os Cartões",
 
     "Transaction Entry": "Lançamentos",
     "Title": "Título",
@@ -135,8 +137,14 @@
     "Invoice Payment Transaction Description": "Pagamento referente a fatura do cartão :cardName, período :invoiceStartDate a :invoiceEndDate",
 
     "Transaction Base": "Base de Transação",
+    "Transaction Base In": "Base de Transação para Entradas",
+    "Transaction Base Out": "Base de Transação para Saídas",
     "Transaction Bases": "Bases de Transação",
+    "Choose an Transaction Base": "Escolha uma Base de Transação",
     "Choose an Transaction Base (optional)": "(opcional) Escolha uma Base de Transação",
+
+    "Extract Module": "Módulo de Extração",
+    "Extract Modules": "Módulos de Extração",
 
     "Profile": "Perfil",
     "Configurations": "Configurações",

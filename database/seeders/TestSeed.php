@@ -12,6 +12,7 @@ use App\Models\Owner;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\TransactionBase;
 use App\Models\Wallet;
 use App\Services\CardService;
 use Carbon\Carbon;
@@ -171,6 +172,26 @@ class TestSeed extends Seeder
             'active' => true,
             'created_at' => now(),
             'updated_at' => now(),
+        ]);
+
+
+
+        /* Transaction Base */
+        TransactionBase::create([
+            'title' => 'NuBank PIX de entrada',
+            'category_id' => $categoryGenericIn->id,
+            'payment_method_id' => $paymentMethodPix->id,
+            // 'card_id' => $categoryGenericIn->id,
+            'source_wallet_id' => $walletMeDefault->id,
+            'destination_wallet_id' => $walletNuBank->id,
+        ]);
+        TransactionBase::create([
+            'title' => 'NuBank PIX de saída',
+            'category_id' => $categoryGenericOut->id,
+            'payment_method_id' => $paymentMethodPix->id,
+            // 'card_id' => $categoryGenericIn->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletMeDefault->id,
         ]);
 
 
@@ -1050,107 +1071,4 @@ class TestSeed extends Seeder
             ])
         );
     }
-
-    // private function generateValues(float &$gross, float &$discount, float &$interest, float &$rounding)
-    // {
-    //     $rand = mt_rand(0, 10);
-
-    //     $gross = mt_rand(100, 5000) / 100;
-
-    //     if ($rand >= 6) 
-    //         $discount = round(($gross / mt_rand(5, 10)), 2);
-
-    //     if ($rand >= 9) 
-    //         $interest = round(($gross * mt_rand(1, 10) / 100), 2);
-
-    //     if ($rand >= 4) {
-    //         $net = $gross - $discount + $interest;
-    //         $rounding = ($net - round($net)) * -1;
-    //     }
-    // }
-
-    // private function createTransactions_notes(int $daysAgo = 25)
-    // {
-    //     $today = new Carbon();
-    //     $categoryGenericOut = Category::find(2);
-    //     $paymentMethodNotes = PaymentMethod::find(1);
-    //     $walletSystem = Wallet::find(1);
-    //     $walletMeDefault = Wallet::find(2);
-
-    //     for ($i=0; $i < $daysAgo; $i++) {
-    //         $gross = $discount = $interest = $rounding = 0;
-    //         $this->generateValues($gross, $discount, $interest, $rounding);
-
-    //         Transaction::create([
-    //             'title' => 'Transação simples #' . ($i + 1),
-    //             'transaction_date' => $today->clone()->subDays($daysAgo - $i),
-    //             'processing_date' => $today->clone()->subDays($daysAgo - $i),
-    //             'category_id' => $categoryGenericOut->id,
-    //             'relevance' => Relevance::Banal->value,
-    //             'payment_method_id' => $paymentMethodNotes->id,
-    //             'source_wallet_id' => $walletMeDefault->id,
-    //             'destination_wallet_id' => $walletSystem->id,
-    //             'gross_value' => $gross,
-    //             'discount_value' => $discount,
-    //             'interest_value' => $interest,
-    //             'rounding_value' => $rounding,
-    //         ]);
-    //     }
-    // }
-
-    // private function createTransactions_debit(int $daysAgo = 25)
-    // {
-    //     $today = new Carbon();
-    //     $categoryGenericOut = Category::find(2);
-    //     $paymentMethodDebit = PaymentMethod::where('type', PaymentType::Debit->value)->inRandomOrder()->first();
-    //     $walletSystem = Wallet::find(1);
-    //     // $baseDate = $today->setMonth($month)->startOfMonth()->startOfDay();
-    //     $categoryGenericIn = Category::find(1);
-    //     $walletMeDefault = Wallet::find(2);
-
-    //     for ($i=0; $i < $daysAgo; $i++) {
-    //         $gross = $discount = $interest = $rounding = 0;
-    //         $this->generateValues($gross, $discount, $interest, $rounding);
-
-    //         Transaction::create([
-    //             'title' => 'Transação simples #' . ($i + 1),
-    //             'transaction_date' => $today->clone()->subDays($daysAgo - $i),
-    //             'processing_date' => $today->clone()->subDays($daysAgo - $i),
-    //             'category_id' => $categoryGenericOut->id,
-    //             'relevance' => Relevance::Banal->value,
-    //             'payment_method_id' => $paymentMethodDebit->id,
-    //             'source_wallet_id' => $walletMeDefault->id,
-    //             'destination_wallet_id' => $walletSystem->id,
-    //             'gross_value' => $gross,
-    //             'discount_value' => $discount,
-    //             'interest_value' => $interest,
-    //             'rounding_value' => $rounding,
-    //         ]);
-    //     }
-    // }
-
-    // private function createCreditTransactions(int $month, Card $card, int $count = 25)
-    // {
-    //     $today = new Carbon();
-    //     $baseDate = $today->setMonth($month)->startOfMonth()->startOfDay();
-
-    //     for ($i=0; $i < $count; $i++) { 
-    //     //     Transaction::create([
-    //     //         'title' => 'Netflix',
-    //     //         'transaction_date' => $startOfMonth->clone()->addDays(4),
-    //     //         'processing_date' => $startOfMonth->clone()->addDays(4),
-    //     //         'category_id' => $categoryGenericOut->id,
-    //     //         'relevance' => Relevance::Relevant->value,
-    //     //         'payment_method_id' => $paymentMethodCredit->id,
-    //     //         'card_id' => $cardCreditNubank->id,
-    //     //         'source_wallet_id' => $cardCreditNubank->wallet_id,
-    //     //         'destination_wallet_id' => $walletSystem->id,
-    //     //         'gross_value' => 59.90,
-    //     //         'discount_value' => 0.00,
-    //     //         'interest_value' => 0.00,
-    //     //         'rounding_value' => 0.00,
-    //     //         'description' => 'Mensalidade Netflix',
-    //     //     ]);
-    //     }
-    // }
 }

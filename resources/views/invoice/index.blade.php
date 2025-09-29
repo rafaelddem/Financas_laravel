@@ -27,7 +27,7 @@ use Carbon\Carbon;
             <div class="col_20">
                 <label for="wallet_id">{{__('Source Wallet')}}:</label>
                 <select name="wallet_id" form="form-filter" id="wallet_id">
-                    <option value='0' data-owner="" data-wallet=""> {{ "Todos as Carteiras" }} </option>
+                    <option value='0' data-owner="" data-wallet="">{{__('All Wallets')}}</option>
                     @foreach ($wallets as $wallet)
                         <option value='{{ $wallet->id }}' data-owner="{{ $wallet->owner_id }}" data-wallet="{{ $wallet->id }}" @if($walletId == $wallet->id) selected @endIf>
                             {{ $wallet->owner->name }} > {{ $wallet->name }}
@@ -38,7 +38,7 @@ use Carbon\Carbon;
             <div id="div_card" class="col_20">
                 <label for="card_id">{{__('Card')}}:</label>
                 <select form="form-filter" name="card_id" id="card_id" required>
-                    <option value='0' data-owner="" data-wallet=""> {{ "Todos os Cartões" }} </option>
+                    <option value='0' data-owner="" data-wallet="">{{__('All Cards')}}</option>
                     @foreach ($cards as $card)
                         <option value='{{ $card->id }}' @if($cardId == $card->id) selected @endIf> {{ $card->name }} </option>
                     @endforeach
@@ -53,67 +53,61 @@ use Carbon\Carbon;
     @if(!$closedInvoices->isEmpty())
         <div class="presentation">
             <h2 class="card-title">{{__('Unpaid Invoice')}}</h2>
-            <div class="row">
-                <div class="col">
-                    <table>
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-                        @foreach($closedInvoices as $invoice)
-                        <tr>
-                            <td class="td-item">
-                                <span class="td-content">
-                                    {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
-                                    @if($invoice->due_date < Carbon::now())
-                                        <span class="tag">{{__('Overdue')}}</span>
-                                    @endif
-                                </span>
-                                <button type="button"
-                                    class="open-confirm"
-                                    data-id="{{ $invoice->id }}"
-                                    data-subtitle="{{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }}">
-                                    {{ __('Pay') }}
-                                </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </table>
-                </div>
+            <div class="col">
+                <table>
+                    <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                    @foreach($closedInvoices as $invoice)
+                    <tr>
+                        <td class="td-item">
+                            <span class="td-content">
+                                {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
+                                @if($invoice->due_date < Carbon::now())
+                                    <span class="tag">{{__('Overdue')}}</span>
+                                @endif
+                            </span>
+                            <button type="button"
+                                class="open-confirm"
+                                data-id="{{ $invoice->id }}"
+                                data-subtitle="{{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }}">
+                                {{ __('Pay') }}
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
             </div>
         </div>
     @endif
     <div class="presentation">
         <h2 class="card-title">{{__('Open Invoices')}}</h2>
-        <div class="row">
-            <div class="col">
-                <table>
-                    @foreach($openInvoices as $invoice)
-                    <tr>
-                        <td class="td-item">
-                            <span class="td-content">
-                                {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
-            </div>
+        <div class="col">
+            <table>
+                @foreach($openInvoices as $invoice)
+                <tr>
+                    <td class="td-item">
+                        <span class="td-content">
+                            {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
+                        </span>
+                    </td>
+                </tr>
+                @endforeach
+            </table>
         </div>
     </div>
     <div class="presentation">
         <h2 class="card-title">{{__('Paid Invoices')}}</h2>
-        <div class="row">
-            <div class="col">
-                <table>
-                    @foreach($paidInvoices as $invoice)
-                    <tr>
-                        <td class="td-item">
-                            <span class="td-content">
-                                {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
-            </div>
+        <div class="col">
+            <table>
+                @foreach($paidInvoices as $invoice)
+                <tr>
+                    <td class="td-item">
+                        <span class="td-content">
+                            {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
+                        </span>
+                    </td>
+                </tr>
+                @endforeach
+            </table>
         </div>
     </div>
 
