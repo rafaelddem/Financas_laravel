@@ -28,6 +28,11 @@ Route::group(['prefix' => 'base-transacao', 'as' => 'transaction-base.'], functi
     Route::delete('/', [TransactionBaseController::class, 'destroy'])->name('destroy');
 });
 
+Route::group(['prefix' => 'importacao-extrato', 'as' => 'extract-import.'], function () {
+    Route::get('/', [ExtractImportController::class, 'index'])->name('index');
+    Route::post('/', [ExtractImportController::class, 'extract'])->name('extract');
+});
+
 Route::group(['prefix' => 'modulo-extrato', 'as' => 'extract-module.'], function () {
     Route::get('/', [ExtractModuleController::class, 'index'])->name('index');
     Route::post('/', [ExtractModuleController::class, 'store'])->name('store');

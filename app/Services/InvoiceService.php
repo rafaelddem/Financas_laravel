@@ -9,22 +9,25 @@ use App\Exceptions\ServiceException;
 use App\Models\Invoice;
 use App\Repositories\InstallmentRepository;
 use App\Repositories\InvoiceRepository;
+use App\Repositories\TransactionBaseRepository;
 use App\Repositories\TransactionRepository;
 use App\Repositories\WalletRepository;
 use Carbon\Carbon;
 
 class InvoiceService extends BaseService
 {
+    private TransactionRepository $transactionRepository;
     private InstallmentRepository $installmentRepository;
     private WalletRepository $walletRepository;
-    private TransactionRepository $transactionRepository;
+    private TransactionBaseRepository $transactionBaseRepository;
 
     public function __construct()
     {
         $this->repository = app(InvoiceRepository::class);
+        $this->transactionRepository = app(TransactionRepository::class);
         $this->installmentRepository = app(InstallmentRepository::class);
         $this->walletRepository = app(WalletRepository::class);
-        $this->transactionRepository = app(TransactionRepository::class);
+        $this->transactionBaseRepository = app(TransactionBaseRepository::class);
     }
 
     public function listInvoices(Carbon $startDate, Carbon $endDate, ?InvoiceStatus $status = null, ?int $walletId = null, ?int $cardId = null)
@@ -121,15 +124,16 @@ class InvoiceService extends BaseService
 
             $this->installmentRepository->updateInstallmentPaymentDate($invoice, $paymentDate);
 
+            $transactionBase = $this->transactionBaseRepository->find(env('INVOICE_BASE_TRANSACTION'));
             $this->transactionRepository->create([
                 'title' => __('Invoice Payment Transaction Title'),
                 'transaction_date' => $paymentDate,
                 'processing_date' => $paymentDate,
-                'category_id' => env('INVOICE_DEFAULT_CATEGORY'),
+                'category_id' => $transactionBase->category_id,
                 'relevance' => Relevance::Indispensable->value,
-                'payment_method_id' => env('INVOICE_DEFAULT_PAYMENT_METHOD'),
+                'payment_method_id' => $transactionBase->payment_method_id,
                 'source_wallet_id' => $invoice->card->wallet_id,
-                'destination_wallet_id' => env('INVOICE_DEFAULT_DESTINATION_WALLET'),
+                'destination_wallet_id' => $transactionBase->destination_wallet_id,
                 'gross_value' => $invoice->value,
                 'discount_value' => 0.00,
                 'interest_value' => 0.00,

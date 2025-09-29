@@ -31,6 +31,7 @@
     "Return": "Voltar",
     "Filter": "Filtrar",
     "Filters": "Filtros",
+    "Extract": "Extrair",
     "Default Placeholder": "Digite aqui...",
 
     "Name": "Nome",
@@ -145,6 +146,11 @@
 
     "Extract Module": "Módulo de Extração",
     "Extract Modules": "Módulos de Extração",
+
+    "Extract Import": "Importação de Extrato",
+    "Select A Extract Module": "Selecione um módulo de extração",
+    "The extract data was entered successfully.": "Dados do extrato foram inseridos com Sucesso.",
+    "Extract Module Registration": "Cadastro de Módulo de Extração",
 
     "Profile": "Perfil",
     "Configurations": "Configurações",

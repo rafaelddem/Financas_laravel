@@ -84,6 +84,6 @@ class InvoiceController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('invoice.list', compact('start_date', 'end_date', 'wallet_id', 'card_id')))->withErrors(compact('message'));
+        return redirect(route('invoice.list'))->withErrors(compact('message'));
     }
 }

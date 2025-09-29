@@ -12,6 +12,7 @@ use App\Models\Owner;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\ExtractModule;
 use App\Models\TransactionBase;
 use App\Models\Wallet;
 use App\Services\CardService;
@@ -177,7 +178,7 @@ class TestSeed extends Seeder
 
 
         /* Transaction Base */
-        TransactionBase::create([
+        $transactionBaseNuBankIn = TransactionBase::create([
             'title' => 'NuBank PIX de entrada',
             'category_id' => $categoryGenericIn->id,
             'payment_method_id' => $paymentMethodPix->id,
@@ -185,13 +186,22 @@ class TestSeed extends Seeder
             'source_wallet_id' => $walletMeDefault->id,
             'destination_wallet_id' => $walletNuBank->id,
         ]);
-        TransactionBase::create([
+        $transactionBaseNuBankOut = TransactionBase::create([
             'title' => 'NuBank PIX de saída',
             'category_id' => $categoryGenericOut->id,
             'payment_method_id' => $paymentMethodPix->id,
             // 'card_id' => $categoryGenericIn->id,
             'source_wallet_id' => $walletNuBank->id,
             'destination_wallet_id' => $walletMeDefault->id,
+        ]);
+
+
+
+        /* Extract Module */
+        ExtractModule::create([
+            'name' => 'NuBank',
+            'transaction_base_in_id' => $transactionBaseNuBankIn->id,
+            'transaction_base_out_id' => $transactionBaseNuBankOut->id,
         ]);
 
 

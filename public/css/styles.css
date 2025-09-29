@@ -464,6 +464,9 @@ td form {
     color: var(--tag-font-dm);
 }
 
+input[type="file"] {
+  height: 38px;
+}
 input[type="submit"],
 input[type="button"] {
     background-color: var(--button);
