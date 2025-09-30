@@ -10,7 +10,7 @@ class NuBankCSVExtrator extends ExtratorCSVService
     protected function defineModelData(ExtractModule $extractModule, array $attributes): array
     {
         $transactionsAttributes = [
-            'title' => mb_strlen($attributes[3]) <= 50 ? $attributes[3] : substr($attributes[3], 0, 47) . '...',
+            'title' => mb_strlen($attributes[3]) <= 50 ? $attributes[3] : mb_substr($attributes[3], 0, 47) . '...',
             'transaction_date' => Carbon::createFromFormat('d/m/Y', $attributes[0])->startOfDay(),
             'processing_date' => Carbon::createFromFormat('d/m/Y', $attributes[0])->startOfDay(),
             'description' => $attributes[3],
