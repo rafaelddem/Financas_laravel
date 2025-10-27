@@ -32,7 +32,7 @@ class CreateCalculateWalletValueProcedure extends Migration
                     payment_methods.type != 'credit'
                     and transactions.source_wallet_id = wallet_id;
 
-                SET total = sum_in - sum_out;
+                SET total = coalesce(sum_in, 0) - coalesce(sum_out, 0);
 
                 SELECT total;
             END;
