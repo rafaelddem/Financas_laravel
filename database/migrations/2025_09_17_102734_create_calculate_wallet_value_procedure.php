@@ -10,18 +10,11 @@ class CreateCalculateWalletValueProcedure extends Migration
     public function up(): void
     {
         DB::unprepared("
-            CREATE PROCEDURE calculate_wallet_value(IN invoice_id INT)
+            CREATE PROCEDURE calculate_wallet_value(IN wallet_id INT)
             BEGIN
-                DECLARE wallet_id INTEGER;
                 DECLARE sum_in DECIMAL(10,2);
                 DECLARE sum_out DECIMAL(10,2);
                 DECLARE total DECIMAL(10,2);
-
-                select wallets.id INTO wallet_id
-                from invoices
-                    join cards on cards.id = invoices.card_id
-                    join wallets on wallets.id = cards.wallet_id
-                where invoices.id = invoice_id;
 
                 select sum(gross_value - discount_value + interest_value + rounding_value) INTO sum_in
                 from transactions
@@ -44,6 +37,21 @@ class CreateCalculateWalletValueProcedure extends Migration
                 SELECT total;
             END;
         ");
+
+        DB::unprepared("
+            CREATE PROCEDURE get_wallet_id_by_invoice(IN invoice_id INT)
+            BEGIN
+                DECLARE wallet_id INT;
+
+                SELECT wallets.id INTO wallet_id
+                FROM invoices
+                    JOIN cards ON cards.id = invoices.card_id
+                    JOIN wallets ON wallets.id = cards.wallet_id
+                WHERE invoices.id = invoice_id;
+
+                CALL calculate_wallet_value(wallet_id);
+            END;
+        ");
     }
 
     /**
@@ -51,6 +59,7 @@ class CreateCalculateWalletValueProcedure extends Migration
      */
     public function down(): void
     {
+        DB::unprepared("DROP PROCEDURE IF EXISTS get_wallet_id_by_invoice;");
         DB::unprepared("DROP PROCEDURE IF EXISTS calculate_wallet_value;");
     }
 };

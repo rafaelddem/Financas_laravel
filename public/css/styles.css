@@ -490,6 +490,22 @@ input[type="button"]:hover {
     background-color: var(--button-hover-dm);
 }
 
+.separator-with-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.separator-with-text::before,
+.separator-with-text::after {
+  content: '';
+  flex: 1;
+  border-top: var(--form-components-border);
+}
+.separator-with-text span {
+  padding: 0 10px;
+  font-weight: bold;
+}
+
 /* componentes fim */
 
 /* formulario inicio */

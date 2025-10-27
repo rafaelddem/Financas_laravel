@@ -52,7 +52,36 @@ function addMonths(date, months) {
     return newDate;
 }
 
-function formatMoney(value) {
+document.addEventListener("keydown", function (e) {
+    if (e.target.classList.contains("money") && e.key === "-") {
+        const input = e.target;
+        const raw = input.value.replace(/[^\d,-]/g, "");
+
+        if (raw === "" || raw === "0,00" || raw === "00") {
+            e.preventDefault();
+            input.value = "-0,00";
+
+            setTimeout(() => {
+                input.setSelectionRange(input.value.length, input.value.length);
+            }, 0);
+        }
+    }
+});
+
+document.addEventListener("input", function (e) {
+    if (e.target.classList.contains("money")) {
+        formatMoney(e.target);
+    }
+});
+
+function formatMoney(input) {
+    let value = input.value.replace(/[^\d-]/g, '');
+    value = (parseInt(value, 10) / 100).toFixed(2);
+    value = value.replace(".", ",");
+    input.value = applyBrlMask(value);
+};
+
+function applyBrlMask(value) {
     return value.toLocaleString("pt-BR", {
         currency: "BRL",
         minimumFractionDigits: 2,
@@ -60,7 +89,7 @@ function formatMoney(value) {
     });
 };
 
-function parseMoney(value) {
+function moneyToFloat(value) {
     if (!value) 
         return 0;
 

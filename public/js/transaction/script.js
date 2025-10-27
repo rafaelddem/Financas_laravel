@@ -137,29 +137,8 @@ function addInstallmentFields(installments) {
     distributeNetValueAcrossInstallments();
 }
 
-document.addEventListener("keydown", function (e) {
-    if (e.target.classList.contains("money") && e.key === "-") {
-        const input = e.target;
-        const raw = input.value.replace(/[^\d,-]/g, "");
-
-        if (raw === "" || raw === "0,00" || raw === "00") {
-            e.preventDefault();
-            input.value = "-0,00";
-
-            setTimeout(() => {
-                input.setSelectionRange(input.value.length, input.value.length);
-            }, 0);
-        }
-    }
-});
-
 document.addEventListener("input", function (e) {
     if (e.target.classList.contains("money")) {
-        let value = e.target.value.replace(/[^\d-]/g, '');
-        value = (parseInt(value, 10) / 100).toFixed(2);
-        value = value.replace(".", ",");
-        e.target.value = formatMoney(value);
-
         const installmentContainer = e.target.closest(".flex-container");
         if (installmentContainer) {
             recalculateNetValue(installmentContainer);
@@ -171,22 +150,22 @@ document.addEventListener("input", function (e) {
 });
 
 function recalculateNetValue(container) {
-    const gross = parseMoney(container.querySelector('[data-name="gross_value"]')?.value);
-    const discount = parseMoney(container.querySelector('[data-name="discount_value"]')?.value);
-    const interest = parseMoney(container.querySelector('[data-name="interest_value"]')?.value);
-    const rounding = parseMoney(container.querySelector('[data-name="rounding_value"]')?.value);
+    const gross = moneyToFloat(container.querySelector('[data-name="gross_value"]')?.value);
+    const discount = moneyToFloat(container.querySelector('[data-name="discount_value"]')?.value);
+    const interest = moneyToFloat(container.querySelector('[data-name="interest_value"]')?.value);
+    const rounding = moneyToFloat(container.querySelector('[data-name="rounding_value"]')?.value);
 
     const net = gross - discount + interest + rounding;
 
     const netInput = container.querySelector('[data-name="net_value"]');
     if (netInput) {
-        netInput.value = formatMoney(net);
+        netInput.value = applyBrlMask(net);
     }
 }
 
 function distributeNetValueAcrossInstallments() {
     const netValueInput = document.querySelector('[name="net_value"]');
-    const netValue = parseMoney(netValueInput?.value);
+    const netValue = moneyToFloat(netValueInput?.value);
 
     const installmentContainers = document.querySelectorAll('#installmentFields .flex-container');
     const numInstallments = installmentContainers.length;
@@ -205,7 +184,7 @@ function distributeNetValueAcrossInstallments() {
 
         const grossInput = container.querySelector('[data-name="gross_value"]');
         if (grossInput) {
-            grossInput.value = formatMoney(value);
+            grossInput.value = applyBrlMask(value);
         }
 
         recalculateNetValue(container);
