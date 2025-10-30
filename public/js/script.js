@@ -75,10 +75,16 @@ document.addEventListener("input", function (e) {
 });
 
 function formatMoney(input) {
-    let value = input.value.replace(/[^\d-]/g, '');
-    value = (parseInt(value, 10) / 100).toFixed(2);
-    value = value.replace(".", ",");
-    input.value = applyBrlMask(value);
+    if (input.value.includes(',')) {
+        let value = input.value.replace(/[^\d-]/g, '');
+        value = (parseInt(value, 10) / 100).toFixed(2);
+        value = value.replace(".", ",");
+        input.value = applyBrlMask(value);
+    } else {
+        let numero = parseFloat(input.value.replace(',', '.'));
+        let value = isNaN(numero) ? '' : numero.toFixed(2).replace('.', ',');
+        input.value = value;
+    }
 };
 
 function applyBrlMask(value) {

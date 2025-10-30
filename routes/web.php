@@ -28,15 +28,17 @@ Route::group(['prefix' => 'base-transacao', 'as' => 'transaction-base.'], functi
     Route::delete('/', [TransactionBaseController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['prefix' => 'importacao-extrato', 'as' => 'extract-import.'], function () {
-    Route::get('/', [ExtractImportController::class, 'index'])->name('index');
-    Route::post('/', [ExtractImportController::class, 'extract'])->name('extract');
-});
-
 Route::group(['prefix' => 'modulo-extrato', 'as' => 'extract-module.'], function () {
     Route::get('/', [ExtractModuleController::class, 'index'])->name('index');
     Route::post('/', [ExtractModuleController::class, 'store'])->name('store');
     Route::delete('/', [ExtractModuleController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['prefix' => 'importacao-extrato', 'as' => 'extract-import.'], function () {
+    Route::get('/', [ExtractImportController::class, 'index'])->name('index');
+    Route::post('/extrair', [ExtractImportController::class, 'extract'])->name('extract');
+    Route::post('/', [ExtractImportController::class, 'ready'])->name('ready');
+    Route::post('/importar', [ExtractImportController::class, 'import'])->name('import');
 });
 
 Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {
