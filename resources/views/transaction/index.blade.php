@@ -15,7 +15,13 @@
                     <td class="td-item">
                         <span class="td-content">
                             {{ $transaction->transaction_date->format('d/m/Y') }} | {{ $transaction->net_value_formatted }} | {{ $transaction->title }}
-                            <span class="tag">{{ $transaction->sourceWallet->name }}</span>
+                            @if($transaction->sourceWallet->owner_id == $transaction->destinationWallet->owner_id)
+                                <span class="tag">{{ $transaction->sourceWallet->name }} <i class="fa-solid fa-left-right"></i> {{ $transaction->destinationWallet->name }}</span>
+                            @elseif($transaction->sourceWallet->owner_id == env('MY_OWNER_ID'))
+                                <span class="tag"><i class="fa-solid fa-caret-down"></i> {{ $transaction->sourceWallet->name }}</span>
+                            @elseif($transaction->destinationWallet->owner_id == env('MY_OWNER_ID'))
+                                <span class="tag"><i class="fa-solid fa-caret-up"></i> {{ $transaction->destinationWallet->name }}</span>
+                            @endif
                             <span class="tag">{{ __($transaction->relevance->name)}}</span>
                         </span>
                         <form method="get" id="form-update-{{$transaction->id}}" action="{{route('category.edit', ['id' => $transaction->id])}}"></form>
