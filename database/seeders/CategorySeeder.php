@@ -31,6 +31,11 @@ class CategorySeeder extends Seeder
                 'name' => 'Movimentação entre carteiras',
                 'relevance' => Relevance::Banal->value,
             ],
+            [
+                'id' => 4,
+                'name' => 'Pagamento boleto crédito',
+                'relevance' => Relevance::Relevant->value,
+            ],
         ]);
     }
 }
