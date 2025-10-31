@@ -35,16 +35,20 @@ class TestSeed extends Seeder
         $categoryGenericIn = Category::find(1);
         $categoryGenericOut = Category::find(2);
         $categoryGenericTransf = Category::find(3);
+        $categorySalary = Category::create([
+            'name' => 'Salário',
+            'relevance' => Relevance::Indispensable->value,
+        ]);
+        $categoryCreditInvitePayment = Category::create([
+            'name' => 'Pagamento boleto',
+            'relevance' => Relevance::Indispensable->value,
+        ]);
         $categoryStudies = Category::create([
             'name' => 'Estudos',
             'relevance' => Relevance::Relevant->value,
         ]);
         $categoryInternet = Category::create([
             'name' => 'Internet',
-            'relevance' => Relevance::Indispensable->value,
-        ]);
-        $categorySalary = Category::create([
-            'name' => 'Salário',
             'relevance' => Relevance::Indispensable->value,
         ]);
         $categoryCar = Category::create([
