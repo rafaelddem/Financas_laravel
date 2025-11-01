@@ -36,6 +36,11 @@ class CategorySeeder extends Seeder
                 'name' => 'Pagamento boleto crédito',
                 'relevance' => Relevance::Relevant->value,
             ],
+            [
+                'id' => 5,
+                'name' => 'Adiantamento boleto crédito',
+                'relevance' => Relevance::Relevant->value,
+            ],
         ]);
     }
 }
