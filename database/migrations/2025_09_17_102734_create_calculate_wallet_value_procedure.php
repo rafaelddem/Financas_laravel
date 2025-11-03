@@ -39,7 +39,7 @@ class CreateCalculateWalletValueProcedure extends Migration
         ");
 
         DB::unprepared("
-            CREATE PROCEDURE get_wallet_id_by_invoice(IN invoice_id INT)
+            CREATE PROCEDURE calculate_wallet_value_by_invoice(IN invoice_id INT)
             BEGIN
                 DECLARE wallet_id INT;
 
@@ -59,7 +59,7 @@ class CreateCalculateWalletValueProcedure extends Migration
      */
     public function down(): void
     {
-        DB::unprepared("DROP PROCEDURE IF EXISTS get_wallet_id_by_invoice;");
+        DB::unprepared("DROP PROCEDURE IF EXISTS calculate_wallet_value_by_invoice;");
         DB::unprepared("DROP PROCEDURE IF EXISTS calculate_wallet_value;");
     }
 };
