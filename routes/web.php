@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () { return view('index'); });
 
+Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {
+    Route::get('/', [InvoiceController::class, 'index'])->name('list');
+    Route::post('/', [InvoiceController::class, 'pay'])->name('pay');
+});
+
 Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
     Route::get('/', [TransactionController::class, 'index'])->name('list');
     Route::get('/novo', [TransactionController::class, 'create'])->name('create');
@@ -39,11 +44,6 @@ Route::group(['prefix' => 'importacao-extrato', 'as' => 'extract-import.'], func
     Route::post('/extrair', [ExtractImportController::class, 'extract'])->name('extract');
     Route::post('/', [ExtractImportController::class, 'ready'])->name('ready');
     Route::post('/importar', [ExtractImportController::class, 'import'])->name('import');
-});
-
-Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {
-    Route::get('/', [InvoiceController::class, 'index'])->name('list');
-    Route::post('/', [InvoiceController::class, 'pay'])->name('pay');
 });
 
 Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {

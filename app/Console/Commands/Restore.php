@@ -38,8 +38,11 @@ class Restore extends Command
 
         try {
             Artisan::call('db:seed', ['--class' => 'Restore']);
-        } catch (\Throwable $th) {}
 
-        $this->info('Exist data added successfully!');
+            $this->info('Exist data added successfully!');
+        } catch (\Throwable $th) {
+            $this->info('Failed to restore data');
+        }
+
     }
 }
