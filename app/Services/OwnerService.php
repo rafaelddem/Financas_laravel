@@ -74,4 +74,17 @@ class OwnerService extends BaseService
             throw new ServiceException();
         }
     }
+
+    public function listOther(bool $onlyActive = true)
+    {
+        try {
+            return $this->repository->listOther($onlyActive);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return [];
+    }
 }

@@ -8,11 +8,17 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExtractImportController;
 use App\Http\Controllers\ExtractModuleController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionBaseController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () { return view('index'); });
+Route::get('/', [ReportController::class, 'index'])->name('home');
+
+Route::group(['prefix' => 'relatorios', 'as' => 'reports.'], function () {
+    Route::get('/', [ReportController::class, 'index'])->name('index');
+    Route::get('/emprestimos', [ReportController::class, 'loans'])->name('loans');
+});
 
 Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {
     Route::get('/', [InvoiceController::class, 'index'])->name('list');

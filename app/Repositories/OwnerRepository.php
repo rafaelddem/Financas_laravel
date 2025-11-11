@@ -27,6 +27,22 @@ class OwnerRepository extends BaseRepository
         }
     }
 
+    public function listOther(bool $onlyActive = true)
+    {
+        try {
+            return $this->model
+                ->when($onlyActive, function ($query) {
+                    $query->where('active', true);
+                })
+                ->whereNotIn('id', [env('SYSTEM_ID'), env('MY_OWNER_ID')])
+                ->orderby('active', 'desc')
+                ->orderby('name', 'asc')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
     /**
      * Implementar função após implementação da Transação
      */

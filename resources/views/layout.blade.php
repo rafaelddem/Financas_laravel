@@ -30,8 +30,11 @@
     <nav class="sidebar">
         <div class="menu-scroll">
             <ul class="menu-main">
-                <li class="navbar-item"><a href="/"><i class="fa-solid fa-house"></i><span>{{__('Dashboard')}}</span></a></li>
-                <li class="navbar-item"><a href="/"><i class="fa-solid fa-file-lines"></i><span>{{__('Reports')}}</span></a></li>
+                <li class="navbar-item"><a href="{{route('home')}}"><i class="fa-solid fa-house"></i><span>{{__('Dashboard')}}</span></a></li>
+                <li class="navbar-item" onclick="toggleSubmenu(event, 'reports')"><i class="fa-solid fa-file-lines"></i><span>{{__('Reports')}}</span><i class="fa-solid fa-caret-left"></i></li>
+                <ul class="submenu reports">
+                    <li class="navbar-item"><a href="{{route('reports.loans')}}"><i class="fa-solid fa-file-code"></i><span>{{__('Wallet Loans')}}</span></a></li>
+                </ul>
                 <li class="navbar-item" onclick="toggleSubmenu(event, 'transactions')"><i class="fa-solid fa-piggy-bank"></i><span>{{__('Transactions')}}</span><i class="fa-solid fa-caret-left"></i></li>
                 <ul class="submenu transactions">
                     <li class="navbar-item"><a href="{{route('invoice.list')}}"><i class="fa-solid fa-file-invoice-dollar"></i><span>{{__('Invoices')}}</span></a></li>
@@ -80,5 +83,7 @@
 
         @yield('page_content')
     </div>
+
+    @yield('scripts')
 </body>
 </html>

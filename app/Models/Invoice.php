@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\MoneyHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,6 +39,6 @@ class Invoice extends Model
 
     public function getValueFormattedAttribute(): string
     {
-        return 'R$ ' . number_format($this->value, 2, ',', '.');
+        return MoneyHelper::format($this->value);
     }
 }

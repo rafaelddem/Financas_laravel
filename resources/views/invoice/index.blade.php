@@ -17,11 +17,11 @@ use Carbon\Carbon;
         <h2 class="card-title">{{__('Filters')}}</h2>
         <div class="flex-container">
             <div class="col_20">
-                <label for="title">{{__('Title')}}:</label>
+                <label for="title">{{__('Start Date')}}:</label>
                 <input type="date" form="form-filter" name="start_date" id="start_date" value="{{$startDate->format('Y-m-d')}}" required>
             </div>
             <div class="col_20">
-                <label for="title">{{__('Title')}}:</label>
+                <label for="title">{{__('End Date')}}:</label>
                 <input type="date" form="form-filter" name="end_date" id="end_date" value="{{$endDate->format('Y-m-d')}}" required>
             </div>
             <div class="col_20">

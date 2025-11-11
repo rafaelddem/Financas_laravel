@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\MoneyHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,6 +46,6 @@ class Installment extends Model
 
     public function getNetValueFormattedAttribute(): string
     {
-        return 'R$ ' . number_format($this->net_value, 2, ',', '.');
+        return MoneyHelper::format($this->net_value);
     }
 }

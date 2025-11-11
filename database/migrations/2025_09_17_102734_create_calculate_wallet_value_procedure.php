@@ -10,7 +10,7 @@ class CreateCalculateWalletValueProcedure extends Migration
     public function up(): void
     {
         DB::unprepared("
-            CREATE Function calculate_wallet_value(wallet_id INT)
+            CREATE FUNCTION calculate_wallet_value(wallet_id INT, start_date DATE, end_date DATE)
             RETURNS DECIMAL(10,2)
             DETERMINISTIC
             BEGIN
@@ -41,46 +41,17 @@ class CreateCalculateWalletValueProcedure extends Migration
         ");
 
         DB::unprepared("
-            CREATE PROCEDURE calculate_all_wallets_value()
-            BEGIN
-                DECLARE done INT DEFAULT FALSE;
-                DECLARE wallet_id INT;
-                DECLARE wallet_name VARCHAR(100);
-                DECLARE wallet_value DECIMAL(10,2);
-
-                DECLARE cur CURSOR FOR SELECT id, name FROM wallets;
-                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-                CREATE TEMPORARY TABLE IF NOT EXISTS temporary_wallets (
-                    id INT,
-                    name VARCHAR(100),
-                    value DECIMAL(10,2)
-                );
-
-                DELETE FROM temporary_wallets;
-
-                OPEN cur;
-
-                read_loop: LOOP
-                    FETCH cur INTO wallet_id, wallet_name;
-                    IF done THEN
-                        LEAVE read_loop;
-                    END IF;
-
-                    SET wallet_value = calculate_wallet_value(wallet_id);
-                    INSERT INTO temporary_wallets (id, name, value) VALUES (wallet_id, wallet_name, wallet_value);
-                END LOOP;
-
-                CLOSE cur;
-
-                SELECT * FROM temporary_wallets;
-            END;
-        ");
-
-        DB::unprepared("
-            CREATE PROCEDURE calculate_wallet_value_by_invoice(IN invoice_id INT)
+            CREATE PROCEDURE calculate_wallet_value_by_invoice(IN invoice_id INT, start_date DATE, end_date DATE)
             BEGIN
                 DECLARE wallet_id INT;
+
+                IF start_date IS NULL THEN
+                    SELECT DATE_FORMAT(MIN(processing_date), '%Y-%m-01') INTO start_date FROM transactions;
+                END IF;
+
+                IF end_date IS NULL THEN
+                    SELECT NOW() INTO end_date;
+                END IF;
 
                 SELECT wallets.id INTO wallet_id
                 FROM invoices
@@ -88,7 +59,7 @@ class CreateCalculateWalletValueProcedure extends Migration
                     JOIN wallets ON wallets.id = cards.wallet_id
                 WHERE invoices.id = invoice_id;
 
-                CALL calculate_wallet_value(wallet_id);
+                SELECT calculate_wallet_value(wallet_id, start_date, end_date) as total;
             END;
         ");
     }
@@ -99,7 +70,7 @@ class CreateCalculateWalletValueProcedure extends Migration
     public function down(): void
     {
         DB::unprepared("DROP PROCEDURE IF EXISTS calculate_wallet_value_by_invoice;");
-        DB::unprepared("DROP PROCEDURE IF EXISTS calculate_all_wallets_value;");
-        DB::unprepared("DROP PROCEDURE IF EXISTS calculate_wallet_value;");
+        DB::unprepared("DROP PROCEDURE IF EXISTS calculate_loans;");
+        DB::unprepared("DROP FUNCTION IF EXISTS calculate_wallet_value;");
     }
 };

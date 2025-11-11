@@ -108,7 +108,7 @@ class WalletRepository extends BaseRepository
     public function getValue(int $invoiceId): float
     {
         try {
-            $resultado = \DB::select('CALL calculate_wallet_value_by_invoice(?)', [$invoiceId]);
+            $resultado = \DB::select('CALL calculate_wallet_value_by_invoice(?, ?, ?)', [$invoiceId, null, null]);
 
             return $resultado[0]->total ?? 0;
         } catch (\Throwable $th) {

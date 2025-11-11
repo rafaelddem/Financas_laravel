@@ -65,7 +65,7 @@ use App\Enums\Relevance;
     <div class="presentation">
         <h2 class="card-title">{{__('Extract Approval')}}</h2>
         @foreach($importTransactions as $key => $importTransaction)
-        <div class="separator-with-text"><span>Informações pessoais</span></div>
+        <div class="separator-with-text"><span>{{__('Transactionto Approve #1', ['index' => $importTransaction->id])}}</span></div>
         <div class="flex-container">
             <input type="hidden" form="form-approve-{{$key}}" name="id" value="{{$importTransaction->id}}">
             <div class="col_25 md_col">

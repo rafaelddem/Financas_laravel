@@ -94,6 +94,8 @@
     "Open Invoices": "Faturas Abertas",
     "Unpaid Invoice": "Faturas Pendentes",
     "Paid Invoices": "Faturas Pagas",
+    "Start Date": "Início do Período",
+    "End Date": "Fim do Período",
     "Invoices created successfully.": "Faturas criadas com sucesso.",
     "Open": "Aberta",
     "Closed": "Fechada",
@@ -156,10 +158,20 @@
     "Ready": "Pronto",
     "Files Left": "{1} :count Transação por aprovar|[2,*] :count Transações por aprovar",
     "File Not Found": "Arquivo não encontrado",
+    "Transactionto Approve #1": "Transação à aprovar :index",
 
     "Profile": "Perfil",
     "Configurations": "Configurações",
     "Logout": "Sair",
+
+    "Wallet Totals": "Totais por Carteira",
+    "Wallet Loans": "Emprestimos",
+    "Wallet Loans By Owner": "Dono relacionado ao empréstimo",
+    "There Are No Owners": "Não há Donos cadastrados",
+    "Total Amount": "Valores Totais",
+    "Future Invoices Value": "Faturas Futuras",
+    "Amounts to Refunded": "Valores a Devolver",
+    "Amounts to Received": "Valores a Receber",
 
     "": ""
 }

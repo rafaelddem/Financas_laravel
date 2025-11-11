@@ -186,6 +186,8 @@ body {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 60px);
+    position: fixed;
+    z-index: 1000;
 }
 .dark-mode .sidebar {
     background: var(--sidebar-background-dm);
@@ -308,36 +310,47 @@ body {
 }
 .col {
     width: 100%;
+    position: relative;
 }
 .col_10 {
     width: calc(10% - 18px);
+    position: relative;
 }
 .col_15 {
     width: calc(15% - 17px);
+    position: relative;
 }
 .col_20 {
     width: calc(20% - 16px);
+    position: relative;
 }
 .col_25 {
     width: calc(25% - 15px);
+    position: relative;
 }
 .col_30 {
     width: calc(30% - 14px);
+    position: relative;
 }
 .col_33 {
     width: calc(33.3% - 13.1px);
+    position: relative;
 }
 .col_40 {
     width: calc(40% - 12px);
+    position: relative;
 }
 .col_50 {
     width: calc(50% - 10px);
+    position: relative;
 }
 .col_66 {
     width: calc(66.6% - 6px);
+    position: relative;
 }
 .col_75 {
     width: calc(75% - 6px);
+    position: relative;
 }
 
 /* posicionamento fim */
@@ -356,6 +369,7 @@ body {
 
 .cards {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
     justify-content: space-between;
     margin: 20px;
@@ -626,6 +640,35 @@ input[type="checkbox"]:checked {
 }
 .dark-mode input[type="checkbox"]:checked {
     background-color: var(--button-dm);
+}
+
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+}
+.canvas-wrapper.h_25 {
+  position: relative;
+  width: 100%;
+  padding-top: 25%;
+}
+.canvas-wrapper.h_50 {
+  position: relative;
+  width: 100%;
+  padding-top: 50%;
+}
+.canvas-wrapper.h_75 {
+  position: relative;
+  width: 100%;
+  padding-top: 75%;
+}
+
+.canvas-wrapper canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* formulario fim */
