@@ -33,6 +33,7 @@ class InvoiceRepository extends BaseRepository
                 ->when($cardId, function ($query) use ($cardId) {
                     $query->where('invoices.card_id', $cardId);
                 })
+                ->orderby('invoices.start_date', 'desc')
                 ->get();
         } catch (\Throwable $th) {
             throw new RepositoryException();
