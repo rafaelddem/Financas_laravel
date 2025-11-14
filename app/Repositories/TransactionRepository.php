@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Enums\PaymentType;
 use App\Exceptions\RepositoryException;
 use App\Models\Transaction;
-use Carbon\Carbon;
 
 class TransactionRepository extends BaseRepository
 {
@@ -25,34 +24,6 @@ class TransactionRepository extends BaseRepository
                     'destinationWallet', 
                 ])
                 ->orderBy('transaction_date', 'desc')
-                ->get();
-        } catch (\Throwable $th) {
-            throw new RepositoryException();
-        }
-    }
-
-    public function ownerLoansTransactions(int $ownerId, Carbon $startDate, Carbon $endDate)
-    {
-        try {
-            $myId = env('MY_OWNER_ID');
-
-            return $this->model
-                ->with([
-                    'paymentMethod', 
-                    'category', 
-                    'sourceWallet', 
-                    'destinationWallet', 
-                ])
-                ->leftJoin('wallets as source_wallet', 'source_wallet.id', '=', 'transactions.source_wallet_id')
-                ->leftJoin('wallets as destination_wallet', 'destination_wallet.id', '=', 'transactions.destination_wallet_id')
-                ->leftJoin('owners as source_owner', 'source_owner.id', '=', 'source_wallet.owner_id')
-                ->leftJoin('owners as destination_owner', 'destination_owner.id', '=', 'destination_wallet.owner_id')
-                ->whereIn('source_owner.id', [$myId, $ownerId])
-                ->whereIn('destination_owner.id', [$myId, $ownerId])
-                ->whereColumn('source_owner.id', '!=', 'destination_owner.id')
-                ->whereBetween('processing_date', [$startDate, $endDate])
-                ->orderBy('transaction_date', 'asc')
-                ->orderBy('transactions.id', 'asc')
                 ->get();
         } catch (\Throwable $th) {
             throw new RepositoryException();

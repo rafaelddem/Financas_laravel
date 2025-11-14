@@ -62,6 +62,54 @@ class CreateCalculateWalletValueProcedure extends Migration
                 SELECT calculate_wallet_value(wallet_id, start_date, end_date) as total;
             END;
         ");
+
+        DB::unprepared("
+            CREATE PROCEDURE calculate_all_wallets_value(start_date DATE, end_date DATE)
+            BEGIN
+                DECLARE done INT DEFAULT FALSE;
+                DECLARE wallet_id INT;
+                DECLARE wallet_name VARCHAR(100);
+                DECLARE wallet_owner_id INT;
+                DECLARE wallet_value DECIMAL(10,2);
+
+                DECLARE cur CURSOR FOR SELECT id, name, owner_id FROM wallets;
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+                IF start_date IS NULL THEN
+                    SELECT DATE_FORMAT(MIN(processing_date), '%Y-%m-01') INTO start_date FROM transactions;
+                END IF;
+
+                IF end_date IS NULL THEN
+                    SELECT NOW() INTO end_date;
+                END IF;
+
+                CREATE TEMPORARY TABLE IF NOT EXISTS temporary_wallets (
+                    id INT,
+                    owner_id INT,
+                    name VARCHAR(100),
+                    value DECIMAL(10,2)
+                );
+
+                DELETE FROM temporary_wallets;
+
+                OPEN cur;
+
+                read_loop: LOOP
+                    FETCH cur INTO wallet_id, wallet_name, wallet_owner_id;
+
+                    IF done THEN
+                        LEAVE read_loop;
+                    END IF;
+
+                    SET wallet_value = calculate_wallet_value(wallet_id, start_date, end_date);
+                    INSERT INTO temporary_wallets (id, name, owner_id, value) VALUES (wallet_id, wallet_name, wallet_owner_id, wallet_value);
+                END LOOP;
+
+                CLOSE cur;
+
+                SELECT * FROM temporary_wallets;
+            END;
+        ");
     }
 
     /**
@@ -69,8 +117,8 @@ class CreateCalculateWalletValueProcedure extends Migration
      */
     public function down(): void
     {
+        DB::unprepared("DROP PROCEDURE IF EXISTS calculate_all_wallets_value;");
         DB::unprepared("DROP PROCEDURE IF EXISTS calculate_wallet_value_by_invoice;");
-        DB::unprepared("DROP PROCEDURE IF EXISTS calculate_loans;");
         DB::unprepared("DROP FUNCTION IF EXISTS calculate_wallet_value;");
     }
 };

@@ -38,7 +38,7 @@ class ReportService extends BaseService
         try {
             $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
             foreach ($wallets as $wallet) {
-                if ($wallet->mine) {
+                if ($wallet->owner_id == env('MY_OWNER_ID')) {
                     array_push($walletsData['label'], $wallet->name);
                     array_push($walletsData['value'][0], $wallet->value);
                 }
@@ -78,28 +78,47 @@ class ReportService extends BaseService
         return $other_wallets;
     }
 
-    public function calculateTotalWalletsValue(Carbon $startDate, Carbon $endDate)
+    public function myIncome(Carbon $startDate, Carbon $endDate)
     {
-        $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
+        try {
+            $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
 
-        $total = 0;
-        foreach ($wallets as $wallet) {
-            if($wallet->mine) {
-                $total += (int) ($wallet->value * 100);
+            $total = 0;
+            foreach ($wallets as $wallet) {
+                if($wallet->owner_id == env('MY_OWNER_ID')) {
+                    $total += (int) ($wallet->value * 100);
+                }
             }
-        }
 
-        return $total / 100;
+            return $total / 100;
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
     }
 
     public function ownerLoansTransactions(int $ownerId, Carbon $startDate, Carbon $endDate)
     {
         try {
-            $ownerLoans['fromPeriod'] = $this->transactionRepository->ownerLoansTransactions($ownerId, $startDate, $endDate)->reduce(function ($period, $transaction) {
-                $month = $transaction->processing_date->format('m/Y');
-                $period[$month][] = $transaction;
-                return $period;
-            }, []);
+            $ownerLoans['fromPeriod'] = [];
+            $transactions = $this->repository->listLoansTransactionsByOwner($ownerId, $startDate, $endDate);
+            foreach ($transactions as $transaction) {
+                $date = Carbon::createFromFormat('Y-m-d', $transaction->date);
+                $month = $date->format('m/Y');
+                $ownerLoans['fromPeriod'][$month][] = [
+                    'transactions_id' => $transaction->transactions_id,
+                    'transactions_title' => $transaction->transactions_title,
+                    'source_owner_id' => $transaction->source_owner_id,
+                    'source_owner_name' => $transaction->source_owner_name,
+                    'destination_owner_id' => $transaction->destination_owner_id,
+                    'destination_owner_name' => $transaction->destination_owner_name,
+                    'payment_methods_id' => $transaction->payment_methods_id,
+                    'payment_methods_type' => $transaction->payment_methods_type,
+                    'date' => $date,
+                    'net_value' => $transaction->net_value,
+                ];
+            }
 
             $ownerLoans['beforePeriod'] = 0;
             $loans = $this->repository->calculateLoansByOwner(null, $startDate->clone()->subDay());
@@ -119,7 +138,7 @@ class ReportService extends BaseService
         return new Collection();
     }
 
-    public function totalLoans()
+    public function totalLoans(?Carbon $startDate = null, ?Carbon $endDate = null)
     {
         try {
             $totalLoans = [
@@ -127,7 +146,7 @@ class ReportService extends BaseService
                 'positive' => 0,
             ];
 
-            $loans = $this->repository->calculateLoansByOwner();
+            $loans = $this->repository->calculateLoansByOwner($startDate, $endDate);
             foreach ($loans as $owner) {
                 if (!in_array($owner->id, [env('SYSTEM_ID'), env('MY_OWNER_ID')])) {
                     if ($owner->value > 0) {

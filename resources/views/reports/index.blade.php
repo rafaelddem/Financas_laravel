@@ -15,7 +15,7 @@
             <div class="cards">
                 <div class="card">
                     <h2 class="card-title">{{__('Total Amount')}}</h2>
-                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($total) }}</p>
+                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($my_income) }}</p>
                 </div>
             </div>
         </div>
@@ -54,8 +54,8 @@
                         'name' => 'totalByWallets',
                         'hasLabel' => false,
                         'aspectRatio' => 4,
-                        'labels' => $mine_wallets['label'],
-                        'values' => $mine_wallets['value']
+                        'labels' => $my_wallets_values['label'],
+                        'values' => $my_wallets_values['value']
                     ])
                 </div>
             </div>

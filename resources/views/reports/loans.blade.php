@@ -59,24 +59,25 @@
             @foreach($transactionsByMonth as $transaction)
                 <div class="flex-container">
                     <div class="col_15">
-                        {{$transaction->processing_date->format('d/m/Y')}}
+                        {{$transaction['date']->format('d/m/Y')}}
                     </div>
                     <div class="col_25">
-                        {{$transaction->sourceWallet->owner->name}} > {{$transaction->destinationWallet->owner->name}}
+                        {{$transaction['source_owner_name']}} > {{$transaction['destination_owner_name']}} 
+                        | <span class="tag">{{__(\App\Enums\PaymentType::translate($transaction['payment_methods_type']))}}</span>
                     </div>
                     <div class="col_30">
-                        {{$transaction->title}}
+                        {{$transaction['transactions_title']}}
                     </div>
                     <div class="col_15">
-                        @if ($transaction->sourceWallet->owner_id == env('MY_OWNER_ID'))
-                            @php($in += $transaction->net_value)
-                            {{$transaction->net_value_formatted}}
+                        @if ($transaction['source_owner_id'] == env('MY_OWNER_ID'))
+                            @php($in += $transaction['net_value'])
+                            {{ \App\Helpers\MoneyHelper::format($transaction['net_value']) }}
                         @endif
                     </div>
                     <div class="col_15">
-                        @if ($transaction->sourceWallet->owner_id != env('MY_OWNER_ID'))
-                            @php($out += $transaction->net_value)
-                            {{$transaction->net_value_formatted}}
+                        @if ($transaction['source_owner_id'] != env('MY_OWNER_ID'))
+                            @php($out += $transaction['net_value'])
+                            {{ \App\Helpers\MoneyHelper::format($transaction['net_value']) }}
                         @endif
                     </div>
                 </div>

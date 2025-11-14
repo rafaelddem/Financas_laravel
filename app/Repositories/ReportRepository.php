@@ -16,8 +16,7 @@ class ReportRepository extends BaseRepository
     public function calculateAllWalletsValue(Carbon $startDate, Carbon $endDate)
     {
         try {
-            $ownerId = env('MY_OWNER_ID');
-            return \DB::select('CALL calculate_all_wallets_value(?, ?, ?)', [$ownerId, $startDate, $endDate]);
+            return \DB::select('CALL calculate_all_wallets_value(?, ?)', [$startDate, $endDate]);
         } catch (\Throwable $th) {
             throw new RepositoryException();
         }
@@ -27,6 +26,15 @@ class ReportRepository extends BaseRepository
     {
         try {
             return \DB::select('CALL calculate_loans_by_owner(?, ?)', [$startDate, $endDate]);
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function listLoansTransactionsByOwner(int $ownerId, ?Carbon $startDate = null, ?Carbon $endDate = null)
+    {
+        try {
+            return \DB::select('CALL list_loans_transactions_by_owner(?, ?, ?, ?)', [env('SYSTEM_ID'), $ownerId, $startDate, $endDate]);
         } catch (\Throwable $th) {
             throw new RepositoryException();
         }

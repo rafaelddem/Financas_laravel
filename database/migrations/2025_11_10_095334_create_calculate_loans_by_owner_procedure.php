@@ -20,24 +20,58 @@ class CreateCalculateLoansByOwnerProcedure extends Migration
                 END IF;
 
                 IF end_date IS NULL THEN
-                    SELECT NOW() INTO end_date;
+                    SELECT MAX(processing_date) INTO end_date FROM transactions;
                 END IF;
 
                 SELECT id, name, SUM(value) AS value
                 FROM (
-                    select source_owner.id, source_owner.name, sum((gross_value - discount_value + interest_value + rounding_value)) * -1 as value
-                    from transactions 
-                        left join wallets as source_wallet on source_wallet.id = source_wallet_id
-                        left join owners as source_owner on source_owner.id = source_wallet.owner_id
-                    where processing_date between start_date and end_date
-                    group by source_owner.id, source_owner.name 
+                        SELECT 
+                            source_owner.id, 
+                            source_owner.name, 
+                            SUM(
+                                CASE 
+                                    WHEN payment_methods.type = 'credit' THEN 
+                                        (installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) * -1
+                                    ELSE 
+                                        (transactions.gross_value - transactions.discount_value + transactions.interest_value + transactions.rounding_value) * -1
+                                END
+                            ) AS value
+                        FROM transactions 
+                            LEFT JOIN payment_methods on payment_methods.id = transactions.payment_method_id
+                            LEFT JOIN installments ON installments.transaction_id = transactions.id
+                            LEFT JOIN wallets AS source_wallet ON source_wallet.id = transactions.source_wallet_id
+                            LEFT JOIN owners AS source_owner ON source_owner.id = source_wallet.owner_id
+                        WHERE 
+                            (installment_number IS NOT NULL AND installment_date BETWEEN start_date AND end_date) 
+                            OR (installment_number IS NULL AND processing_date BETWEEN start_date AND end_date)
+                        GROUP BY 
+                            source_owner.id, 
+                            source_owner.name
+
                     UNION ALL
-                    select destination_owner.id, destination_owner.name, sum((gross_value - discount_value + interest_value + rounding_value)) as value
-                    from transactions 
-                        left join wallets as destination_wallet on destination_wallet.id = destination_wallet_id
-                        left join owners as destination_owner on destination_owner.id = destination_wallet.owner_id
-                    where processing_date between start_date and end_date
-                    group by destination_owner.id, destination_owner.name 
+
+                        SELECT 
+                            destination_owner.id, 
+                            destination_owner.name, 
+                            SUM(
+                                CASE 
+                                    WHEN payment_methods.type = 'credit' THEN 
+                                        (installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) 
+                                    ELSE 
+                                        (transactions.gross_value - transactions.discount_value + transactions.interest_value + transactions.rounding_value) 
+                                END
+                            ) AS value
+                        FROM transactions 
+                            LEFT JOIN payment_methods on payment_methods.id = transactions.payment_method_id
+                            LEFT JOIN installments ON installments.transaction_id = transactions.id
+                            LEFT JOIN wallets AS destination_wallet ON destination_wallet.id = transactions.destination_wallet_id
+                            LEFT JOIN owners AS destination_owner ON destination_owner.id = destination_wallet.owner_id
+                        WHERE 
+                            (installment_number IS NOT NULL AND installment_date BETWEEN start_date AND end_date) 
+                            OR (installment_number IS NULL AND processing_date BETWEEN start_date AND end_date)
+                        GROUP BY 
+                            destination_owner.id, 
+                            destination_owner.name
                 ) AS loans
                 GROUP BY id, name;
             END;
