@@ -26,22 +26,22 @@ class Restore extends Command
      */
     public function handle()
     {
-        $this->info('Removing tables...');
+        $this->line('Removing tables...');
 
         Artisan::call('migrate:reset');
 
-        $this->info('Running migrations...');
+        $this->line('Running migrations...');
 
         Artisan::call('migrate', ['--seed' => true]);
 
-        $this->info('Adding test data...');
+        $this->line('Adding test data...');
 
         try {
             Artisan::call('db:seed', ['--class' => 'Restore']);
 
             $this->info('Existing data successfully added!');
         } catch (\Throwable $th) {
-            $this->info('Failed to restore data');
+            $this->error('Failed to restore data');
         }
     }
 }
