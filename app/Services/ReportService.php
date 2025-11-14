@@ -19,10 +19,10 @@ class ReportService extends BaseService
         $this->transactionRepository = app(TransactionRepository::class);
     }
 
-    public function futureCreditValue()
+    public function futureInvoiceAmounts()
     {
         try {
-            return $this->transactionRepository->futureCreditValue();
+            return $this->transactionRepository->futureInvoiceAmounts();
         } catch (\Throwable $th) {
             throw new ServiceException();
         }

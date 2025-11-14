@@ -30,7 +30,7 @@ class TransactionRepository extends BaseRepository
         }
     }
 
-    public function futureCreditValue()
+    public function futureInvoiceAmounts()
     {
         try {
             return $this->model

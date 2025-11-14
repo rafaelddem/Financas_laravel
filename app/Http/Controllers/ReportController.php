@@ -31,7 +31,7 @@ class ReportController extends Controller
                 : Carbon::now();
 
             $my_income = $this->service->myIncome($start_date, $end_date);
-            $future_credit_value = $this->service->futureCreditValue();
+            $future_credit_value = $this->service->futureInvoiceAmounts();
             $total_loans = $this->service->totalLoans($start_date, $end_date);
             $my_wallets_values = $this->service->totalByWallet($start_date, $end_date);
             $loans = $this->service->loans($start_date, $end_date);
