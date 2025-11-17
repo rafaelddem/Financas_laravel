@@ -34,7 +34,23 @@ class CreateListLoansTransactionsByOwnerProcedure extends Migration
                     CASE 
                         WHEN payment_methods.type  = 'credit' THEN installments.installment_date 
                         WHEN payment_methods.type != 'credit' THEN transactions.processing_date 
-                    END as date,  
+                    END as date, 
+                    CASE 
+                        WHEN payment_methods.type  = 'credit' THEN sum(installments.gross_value) 
+                        WHEN payment_methods.type != 'credit' THEN sum(transactions.gross_value) 
+                    END as gross_value, 
+                    CASE 
+                        WHEN payment_methods.type  = 'credit' THEN sum(installments.discount_value) 
+                        WHEN payment_methods.type != 'credit' THEN sum(transactions.discount_value) 
+                    END as discount_value, 
+                    CASE 
+                        WHEN payment_methods.type  = 'credit' THEN sum(installments.interest_value) 
+                        WHEN payment_methods.type != 'credit' THEN sum(transactions.interest_value) 
+                    END as interest_value, 
+                    CASE 
+                        WHEN payment_methods.type  = 'credit' THEN sum(installments.rounding_value) 
+                        WHEN payment_methods.type != 'credit' THEN sum(transactions.rounding_value) 
+                    END as rounding_value, 
                     CASE 
                         WHEN payment_methods.type  = 'credit' THEN sum(installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) 
                         WHEN payment_methods.type != 'credit' THEN sum(transactions.gross_value - transactions.discount_value + transactions.interest_value + transactions.rounding_value) 

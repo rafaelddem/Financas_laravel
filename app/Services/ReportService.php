@@ -19,6 +19,26 @@ class ReportService extends BaseService
         $this->transactionRepository = app(TransactionRepository::class);
     }
 
+    public function myIncome(Carbon $startDate, Carbon $endDate)
+    {
+        try {
+            $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
+
+            $total = 0;
+            foreach ($wallets as $wallet) {
+                if($wallet->owner_id == env('MY_OWNER_ID')) {
+                    $total += (int) ($wallet->value * 100);
+                }
+            }
+
+            return $total / 100;
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+    }
+
     public function futureInvoiceAmounts()
     {
         try {
@@ -26,6 +46,35 @@ class ReportService extends BaseService
         } catch (\Throwable $th) {
             throw new ServiceException();
         }
+    }
+
+    public function totalLoans(?Carbon $startDate = null, ?Carbon $endDate = null)
+    {
+        try {
+            $totalLoans = [
+                'negative' => 0,
+                'positive' => 0,
+            ];
+
+            $loans = $this->repository->calculateLoansByOwner($startDate, $endDate);
+            foreach ($loans as $owner) {
+                if (!in_array($owner->id, [env('SYSTEM_ID'), env('MY_OWNER_ID')])) {
+                    if ($owner->gross_value > 0) {
+                        $totalLoans['positive'] += $owner->gross_value;
+                    } else {
+                        $totalLoans['negative'] += ($owner->gross_value * -1);
+                    }
+                }
+            }
+
+            return $totalLoans;
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return new Collection();
     }
 
     public function totalByWallet(Carbon $startDate, Carbon $endDate)
@@ -54,7 +103,7 @@ class ReportService extends BaseService
 
     public function loans(Carbon $startDate, Carbon $endDate)
     {
-        $other_wallets = [
+        $loans = [
             'label' => ['Emprestimos'],
             'value' => [],
         ];
@@ -63,39 +112,19 @@ class ReportService extends BaseService
             $owners = $this->repository->calculateLoansByOwner($startDate, $endDate);
 
             foreach ($owners as $owner) {
-                if (!in_array($owner->id, [env('SYSTEM_ID'), env('MY_OWNER_ID')]) && (float) $owner->value != 0) {
-                    $other_wallets['value'][$owner->name] = [$owner->value];
+                if (!in_array($owner->id, [env('SYSTEM_ID'), env('MY_OWNER_ID')]) && (float) $owner->gross_value != 0) {
+                    $loans['value'][$owner->name] = [$owner->gross_value];
                 }
             }
 
-            return $other_wallets;
+            return $loans;
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
             throw new ServiceException();
         }
 
-        return $other_wallets;
-    }
-
-    public function myIncome(Carbon $startDate, Carbon $endDate)
-    {
-        try {
-            $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
-
-            $total = 0;
-            foreach ($wallets as $wallet) {
-                if($wallet->owner_id == env('MY_OWNER_ID')) {
-                    $total += (int) ($wallet->value * 100);
-                }
-            }
-
-            return $total / 100;
-        } catch (BaseException $exception) {
-            throw $exception;
-        } catch (\Throwable $th) {
-            throw new ServiceException();
-        }
+        return $loans;
     }
 
     public function ownerLoansTransactions(int $ownerId, Carbon $startDate, Carbon $endDate)
@@ -116,7 +145,7 @@ class ReportService extends BaseService
                     'payment_methods_id' => $transaction->payment_methods_id,
                     'payment_methods_type' => $transaction->payment_methods_type,
                     'date' => $date,
-                    'net_value' => $transaction->net_value,
+                    'net_value' => $transaction->gross_value,
                 ];
             }
 
@@ -124,40 +153,11 @@ class ReportService extends BaseService
             $loans = $this->repository->calculateLoansByOwner(null, $startDate->clone()->subDay());
             foreach ($loans as $owner) {
                 if ($owner->id == $ownerId) {
-                    $ownerLoans['beforePeriod'] = $owner->value;
+                    $ownerLoans['beforePeriod'] = $owner->gross_value;
                 }
             }
 
             return $ownerLoans;
-        } catch (BaseException $exception) {
-            throw $exception;
-        } catch (\Throwable $th) {
-            throw new ServiceException();
-        }
-
-        return new Collection();
-    }
-
-    public function totalLoans(?Carbon $startDate = null, ?Carbon $endDate = null)
-    {
-        try {
-            $totalLoans = [
-                'negative' => 0,
-                'positive' => 0,
-            ];
-
-            $loans = $this->repository->calculateLoansByOwner($startDate, $endDate);
-            foreach ($loans as $owner) {
-                if (!in_array($owner->id, [env('SYSTEM_ID'), env('MY_OWNER_ID')])) {
-                    if ($owner->value > 0) {
-                        $totalLoans['positive'] += $owner->value;
-                    } else {
-                        $totalLoans['negative'] += ($owner->value * -1);
-                    }
-                }
-            }
-
-            return $totalLoans;
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {

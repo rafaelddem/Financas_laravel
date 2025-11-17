@@ -23,7 +23,7 @@ class CreateCalculateLoansByOwnerProcedure extends Migration
                     SELECT MAX(processing_date) INTO end_date FROM transactions;
                 END IF;
 
-                SELECT id, name, SUM(value) AS value
+                SELECT id, name, SUM(gross_value) AS gross_value, SUM(net_value) AS net_value
                 FROM (
                         SELECT 
                             source_owner.id, 
@@ -31,11 +31,19 @@ class CreateCalculateLoansByOwnerProcedure extends Migration
                             SUM(
                                 CASE 
                                     WHEN payment_methods.type = 'credit' THEN 
+                                        installments.gross_value * -1
+                                    ELSE 
+                                        transactions.gross_value * -1
+                                END
+                            ) AS gross_value, 
+                            SUM(
+                                CASE 
+                                    WHEN payment_methods.type = 'credit' THEN 
                                         (installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) * -1
                                     ELSE 
                                         (transactions.gross_value - transactions.discount_value + transactions.interest_value + transactions.rounding_value) * -1
                                 END
-                            ) AS value
+                            ) AS net_value
                         FROM transactions 
                             LEFT JOIN payment_methods on payment_methods.id = transactions.payment_method_id
                             LEFT JOIN installments ON installments.transaction_id = transactions.id
@@ -56,11 +64,19 @@ class CreateCalculateLoansByOwnerProcedure extends Migration
                             SUM(
                                 CASE 
                                     WHEN payment_methods.type = 'credit' THEN 
+                                        installments.gross_value 
+                                    ELSE 
+                                        transactions.gross_value 
+                                END
+                            ) AS gross_value, 
+                            SUM(
+                                CASE 
+                                    WHEN payment_methods.type = 'credit' THEN 
                                         (installments.gross_value - installments.discount_value + installments.interest_value + installments.rounding_value) 
                                     ELSE 
                                         (transactions.gross_value - transactions.discount_value + transactions.interest_value + transactions.rounding_value) 
                                 END
-                            ) AS value
+                            ) AS net_value
                         FROM transactions 
                             LEFT JOIN payment_methods on payment_methods.id = transactions.payment_method_id
                             LEFT JOIN installments ON installments.transaction_id = transactions.id

@@ -172,6 +172,10 @@
     "Future Invoices Value": "Faturas Futuras",
     "Amounts to Refunded": "Valores a Devolver",
     "Amounts to Received": "Valores a Receber",
+    "Amounts Before Period": "Valores anteriores ao período",
+    "Period :reference": "Período: :reference",
+    "Amount Until End Period": "Total parcial",
+    "Amount Until End Date": "Total até a data",
 
     "": ""
 }

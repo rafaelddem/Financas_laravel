@@ -49,13 +49,13 @@
             <div class="flex-container">
                 <div class="col_15"></div>
                 <div class="col_30"></div>
-                <div class="col_25"><b>Total anterior ao período: </b></div>
+                <div class="col_25"><b>{{__('Amounts Before Period')}}: </b></div>
                 <div class="col_15"></div>
                 <div class="col_15"><b>{{ \App\Helpers\MoneyHelper::format($ownerLoans['beforePeriod'] ?? 0) }}</b></div>
             </div>
         @endif
         @foreach($ownerLoans['fromPeriod'] as $month => $transactionsByMonth)
-            <div class="separator-with-text"><span> Período: {{$month}} </span></div>
+            <div class="separator-with-text"><span>{{__('Period :reference', ['reference' => $month])}}</span></div>
             @foreach($transactionsByMonth as $transaction)
                 <div class="flex-container">
                     <div class="col_15">
@@ -82,23 +82,15 @@
                     </div>
                 </div>
             @endforeach
+            @php($parcial += ($in - $out))
             <div class="flex-container">
                 <div class="col_15"></div>
                 <div class="col_30"></div>
                 <div class="col_25"></div>
-                <div class="col_15"> Total do período: </div>
-                <div class="col_15">{{ \App\Helpers\MoneyHelper::format($in - $out) }}</div>
+                <div class="col_15"><b>{{__('Amount Until End Date')}}</b></div>
+                <div class="col_15"><b>{{ \App\Helpers\MoneyHelper::format($parcial) }}</b></div>
             </div>
-            @php($parcial = $in - $out + $parcial)
             @php($in = $out = 0)
         @endforeach
-
-        <div class="flex-container">
-            <div class="col_15"></div>
-            <div class="col_30"></div>
-            <div class="col_25"><b>{{__('Total')}}</b></div>
-            <div class="col_15"></div>
-            <div class="col_15"><b>{{ \App\Helpers\MoneyHelper::format($parcial) }}</b></div>
-        </div>
     </div>
 @endsection
