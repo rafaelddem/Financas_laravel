@@ -76,7 +76,7 @@ class CreateListLoansTransactionsByOwnerProcedure extends Migration
                 group by
                     transactions.id, transactions.title, source_owner.id, source_owner.name, destination_owner.id, destination_owner.name, payment_methods.id, payment_methods.type, installments.installment_date, transactions.processing_date 
                 order by
-                    processing_date, installment_date;
+                    processing_date, installment_date, transactions_id;
             END;
         ");
     }

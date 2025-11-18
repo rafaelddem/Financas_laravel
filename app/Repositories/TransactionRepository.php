@@ -24,6 +24,7 @@ class TransactionRepository extends BaseRepository
                     'destinationWallet', 
                 ])
                 ->orderBy('transaction_date', 'desc')
+                ->orderBy('id', 'desc')
                 ->get();
         } catch (\Throwable $th) {
             throw new RepositoryException();
