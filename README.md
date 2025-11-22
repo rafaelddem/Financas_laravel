@@ -1060,4 +1060,4 @@ Manter o controle dos imprestimos através de relatórios, como faço no sistema
 
 Criar um arquivo de configurações para dados default como um método de pagamento para o pagamento de faturas
 
-Implementar pagamento parcial de fatura
+Implementar pagamento parcial de fatura. Obs.: Considerar a possibilidade de dois cartões de crédito para a mesma carteira
