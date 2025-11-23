@@ -60,6 +60,7 @@ class InvoiceRepository extends BaseRepository
                 ->select('invoices.*')
                 ->join('cards', 'cards.id', '=', 'invoices.card_id')
                 ->where('invoices.card_id', $card_id)
+                ->where('invoices.status', InvoiceStatus::Open->value)
                 ->update([ 'value' => $value ]);
         } catch (ModelNotFoundException $exception) {
             throw new RepositoryException('The reported record was not found.', $exception->getCode(), $exception);

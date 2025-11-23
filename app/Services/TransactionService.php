@@ -43,7 +43,11 @@ class TransactionService extends BaseService
 
                 $this->installmentRepository->insertMultiples($transaction->id, $input['installments']);
 
-                $this->invoiceRepository->addValueToInvoice($transaction->card_id, $transaction->installments()->orderBy('installment_date')->first()->net_value);
+                $invoiceValue = $this->installmentRepository->getSumByInvoice($card->invoices()->get()->last());
+                $partialPayments = $this->repository->totalInvoicePartialPayment($card->invoices()->get()->last());
+                $newInvoiceValue = $invoiceValue - $partialPayments;
+
+                $this->invoiceRepository->addValueToInvoice($transaction->card_id, $newInvoiceValue);
             }
 
             \DB::commit();

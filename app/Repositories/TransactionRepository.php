@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\PaymentType;
 use App\Exceptions\RepositoryException;
+use App\Models\Invoice;
 use App\Models\Transaction;
 
 class TransactionRepository extends BaseRepository
@@ -41,6 +42,19 @@ class TransactionRepository extends BaseRepository
                 ->whereNull('installments.payment_date')
                 ->where('payment_methods.type', PaymentType::Credit->value)
                 ->value('sum_net_value');
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function totalInvoicePartialPayment(Invoice $invoice)
+    {
+        try {
+            return $this->model
+                ->where('category_id', env('INVOICE_PARTIAL_PAYMENT_CATEGORY'))
+                ->where('source_wallet_id', $invoice->card->wallet_id)
+                ->whereBetween('transactions.processing_date', [$invoice->start_date, $invoice->end_date])
+                ->get()->sum('net_value');
         } catch (\Throwable $th) {
             throw new RepositoryException();
         }
