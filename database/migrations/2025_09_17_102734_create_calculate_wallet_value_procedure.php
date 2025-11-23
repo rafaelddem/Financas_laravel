@@ -72,7 +72,7 @@ class CreateCalculateWalletValueProcedure extends Migration
                 DECLARE wallet_owner_id INT;
                 DECLARE wallet_value DECIMAL(10,2);
 
-                DECLARE cur CURSOR FOR SELECT id, name, owner_id FROM wallets;
+                DECLARE cur CURSOR FOR SELECT id, name, owner_id FROM wallets where active = 1;
                 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
                 IF start_date IS NULL THEN

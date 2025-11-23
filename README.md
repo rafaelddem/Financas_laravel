@@ -1060,4 +1060,6 @@ Manter o controle dos imprestimos através de relatórios, como faço no sistema
 
 Criar um arquivo de configurações para dados default como um método de pagamento para o pagamento de faturas
 
-Implementar pagamento parcial de fatura. Obs.: Considerar a possibilidade de dois cartões de crédito para a mesma carteira
+Implementar pagamento parcial de fatura. 
+    Obs.: Considerar a possibilidade de dois cartões de crédito para a mesma carteira
+    Obs.: Revisar o total da fatura após o pagamento, pois hoje considera somente o último valor pago, e não o valor cheio da fatura. Em oturas palavras, uma fatura onde o total foi de 1000, mas que antes do seu fechamento já havia sido pago 500, vai aparecer na listagem de fatura pagas como 500 apenas, e não como uma fatura de 100
