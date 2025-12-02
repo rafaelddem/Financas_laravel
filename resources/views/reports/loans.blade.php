@@ -78,6 +78,8 @@
                         @if ($transaction['source_owner_id'] != env('MY_OWNER_ID'))
                             @php($out += $transaction['net_value'])
                             {{ \App\Helpers\MoneyHelper::format($transaction['net_value']) }}
+
+                            @if ($transaction['source_owner_id'] != env('MY_OWNER_ID') && $transaction['destination_owner_id'] != env('MY_OWNER_ID')) * @endif
                         @endif
                     </div>
                 </div>
@@ -92,5 +94,9 @@
             </div>
             @php($in = $out = 0)
         @endforeach
+        <br>
+        <p>{{__('Observations')}}:</p>
+        <p>* {{__('Value correction movement. It will not necessarily be displayed in the corresponding column. Pay attention to the source and destination wallets for better understanding.')}}</p>
+        <p>** {{__('Regarding the totals, when the value shown is positive, it means I should receive that amount, and when it is negative, it means I should return it.')}}</p>
     </div>
 @endsection

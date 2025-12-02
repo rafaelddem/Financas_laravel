@@ -91,6 +91,7 @@ $dados = [
 ></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const canvas = document.getElementById('{{$name}}');
@@ -148,6 +149,22 @@ $dados = [
                     },
                     legend: {
                         display: hasLabel
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => {
+                            return new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                                minimumFractionDigits: 2
+                            }).format(value);
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        color: '#000'
                     }
                 },
                 scales: {
@@ -158,7 +175,8 @@ $dados = [
                             }
                     }
                 },
-            }
+            },
+            plugins: [ChartDataLabels]
         });
     });
 </script>
