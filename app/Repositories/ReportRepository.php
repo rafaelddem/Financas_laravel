@@ -13,6 +13,24 @@ class ReportRepository extends BaseRepository
         parent::__construct(NullModel::class);
     }
 
+    public function calculateIncomeUntilDate(Carbon $limitDate)
+    {
+        try {
+            return \DB::select('CALL calculate_income_until_date(?, ?)', [env('MY_OWNER_ID'), $limitDate])[0]->total;
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function calculateIncomeByPeriod(Carbon $startDate, Carbon $limitDate)
+    {
+        try {
+            return \DB::select('CALL calculate_income_by_period(?, ?, ?)', [env('MY_OWNER_ID'), $startDate, $limitDate]);
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
     public function calculateAllWalletsValue(Carbon $startDate, Carbon $endDate)
     {
         try {

@@ -4,17 +4,17 @@ Gráfico de barras simples
 
 Como incluir o gráfico na tela:
 
-@include('components.chart-bar', [
-    'name' => 'totalWallets',
+@include('components.bar-chart', [
+    'name' => 'component_name',
     'title' => 'Titulo do gráfico',
     'aspectRatio => 2
     'hasLabel' => 'true',
-    'labels' => $mine_wallets['label'],
-    'values' => $mine_wallets['value'],
+    'labels' => $data['label'],
+    'values' => $data['value'],
 ])
 
 onde:
-- name (obrigatório): Identificados do canvas, atributo "id" de componentes HTML.
+- name (obrigatório): Identificador do canvas, atributo "id" de componentes HTML.
 - title: Título do gráfico. Se não informado não é apresentado um título ao gráfico.
 - aspectRatio: Define a propoção do gráfico em relação ao texto (2 = 2:1, 3 = 3:1, 4 = 4:1 ...). Se não informado assume-se o valor 2
 - hasLabel: Define se o gráfico terá Descrição das colunas no topo do gráfico.
@@ -24,7 +24,7 @@ onde:
 Estruturas de gráficos suportados:
 
 1 => 
-$dados = [
+$data = [
     'label' => ['A', 'B', 'C'],
     'value' => [
         [10, -10, 20],
@@ -41,7 +41,7 @@ $dados = [
 
 
 2 => 
-$dados = [
+$data = [
     'label' => ['A'],
     'value' => [
         'Z' => [20],
@@ -61,7 +61,7 @@ $dados = [
 
 
 3 => 
-$dados = [
+$data = [
     'label' => ['A', 'B', 'C'],
     'value' => [
         'Z' => [30, 20, 30],
@@ -90,8 +90,6 @@ $dados = [
     data-values='@json($values)'
 ></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const canvas = document.getElementById('{{$name}}');
@@ -123,7 +121,7 @@ $dados = [
             return {
                 label: label,
                 data: data,
-                    backgroundColor: function(context) {
+                backgroundColor: function(context) {
                     return context.raw < 0 ? colorNegative : colorPositive;
                 },
                 barThickness: 40,

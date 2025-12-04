@@ -1,9 +1,5 @@
 @extends('layout')
 
-@push('head-script')
-    <script src="{{ asset('js/charts.js') }}" defer></script>
-@endpush('head-script')
-
 @section('page_content')
     <div class="presentation">
         <h1>Bem-vindo ao Sistema Financeiro</h1>
@@ -15,7 +11,7 @@
             <div class="cards">
                 <div class="card">
                     <h2 class="card-title">{{__('Total Amount')}}</h2>
-                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($my_income) }}</p>
+                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($income) }}</p>
                 </div>
             </div>
         </div>
@@ -50,12 +46,12 @@
             <div class="col_66">
                 <h2>{{__('Wallet Totals')}}</h2>
                 <div class="canvas-wrapper h_25">
-                    @include('components.chart-bar', [
+                    @include('components.bar-chart', [
                         'name' => 'totalByWallets',
                         'hasLabel' => false,
                         'aspectRatio' => 4,
-                        'labels' => $my_wallets_values['label'],
-                        'values' => $my_wallets_values['value']
+                        'labels' => $wallets_values['label'],
+                        'values' => $wallets_values['value']
                     ])
                 </div>
             </div>
@@ -64,7 +60,7 @@
                 <div class="col_33">
                     <h2>{{__('Wallet Loans')}}</h2>
                     <div class="canvas-wrapper h_50">
-                        @include('components.chart-bar', [
+                        @include('components.bar-chart', [
                             'name' => 'loans',
                             'hasLabel' => false,
                             'labels' => $loans['label'],
@@ -73,6 +69,22 @@
                     </div>
                 </div>
             @endif
+        </div>
+    </div>
+
+    <div class="presentation">
+        <div class="flex-container">
+            <div class="col">
+                <h2>{{__('Totals By Period')}}</h2>
+                <div class="canvas-wrapper h_25">
+                    @include('components.line-chart', [
+                        'name' => 'income_by_period',
+                        'aspectRatio' => 4,
+                        'labels' => $income_by_period['labels'],
+                        'values' => $income_by_period['values'],
+                    ])
+                </div>
+            </div>
         </div>
     </div>
 @endsection

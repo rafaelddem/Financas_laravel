@@ -166,6 +166,7 @@
 
     "Wallet Totals": "Totais por Carteira",
     "Wallet Loans": "Emprestimos",
+    "Totals By Period": "Totais por Período",
     "Wallet Loans By Owner": "Dono relacionado ao empréstimo",
     "There Are No Owners": "Não há Donos cadastrados",
     "Total Amount": "Valores Totais",
@@ -179,6 +180,8 @@
     "Observations": "Observações",
     "Value correction movement. It will not necessarily be displayed in the corresponding column. Pay attention to the source and destination wallets for better understanding.": "Movimento de correção de valor. Ele não será necessariamente exibido na coluna correspondente. Preste atenção às carteiras de origem e destino para melhor compreensão.",
     "Regarding the totals, when the value shown is positive, it means I should receive that amount, and when it is negative, it means I should return it.": "Em relação aos totais, quando o valor apresentado é positivo, significa que devo receber esse valor, e quando é negativo, significa que devo devolvê-lo.",
+    "Report Label Total Until Date": "Até a data",
+    "Report Label Total From Period": "Do período",
 
     "": ""
 }

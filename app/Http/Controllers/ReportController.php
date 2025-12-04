@@ -30,13 +30,14 @@ class ReportController extends Controller
                 ? Carbon::createFromFormat('Y-m-d', $request->get('end_date'))
                 : Carbon::now();
 
-            $my_income = $this->service->myIncome($start_date, $end_date);
+            $income = $this->service->income($start_date, $end_date);
+            $income_by_period = $this->service->incomeByPeriod($end_date->clone()->subYears(2), $end_date);
             $future_credit_value = $this->service->futureInvoiceAmounts();
             $total_loans = $this->service->totalLoans($start_date, $end_date);
-            $my_wallets_values = $this->service->totalByWallet($start_date, $end_date);
+            $wallets_values = $this->service->incomeByWallet($start_date, $end_date);
             $loans = $this->service->loans($start_date, $end_date);
 
-            return view('reports.index', compact('my_income', 'future_credit_value', 'total_loans', 'my_wallets_values', 'loans'));
+            return view('reports.index', compact('income', 'income_by_period', 'future_credit_value', 'total_loans', 'wallets_values', 'loans'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script src="{{ asset('js/dark-mode.js') }}"></script>
     <script src="{{ asset('js/script.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     @stack('head-script')
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

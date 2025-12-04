@@ -19,24 +19,69 @@ class ReportService extends BaseService
         $this->transactionRepository = app(TransactionRepository::class);
     }
 
-    public function myIncome(Carbon $startDate, Carbon $endDate)
+    public function income(Carbon $startDate, Carbon $endDate)
     {
         try {
-            $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
-
-            $total = 0;
-            foreach ($wallets as $wallet) {
-                if($wallet->owner_id == env('MY_OWNER_ID')) {
-                    $total += (int) ($wallet->value * 100);
-                }
-            }
-
-            return $total / 100;
+            return $this->repository->calculateIncomeUntilDate($endDate);
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
             throw new ServiceException();
         }
+    }
+
+    public function incomeByPeriod(Carbon $startDate, Carbon $endDate)
+    {
+        try {
+            $inicialTotal = $this->repository->calculateIncomeUntilDate($startDate->clone()->subDay());
+            $total = (int) $inicialTotal * 100;
+            $periods = $this->repository->calculateIncomeByPeriod($startDate, $endDate);
+
+            $wallets = [
+                'labels' => [],
+                'values' => [
+                    __('Report Label Total Until Date')=> [],
+                    __('Report Label Total From Period') => [],
+                ],
+            ];
+            foreach ($periods as $period) {
+                $total += (int) ($period->value * 100);
+
+                array_push($wallets['labels'], $period->date);
+                array_push($wallets['values'][__('Report Label Total Until Date')], $total / 100);
+                array_push($wallets['values'][__('Report Label Total From Period')], $period->value);
+            }
+
+            return $wallets;
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+    }
+
+    public function incomeByWallet(Carbon $startDate, Carbon $endDate)
+    {
+        $walletsData = [
+            'label' => [],
+            'value' => [[]],
+        ];
+
+        try {
+            $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
+            foreach ($wallets as $wallet) {
+                if ($wallet->owner_id == env('MY_OWNER_ID')) {
+                    array_push($walletsData['label'], $wallet->name);
+                    array_push($walletsData['value'][0], $wallet->value);
+                }
+            }
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return $walletsData;
     }
 
     public function futureInvoiceAmounts()
@@ -77,35 +122,11 @@ class ReportService extends BaseService
         return new Collection();
     }
 
-    public function totalByWallet(Carbon $startDate, Carbon $endDate)
-    {
-        $walletsData = [
-            'label' => [],
-            'value' => [[]],
-        ];
-
-        try {
-            $wallets = $this->repository->calculateAllWalletsValue($startDate, $endDate);
-            foreach ($wallets as $wallet) {
-                if ($wallet->owner_id == env('MY_OWNER_ID')) {
-                    array_push($walletsData['label'], $wallet->name);
-                    array_push($walletsData['value'][0], $wallet->value);
-                }
-            }
-        } catch (BaseException $exception) {
-            throw $exception;
-        } catch (\Throwable $th) {
-            throw new ServiceException();
-        }
-
-        return $walletsData;
-    }
-
     public function loans(Carbon $startDate, Carbon $endDate)
     {
         $loans = [
-            'label' => ['Emprestimos'],
-            'value' => [],
+            'label' => [],
+            'value' => [[]],
         ];
 
         try {
@@ -113,7 +134,8 @@ class ReportService extends BaseService
 
             foreach ($owners as $owner) {
                 if (!in_array($owner->id, [env('SYSTEM_ID'), env('MY_OWNER_ID')]) && (float) $owner->gross_value != 0) {
-                    $loans['value'][$owner->name] = [$owner->gross_value];
+                    array_push($loans['label'], $owner->name);
+                    array_push($loans['value'][0], $owner->gross_value);
                 }
             }
 
