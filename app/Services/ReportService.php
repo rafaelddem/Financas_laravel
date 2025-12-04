@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PaymentType;
 use App\Exceptions\BaseException;
 use App\Exceptions\ServiceException;
 use App\Repositories\ReportRepository;
@@ -159,7 +160,9 @@ class ReportService extends BaseService
                 $month = $date->format('m/Y');
                 $ownerLoans['fromPeriod'][$month][] = [
                     'transactions_id' => $transaction->transactions_id,
-                    'transactions_title' => $transaction->transactions_title,
+                    'transactions_title' => ($transaction->payment_methods_type != PaymentType::Credit->value)
+                        ? $transaction->transactions_title
+                        : $transaction->transactions_title . ' (' . $transaction->installment_number . '/' . $transaction->installment_total . ')',
                     'source_owner_id' => $transaction->source_owner_id,
                     'source_owner_name' => $transaction->source_owner_name,
                     'destination_owner_id' => $transaction->destination_owner_id,

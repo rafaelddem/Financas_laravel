@@ -52,7 +52,7 @@ class ReportRepository extends BaseRepository
     public function listLoansTransactionsByOwner(int $ownerId, ?Carbon $startDate = null, ?Carbon $endDate = null)
     {
         try {
-            return \DB::select('CALL list_loans_transactions_by_owner(?, ?, ?, ?)', [env('SYSTEM_ID'), $ownerId, $startDate, $endDate]);
+            return \DB::select('CALL list_loans_transactions_by_owner(?, ?, ?)', [$ownerId, $startDate, $endDate]);
         } catch (\Throwable $th) {
             throw new RepositoryException();
         }

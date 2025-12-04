@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('installments', function (Blueprint $table) {
             $table->integer('transaction_id')->unsigned()->nullable(false);
             $table->integer('installment_number')->unsigned()->nullable(false);
+            $table->integer('installment_total')->unsigned()->nullable(false);
             $table->date('installment_date')->nullable(false);
             $table->decimal('gross_value', 8, 2);
             $table->decimal('discount_value', 8, 2)->default(0.0);

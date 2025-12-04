@@ -911,6 +911,12 @@ A entidade *Parcela* (internamente ao sistema identificada como "installment") �
     - tipo dado:            Numérico;
     - tamanho:              2;
     - alteração:            Não permitida.
+- número de parcelas (installment_total):
+    - objetivo:             Manter o total de parcelas da *Transação* (necessário quando existe mais de uma *Parcela* por *Transação*);
+    - obrigatório:          Sim;
+    - tipo dado:            Numérico;
+    - tamanho:              2;
+    - alteração:            Não permitida.
 - data da parcela (installment_date):
     - objetivo:             Manter a data em que a *Parcela* foi (ou será, nos casos de vendas no crédito) registrada;
     - obrigatório:          Sim;
@@ -964,6 +970,10 @@ Nome da tabela: installments.
     - tamanho: (condicionado ao tamanho do identificador da entidade referenciada);
     - não permite valor nulo.
 - installment_number: Referente ao atributo "número da parcela". Terá as seguintes características:
+    - tipo: int;
+    - tamanho: 2;
+    - não permite valor nulo.
+- installment_total: Referente ao atributo "número de parcelas". Terá as seguintes características:
     - tipo: int;
     - tamanho: 2;
     - não permite valor nulo.

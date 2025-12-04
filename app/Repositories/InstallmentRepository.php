@@ -21,7 +21,8 @@ class InstallmentRepository extends BaseRepository
             foreach ($input as $intallmentNumber => $installment) {
                 $this->create($installment + [
                     'transaction_id' => $transactionId, 
-                    'installment_number' => ($intallmentNumber + 1)
+                    'installment_number' => ($intallmentNumber + 1), 
+                    'installment_total' => count($input)
                 ]);
             }
         } catch (\Throwable $th) {
