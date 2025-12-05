@@ -49,6 +49,15 @@ class ReportRepository extends BaseRepository
         }
     }
 
+    public function calculateExpensesByCategory(Carbon $startDate, Carbon $endDate)
+    {
+        try {
+            return \DB::select('CALL calculate_expenses_by_category(?, ?, ?)', [env('MY_OWNER_ID'), $startDate, $endDate]);
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
     public function listLoansTransactionsByOwner(int $ownerId, ?Carbon $startDate = null, ?Carbon $endDate = null)
     {
         try {

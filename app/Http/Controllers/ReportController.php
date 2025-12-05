@@ -35,9 +35,10 @@ class ReportController extends Controller
             $future_credit_value = $this->service->futureInvoiceAmounts();
             $total_loans = $this->service->totalLoans($start_date, $end_date);
             $wallets_values = $this->service->incomeByWallet($start_date, $end_date);
+            $output_by_category = $this->service->expensesByCategory($end_date->clone()->subYears(1), $end_date);
             $loans = $this->service->loans($start_date, $end_date);
 
-            return view('reports.index', compact('income', 'income_by_period', 'future_credit_value', 'total_loans', 'wallets_values', 'loans'));
+            return view('reports.index', compact('income', 'income_by_period', 'future_credit_value', 'total_loans', 'wallets_values', 'loans', 'output_by_category'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

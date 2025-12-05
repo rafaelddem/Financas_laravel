@@ -150,6 +150,43 @@ class ReportService extends BaseService
         return $loans;
     }
 
+    public function expensesByCategory(Carbon $startDate, Carbon $endDate)
+    {
+        $output = [];
+
+        $output = [
+            'labels' => [],
+            'values' => [],
+        ];
+        try {
+            $periods = $this->repository->calculateExpensesByCategory($startDate, $endDate);
+
+            $startDate->startOfMonth();
+            $endDate->startOfMonth();
+            while ($startDate->lte($endDate)) {
+                array_push($output['labels'], $startDate->format('m/Y'));
+                $startDate->addMonth();
+            }
+
+            foreach ($periods as $data) {
+                if (!isset($output['values'][$data->name])) {
+                    $output['values'][$data->name] = array_fill_keys($output['labels'], 0);
+                }
+
+                $period = Carbon::createFromFormat('Y-m', $data->period)->format('m/Y');
+                $output['values'][$data->name][$period] = $data->net_value;
+            }
+
+            return $output;
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return $output;
+    }
+
     public function ownerLoansTransactions(int $ownerId, Carbon $startDate, Carbon $endDate)
     {
         try {

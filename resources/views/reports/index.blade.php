@@ -87,4 +87,21 @@
             </div>
         </div>
     </div>
+
+    <div class="presentation">
+        <div class="flex-container">
+            <div class="col">
+                <h2>{{__('Expenses By Period')}}</h2>
+                <div class="canvas-wrapper h_25">
+                    @include('components.bar-prop-chart', [
+                        'name' => 'totalByWallets2',
+                        'hasLabel' => false,
+                        'aspectRatio' => 4,
+                        'labels' => $output_by_category['labels'],
+                        'values' => $output_by_category['values']
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
