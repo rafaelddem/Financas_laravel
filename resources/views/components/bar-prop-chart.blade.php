@@ -59,18 +59,7 @@ A chave 'values' conterá os valores que compõem uma coluna. No exemplo anterio
 
         const labels = JSON.parse(canvas.dataset.labels);
         const values = JSON.parse(canvas.dataset.values);
-        const dataSetColors = [
-            ['#4ade80'],
-            ['#60a5fa'],
-            ['#f87171'],
-            ['#facc15'],
-            ['#a78bfa'],
-            ['#34d399'],
-            ['#f472b6'],
-            ['#fb923c'],
-            ['#c084fc'],
-            ['#fcd34d']
-        ];
+        const dataSetColors = ['#4ade80', '#60a5fa', '#f87171', '#facc15', '#a78bfa', '#34d399', '#f472b6', '#fb923c', '#c084fc', '#fcd34d'];
 
         const datasets = Object.entries(values).map(([label, data], index) => {
             const colorPositive = dataSetColors[index % 10];
