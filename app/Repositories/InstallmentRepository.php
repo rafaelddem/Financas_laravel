@@ -45,14 +45,16 @@ class InstallmentRepository extends BaseRepository
         }
     }
 
-    public function futureInstallmentsByCard(int $cardId, Carbon $lastInvoiceEndDate): Collection
+    public function installmentsByInvoice(int $cardId, Carbon $start_date, Carbon $end_date): Collection
     {
         try {
             return $this->model
                 ->select('installments.*')
+                ->with('transaction')
                 ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->where('transactions.card_id', $cardId)
-                ->where('installment_date', '>', $lastInvoiceEndDate)
+                ->whereBetween('installment_date', [$start_date, $end_date])
+                ->orderBy('installment_date')
                 ->get();
         } catch (\Throwable $th) {
             throw new RepositoryException();

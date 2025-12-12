@@ -88,6 +88,11 @@ use Carbon\Carbon;
                         <span class="td-content">
                             {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
                         </span>
+                        <div class="td-buttons">
+                            <button type="button" onclick="window.location='{{ route('invoice.details', ['invoice_id' => $invoice->id]) }}'" title="{{__('Invoice Details')}}">
+                                <i class="fa-solid fa-align-left"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
@@ -104,6 +109,11 @@ use Carbon\Carbon;
                         <span class="td-content">
                             {{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }} | {{ $invoice->value_formatted }}
                         </span>
+                        <div class="td-buttons">
+                            <button type="button" onclick="window.location='{{ route('invoice.details', ['invoice_id' => $invoice->id]) }}'" title="{{__('Invoice Details')}}">
+                                <i class="fa-solid fa-align-left"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 @endforeach

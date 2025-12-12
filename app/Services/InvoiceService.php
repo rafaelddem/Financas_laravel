@@ -51,7 +51,7 @@ class InvoiceService extends BaseService
             foreach ($invoicesToUpdate as $invoice) {
                 $this->closeInvoice($invoice);
 
-                $futureInstallments = $this->installmentRepository->futureInstallmentsByCard($invoice->card_id, $invoice->end_date)->count();
+                $futureInstallments = $this->installmentRepository->installmentsByInvoice($invoice->card_id, $invoice->end_date->clone()->addDay(), $invoice->end_date->clone()->addYears(5))->count();
                 if ($futureInstallments > 0 || $invoice->card->active) {
                     $this->createInvoice($invoice);
                 }
@@ -111,11 +111,33 @@ class InvoiceService extends BaseService
         }
     }
 
+    public function details(int $invoice_id)
+    {
+        try {
+            $invoice = $this->repository->find($invoice_id, ['card']);
+
+            $installments = $this->installmentRepository->installmentsByInvoice($invoice->card_id, $invoice->start_date, $invoice->end_date);
+            $futureInstallments = ($invoice->status == InvoiceStatus::Open->value)
+                ? $this->installmentRepository->installmentsByInvoice($invoice->card_id, $invoice->end_date->clone()->addDay(), $invoice->end_date->clone()->addYears(5))
+                : [];
+
+            return [
+                $invoice, 
+                $installments, 
+                $futureInstallments, 
+            ];
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+    }
+
     public function pay(int $invoiceId)
     {
         try {
             \DB::beginTransaction();
-            
+
             $paymentDate = Carbon::now();
             $invoice = $this->repository->find($invoiceId, ['card']);
 

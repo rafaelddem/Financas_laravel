@@ -64,6 +64,23 @@ class InvoiceController extends Controller
         return view('invoice.index', compact('openInvoices', 'closedInvoices', 'paidInvoices', 'startDate', 'endDate', 'wallets', 'walletId', 'cards', 'cardId'))->withErrors(compact('message'));
     }
 
+    public function details(Request $request)
+    {
+        $message = '';
+
+        try {
+            [$invoice, $installments, $futureInstallments] = $this->service->details($request->invoice_id);
+
+            return view('invoice.details', compact('invoice', 'installments', 'futureInstallments'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('invoice.list'))->withErrors(compact('message'));
+    }
+
     public function pay(Request $request)
     {
         $message = '';

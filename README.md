@@ -1051,6 +1051,7 @@ Na Categoria, ver a necessidade de um campo 'descrição' e um campo 'nome abrev
 
 Na Categoria, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
 
+Na listagem de empréstimos, adicionar um botão que leve até a apresentação completa do movimento, para consulta de detalhes do mesmo.
 
 
 

@@ -104,6 +104,7 @@
     "Pay": "Pagar",
     "All Wallets": "Todas as Carteiras",
     "All Cards": "Todas os Cartões",
+    "Invoice Details": "Detalhes da fatura",
 
     "Transaction Entry": "Lançamentos",
     "Title": "Título",
@@ -139,6 +140,8 @@
     "The wallet does not have enough value for payment.": "A carteira não possui valor suficiente para pagamento.",
     "Invoice Payment Transaction Title": "Boleto do cartão",
     "Invoice Payment Transaction Description": "Pagamento referente a fatura do cartão :cardName, período :invoiceStartDate a :invoiceEndDate",
+    "Invoice Details From Card": "Detalhes da fatura do cartão ':cardName' (:invoiceStartDate a :invoiceEndDate)",
+    "Future Installments": "Parcelas Futuras",
 
     "Transaction Base": "Base de Transação",
     "Transaction Base In": "Base de Transação para Entradas",

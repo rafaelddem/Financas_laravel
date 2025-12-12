@@ -123,7 +123,7 @@ class ReportService extends BaseService
         return new Collection();
     }
 
-    public function loans(Carbon $startDate, Carbon $endDate)
+    public function loans(?Carbon $startDate = null, ?Carbon $endDate = null)
     {
         $loans = [
             'label' => [],
@@ -161,8 +161,8 @@ class ReportService extends BaseService
         try {
             $periods = $this->repository->calculateExpensesByCategory($startDate, $endDate);
 
-            $startDate->startOfMonth();
-            $endDate->startOfMonth();
+            $startDate = $startDate->clone()->startOfMonth();
+            $endDate = $endDate->clone()->startOfMonth();
             while ($startDate->lte($endDate)) {
                 array_push($output['labels'], $startDate->format('m/Y'));
                 $startDate->addMonth();
@@ -197,9 +197,9 @@ class ReportService extends BaseService
                 $month = $date->format('m/Y');
                 $ownerLoans['fromPeriod'][$month][] = [
                     'transactions_id' => $transaction->transactions_id,
-                    'transactions_title' => ($transaction->payment_methods_type != PaymentType::Credit->value)
-                        ? $transaction->transactions_title
-                        : $transaction->transactions_title . ' (' . $transaction->installment_number . '/' . $transaction->installment_total . ')',
+                    'transactions_title' => ($transaction->payment_methods_type == PaymentType::Credit->value && $transaction->installment_number > 1)
+                        ? $transaction->transactions_title . ' (' . $transaction->installment_number . ' de ' . $transaction->installment_total . ')'
+                        : $transaction->transactions_title,
                     'source_owner_id' => $transaction->source_owner_id,
                     'source_owner_name' => $transaction->source_owner_name,
                     'destination_owner_id' => $transaction->destination_owner_id,

@@ -20,7 +20,15 @@ class CreateCalculateLoansByOwnerProcedure extends Migration
                 END IF;
 
                 IF end_date IS NULL THEN
-                    SELECT MAX(processing_date) INTO end_date FROM transactions;
+                    select 
+                        CASE 
+                            WHEN max(processing_date) >= max(installment_date) THEN 
+                                max(processing_date)
+                            ELSE 
+                                max(installment_date)
+                        END INTO end_date
+                    from financas.transactions
+                        left join financas.installments on installments.transaction_id = transactions.id;
                 END IF;
 
                 SELECT id, name, SUM(gross_value) AS gross_value, SUM(net_value) AS net_value
