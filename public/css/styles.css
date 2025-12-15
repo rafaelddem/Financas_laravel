@@ -247,6 +247,25 @@ body {
 
 /* menu lateral fim */
 
+.centered {
+    background-color: var(--basepage-background);
+    color: var(--basepage-font);
+    width: 100%;
+    margin-top: 40px;
+    padding-top: 20px;
+    transition: 0.3s;
+}
+.centered_form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.dark-mode .centered {
+    background-color: var(--basepage-background-dm);
+    color: var(--basepage-font-dm);
+}
+
 .base-page {
     background-color: var(--basepage-background);
     color: var(--basepage-font);
