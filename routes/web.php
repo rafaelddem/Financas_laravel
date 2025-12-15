@@ -22,6 +22,7 @@ Route::group(['prefix' => 'relatorios', 'as' => 'reports.'], function () {
 
 Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {
     Route::get('/', [InvoiceController::class, 'index'])->name('list');
+    Route::get('/detalhes/{invoice_id}', [InvoiceController::class, 'details'])->name('details');
     Route::post('/', [InvoiceController::class, 'pay'])->name('pay');
 });
 

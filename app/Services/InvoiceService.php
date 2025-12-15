@@ -118,7 +118,7 @@ class InvoiceService extends BaseService
 
             $installments = $this->installmentRepository->installmentsByInvoice($invoice->card_id, $invoice->start_date, $invoice->end_date);
             $futureInstallments = ($invoice->status == InvoiceStatus::Open->value)
-                ? $this->installmentRepository->installmentsByInvoice($invoice->card_id, $invoice->end_date->clone()->addDay(), $invoice->end_date->clone()->addYears(5))
+                ? $this->installmentRepository->installmentsByInvoice($invoice->card_id, $invoice->end_date->clone()->addDay()->startOfDay(), $invoice->end_date->clone()->addYears(5))
                 : [];
 
             return [
