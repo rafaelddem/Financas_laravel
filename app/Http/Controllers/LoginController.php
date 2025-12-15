@@ -22,7 +22,7 @@ class LoginController extends Controller
             ];
 
             if (!Auth::attempt($data)) 
-                throw new BaseException(__('Invalid Data.'));
+                throw new BaseException(__('Invalid Access Credentials.'));
 
             return redirect(route('home'));
         } catch (BaseException $exception) {
@@ -31,7 +31,7 @@ class LoginController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('login'))->withErrors(__('Invalid Data.'));
+        return redirect(route('login'))->withErrors($message);
     }
 
     public function signOut()

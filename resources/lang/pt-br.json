@@ -37,7 +37,8 @@
     "Username": "E-mail",
     "Password": "Senha",
     "Sign in": "Entrar",
-    "Invalid Data.": "Dados de acesso inválidos.",
+    "Invalid Access Credentials.": "Dados de acesso inválidos.",
+    "Access Credentials": "Dados de Acesso",
 
     "Name": "Nome",
     "Type": "Tipo",

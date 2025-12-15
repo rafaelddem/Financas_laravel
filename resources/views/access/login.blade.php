@@ -4,7 +4,7 @@
     <div class="centered centered_form">
         <div class="flex-container">
             <div class="col">
-                <h2 class="card-title">{{__('Fill out the form')}}</h2>
+                <h2 class="card-title">{{__('Access Credentials')}}</h2>
             </div>
             <div class="col">
                 <label for="username">{{__('Username')}}:</label>
