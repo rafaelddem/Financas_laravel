@@ -91,6 +91,17 @@ abstract class ExtratorCSVService
         }
     }
 
+    public function delete(int $id)
+    {
+        try {
+            $this->extractImportRepository->delete($id);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+    }
+
     public function import(string $file_name)
     {
         try {

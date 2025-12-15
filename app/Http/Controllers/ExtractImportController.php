@@ -91,6 +91,22 @@ class ExtractImportController extends Controller
         return redirect(route('extract-import.index'))->withErrors(compact('message'));
     }
 
+    public function destroy(Request $request)
+    {
+        try {
+            $this->serviceExtractor->delete($request->get('id'));
+
+            $message = __('The extract data was removed successfully.');
+            return redirect(route('extract-import.index', compact('message')));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('extract-import.index'))->withErrors(compact('message'));
+    }
+
     public function import(Request $request)
     {
         try {

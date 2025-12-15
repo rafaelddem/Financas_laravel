@@ -63,7 +63,7 @@ use App\Enums\Relevance;
 
     @if($importTransactions->count() > 0)
     <div class="presentation">
-        <h2 class="card-title">{{__('Extract Approval')}}</h2>
+        <h2 class="card-title">{{__('Transaction Approval')}}</h2>
         @foreach($importTransactions as $key => $importTransaction)
         <div class="separator-with-text"><span>{{__('Transactionto Approve #1', ['index' => $importTransaction->id])}}</span></div>
         <div class="flex-container">
@@ -134,6 +134,10 @@ use App\Enums\Relevance;
                 <input class="button-as-input" type="submit" form="form-approve-{{$key}}" value="{{ __('Ready') }}">
             </div>
             <form method="post" id="form-approve-{{$key}}" action="{{route('extract-import.ready')}}"> @csrf </form>
+            <div class="col_25 md_col_50 sm_col">
+                <input class="button-as-input" type="submit" form="form-remove-{{$key}}" value="{{ __('Delete') }}">
+            </div>
+            <form method="post" id="form-remove-{{$key}}" action="{{route('extract-import.destroy', ['id' => $importTransaction->id])}}"> @csrf @method('DELETE') </form>
         </div>
         @endforeach
     </div>

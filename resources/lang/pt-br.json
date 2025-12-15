@@ -163,6 +163,7 @@
     "Select A Extract Module": "Selecione um módulo de extração",
     "The extract data was entered successfully.": "Dados do extrato foram inseridos com Sucesso.",
     "Extract Approval": "Aprovação de Extrato",
+    "Transaction Approval": "Aprovação de Transação",
     "Extract Module Registration": "Cadastro de Módulo de Extração",
     "Ready": "Pronto",
     "Files Left": "{1} :count Transação por aprovar|[2,*] :count Transações por aprovar",

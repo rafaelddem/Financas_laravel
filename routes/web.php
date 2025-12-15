@@ -56,6 +56,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/', [ExtractImportController::class, 'index'])->name('index');
         Route::post('/extrair', [ExtractImportController::class, 'extract'])->name('extract');
         Route::post('/', [ExtractImportController::class, 'ready'])->name('ready');
+        Route::delete('/', [ExtractImportController::class, 'destroy'])->name('destroy');
         Route::post('/importar', [ExtractImportController::class, 'import'])->name('import');
     });
     
