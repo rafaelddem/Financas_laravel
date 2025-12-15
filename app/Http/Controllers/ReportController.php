@@ -53,11 +53,11 @@ class ReportController extends Controller
         try {
             $start_date = ($request->has('start_date')) 
                 ? Carbon::createFromFormat('Y-m-d', $request->get('start_date'))
-                : Carbon::now()->subYears(5);
+                : Carbon::now()->subYears(2);
 
             $end_date = ($request->has('end_date')) 
                 ? Carbon::createFromFormat('Y-m-d', $request->get('end_date'))
-                : Carbon::now();
+                : Carbon::now()->addYears(3);
 
             $owners = $this->ownerService->listOther();
 
