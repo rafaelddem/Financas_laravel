@@ -24,6 +24,10 @@ use Carbon\Carbon;
                                 @if ($installment->installment_total > 1)
                                     ({{ $installment->installment_number }} de {{ $installment->installment_total }})
                                 @endif
+                                @php( $destinationOwner = $installment->transaction->destinationWallet->owner )
+                                @if ($destinationOwner->id != env('SYSTEM_ID'))
+                                    <span class="tag">{{__($destinationOwner->name)}}</span>
+                                @endif
                             </span>
                         </td>
                     </tr>
@@ -47,6 +51,10 @@ use Carbon\Carbon;
                             {{ $installment->installment_date->format('d/m/Y') }} | {{ $installment->net_value_formatted }} | {{ $installment->transaction->title }}
                             @if ($installment->installment_total > 1)
                                 ({{ $installment->installment_number }} de {{ $installment->installment_total }})
+                            @endif
+                            @php( $destinationOwner = $installment->transaction->destinationWallet->owner )
+                            @if ($destinationOwner->id != env('SYSTEM_ID'))
+                                <span class="tag">{{__($destinationOwner->name)}}</span>
                             @endif
                         </span>
                     </td>

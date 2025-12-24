@@ -50,7 +50,7 @@ class InstallmentRepository extends BaseRepository
         try {
             return $this->model
                 ->select('installments.*')
-                ->with('transaction')
+                ->with('transaction.destinationWallet.owner')
                 ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->where('transactions.card_id', $cardId)
                 ->whereBetween('installment_date', [$start_date, $end_date])
