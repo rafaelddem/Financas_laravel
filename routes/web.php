@@ -35,6 +35,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
         Route::get('/', [TransactionController::class, 'index'])->name('list');
         Route::get('/novo', [TransactionController::class, 'create'])->name('create');
+        Route::get('/{id}', [TransactionController::class, 'show'])->name('show');
         Route::get('/novo/{base}', [TransactionController::class, 'create'])->name('createByBase');
         Route::post('/', [TransactionController::class, 'store'])->name('store');
     });

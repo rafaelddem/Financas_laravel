@@ -29,6 +29,11 @@ use Carbon\Carbon;
                                     <span class="tag">{{__($destinationOwner->name)}}</span>
                                 @endif
                             </span>
+                            <div class="td-buttons">
+                                <button type="button" onclick="window.location='{{ route('transaction.show', ['id' => $installment->transaction->id]) }}'" title="{{__('Invoice Details')}}">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -57,6 +62,11 @@ use Carbon\Carbon;
                                 <span class="tag">{{__($destinationOwner->name)}}</span>
                             @endif
                         </span>
+                        <div class="td-buttons">
+                            <button type="button" onclick="window.location='{{ route('transaction.show', ['id' => $installment->transaction->id]) }}'" title="{{__('Invoice Details')}}">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 @endforeach

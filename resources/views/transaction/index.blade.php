@@ -27,9 +27,9 @@
                         <form method="get" id="form-update-{{$transaction->id}}" action="{{route('category.edit', ['id' => $transaction->id])}}"></form>
                         <form method="post" id="form-delete-{{$transaction->id}}" action="{{route('category.destroy')}}"> @csrf @method('DELETE') </form>
                         <div class="td-buttons">
-                            <button type="submit" form="form-update-{{$transaction->id}}">{{__('Edit')}}</button>
-                            <input type="hidden" form="form-delete-{{$transaction->id}}" name="id" value={{$transaction->id}}>
-                            <button type="submit" form="form-delete-{{$transaction->id}}">{{__('Delete')}}</button>
+                            <button type="button" onclick="window.location='{{ route('transaction.show', ['id' => $transaction->id]) }}'" title="{{__('Invoice Details')}}">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>

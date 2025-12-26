@@ -134,7 +134,9 @@
     "The value must have two decimal places and be between min and max.": "O :value deve ter duas casas decimais e estar entre :min e :max.",
     "The sum of the Gross Values of the Installments cannot be greater than the Net Value of the Transaction.": "A soma dos Valores Brutos das Parcelas não poderá ser maior que o Valor Líquido da Transação.",
     "The selected Card must belong to the Source Wallet.": "O Cartão selecionado deve pertencer a Carteira Origem.",
+    "Transaction Details": "Dados da Transação",
 
+    "Installment": "Parcela",
     "Installments": "Parcelas",
     "Installments Data": "Dados da(s) Parcela(s)",
     "Installment Date": "Data da Parcela",

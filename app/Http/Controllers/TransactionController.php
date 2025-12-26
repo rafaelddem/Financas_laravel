@@ -44,6 +44,21 @@ class TransactionController extends Controller
         return view('transaction.index', compact('transactions', 'message'));
     }
 
+    public function show(int $id)
+    {
+        try {
+            $transaction = $this->service->find($id, ['installments', 'category', 'paymentMethod', 'sourceWallet', 'destinationWallet', 'card']);
+
+            return view('transaction.show', compact('transaction'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect()->back()->withErrors(compact('message'));
+    }
+
     public function create(Request $request)
     {
         $categories = [];
