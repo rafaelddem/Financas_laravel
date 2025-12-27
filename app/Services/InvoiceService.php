@@ -146,9 +146,9 @@ class InvoiceService extends BaseService
 
             $this->installmentRepository->updateInstallmentPaymentDate($invoice, $paymentDate);
 
-            $transactionBase = $this->transactionBaseRepository->find(env('INVOICE_BASE_TRANSACTION'));
+            $transactionBase = $this->transactionBaseRepository->find(env('INVOICE_TRANSACTION_BASE'));
             $this->transactionRepository->create([
-                'title' => __('Invoice Payment Transaction Title'),
+                'title' => $transactionBase->title,
                 'transaction_date' => $paymentDate,
                 'processing_date' => $paymentDate,
                 'category_id' => $transactionBase->category_id,

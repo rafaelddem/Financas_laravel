@@ -324,6 +324,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $twoMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $twoMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 59.90,
                 'discount_value' => 0.00,
@@ -354,6 +355,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $twoMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $twoMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 259.68,
                 'discount_value' => 0.00,
@@ -384,6 +386,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $twoMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $twoMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 69.98,
                 'discount_value' => 0.00,
@@ -414,6 +417,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $twoMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $twoMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 159.80,
                 'discount_value' => 0.00,
@@ -444,6 +448,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $twoMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 2,
                 'installment_date' => $twoMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 30.00,
                 'discount_value' => 0.00,
@@ -455,6 +460,7 @@ class TestSeed extends Seeder
             Installment::create([
                 'transaction_id' => $twoMonthsAgoCredits->last()->id,
                 'installment_number' => 2,
+                'installment_total' => 2,
                 'installment_date' => $twoMonthsAgoCredits->last()->transaction_date->addMonth()->startOfMonth(),
                 'gross_value' => 29.99,
                 'discount_value' => 0.00,
@@ -483,6 +489,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $twoMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $twoMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 59.99,
                 'discount_value' => 0.00,
@@ -649,6 +656,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 59.90,
                 'discount_value' => 0.00,
@@ -678,6 +686,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 239.25,
                 'discount_value' => 0.00,
@@ -707,6 +716,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 69.98,
                 'discount_value' => 0.00,
@@ -736,6 +746,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 4,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 59.98,
                 'discount_value' => 0.00,
@@ -746,6 +757,7 @@ class TestSeed extends Seeder
             Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 2,
+                'installment_total' => 4,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonth()->startOfMonth(),
                 'gross_value' => 59.98,
                 'discount_value' => 0.00,
@@ -755,6 +767,7 @@ class TestSeed extends Seeder
             Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 3,
+                'installment_total' => 4,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonths(2),
                 'gross_value' => 59.97,
                 'discount_value' => 0.00,
@@ -764,6 +777,7 @@ class TestSeed extends Seeder
             Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 4,
+                'installment_total' => 4,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonths(3),
                 'gross_value' => 59.97,
                 'discount_value' => 0.00,
@@ -792,6 +806,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 9.80,
                 'discount_value' => 0.00,
@@ -821,6 +836,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $oneMonthsAgoCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $oneMonthsAgoCredits->last()->transaction_date,
                 'gross_value' => 59.99,
                 'discount_value' => 0.00,
@@ -991,6 +1007,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $thisMonthCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $thisMonthCredits->last()->transaction_date,
                 'gross_value' => 175.25,
                 'discount_value' => 0.00,
@@ -1020,6 +1037,7 @@ class TestSeed extends Seeder
             $installment = Installment::create([
                 'transaction_id' => $thisMonthCredits->last()->id,
                 'installment_number' => 1,
+                'installment_total' => 1,
                 'installment_date' => $thisMonthCredits->last()->transaction_date,
                 'gross_value' => 59.90,
                 'discount_value' => 0.00,

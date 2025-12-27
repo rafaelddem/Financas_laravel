@@ -14,13 +14,14 @@ class TransactionBase extends Seeder
      */
     public function run()
     {
+        // Pagamento de fatura
         DB::table('transaction_bases')->insert([
             [
                 'title' => __('Invoice Payment Transaction Title'),
-                'category_id' => 4,
-                'payment_method_id' => 2,
+                'category_id' => env('INVOICE_PAYMENT_CATEGORY'),
+                'payment_method_id' => env('INVOICE_PAYMENT_METHOD'),
                 'source_wallet_id' => env('MY_OWNER_ID'),
-                'destination_wallet_id' => 1,
+                'destination_wallet_id' => env('SYSTEM_ID'),
             ],
         ]);
     }
