@@ -15,7 +15,7 @@ use App\Enums\Relevance;
     <div class="presentation">
         <form method="post" id="form-extract" action="{{ route('extract-import.extract') }}" enctype="multipart/form-data">
             @csrf
-            <h2 class="card-title">{{__('Extract Import')}}</h2>
+            <h2 class="card-title">{{__('Data Extract')}}</h2>
             <div class="flex-container">
                 <div class="col_25 md_col_50 sm_col">
                     <input class="button-as-input" type="submit" id="submit_button" value="{{ __('Extract') }}" disabled>
