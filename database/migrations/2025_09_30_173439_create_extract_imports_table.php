@@ -19,17 +19,25 @@ return new class extends Migration
             $table->string('title', 50)->nullable(false);
             $table->date('transaction_date')->nullable(false);
             $table->date('processing_date')->nullable(false);
-            $table->integer('category_id')->unsigned()->nullable(false);
-            $table->enum('relevance', Relevance::values())->nullable(false);
-            $table->integer('payment_method_id')->unsigned()->nullable(false);
-            $table->integer('source_wallet_id')->unsigned()->nullable(false);
-            $table->integer('destination_wallet_id')->unsigned()->nullable(false);
+            $table->integer('category_id')->unsigned()->nullable(true);
+            $table->enum('relevance', Relevance::values())->nullable(true);
+            $table->integer('payment_method_id')->unsigned()->nullable(true);
+            $table->integer('source_wallet_id')->unsigned()->nullable(true);
+            $table->integer('destination_wallet_id')->unsigned()->nullable(true);
             $table->integer('card_id')->unsigned()->nullable(true);
             $table->decimal('gross_value', 8, 2);
             $table->decimal('discount_value', 8, 2)->default(0.0);
             $table->decimal('interest_value', 8, 2)->default(0.0);
             $table->decimal('rounding_value', 8, 2)->default(0.0);
             $table->string('description', 255)->nullable();
+
+            $table->integer('installment_number')->nullable(true);
+            $table->integer('installment_total')->nullable(true);
+            $table->date('installment_date')->nullable(true);
+            $table->decimal('installment_gross_value', 8, 2)->nullable(true);
+            $table->decimal('installment_discount_value', 8, 2)->nullable(true);
+            $table->decimal('installment_interest_value', 8, 2)->nullable(true);
+            $table->decimal('installment_rounding_value', 8, 2)->nullable(true);
 
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods');

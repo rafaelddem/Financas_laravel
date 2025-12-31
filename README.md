@@ -1047,12 +1047,17 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 Possíveis alterações no projeto:
 
+No cadastro de carteiras, adicionar o relacionamento com uma tabela "Bancos", que manteria os banco (BB, Caixa, Santander...) pré-cadastrados
+
 Na Categoria, ver a necessidade de um campo 'descrição' e um campo 'nome abreviado'.
 
 Na Categoria, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
 
-Na listagem de empréstimos, adicionar um botão que leve até a apresentação completa do movimento, para consulta de detalhes do mesmo.
+Revisar bloqueio de inativação, quando owner/wallet tiver movimentações agendadas ou valores pendentes
 
+Ajustar CSS, pois no redimencionamento algumas telas "quebram"
+
+Ajustam "print" da tela, para sair somente o relatório
 
 
 
@@ -1063,11 +1068,7 @@ Mantive um padrão de formatação para os valores de duas casas decimais (000.0
 
 Rever o bloqueio na alteração dos valores das parcelas. Uma alternativa seria distribuir a diferença no valor entre as parcelas ainda não quitadas
 
-Considerar manter Transação e Parcela como uma entidade só, mas manter elas separadas no banco. Poderia ser mais fácil de manusear os dados no sistema, garantindo sua integridade, mas devo considerar o aumento no tamanho dos dados
-
-Ao invés de fazer apenas a inativição, utilizar também o softdelete, dessa forma a inativação seria apenas para organização dos dados, e o softdelete para quando não for mais necessário o registro
-
-Manter o controle dos imprestimos através de relatórios, como faço no sistema antigo
+Ao invés de fazer apenas a inativação, utilizar também o softdelete, dessa forma a inativação seria apenas para organização dos dados, e o softdelete para quando não for mais necessário o registro
 
 Criar um arquivo de configurações para dados default como um método de pagamento para o pagamento de faturas
 

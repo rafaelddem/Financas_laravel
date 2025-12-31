@@ -7,7 +7,6 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExtractImportController;
-use App\Http\Controllers\ExtractModuleController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionBaseController;
@@ -56,14 +55,6 @@ Route::middleware(['auth:web'])->group(function () {
             Route::delete('/', [TransactionBaseController::class, 'destroy'])->name('destroy');
         });
 
-        Route::group(['prefix' => 'modulo-extrato', 'as' => 'extract-module.'], function () {
-            Route::get('/', [ExtractModuleController::class, 'index'])->name('index');
-            Route::post('/', [ExtractModuleController::class, 'store'])->name('store');
-            Route::delete('/', [ExtractModuleController::class, 'destroy'])->name('destroy');
-        });
-    });
-
-    Route::middleware(['can:admin'])->group(function () {
         Route::group(['prefix' => 'dono', 'as' => 'owner.'], function () {
             Route::get('/', [OwnerController::class, 'index'])->name('list');
             Route::post('/', [OwnerController::class, 'store'])->name('store');

@@ -24,14 +24,32 @@ use App\Enums\Relevance;
                     <label for="module_id">{{ __('Extract Module') }}:</label>
                     <select name="module_id" id="module_id">
                         <option value="" selected hidden>{{ __('Select A Extract Module') }}</option>
-                        @foreach ($importOptions as $importOption)
-                            <option value="{{ $importOption->id }}">{{ $importOption->name }}</option>
+                        @foreach ($modules as $module)
+                            <option value="{{ $module->id }}">{{ $module->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col_50 md_col">
-                    <label for="extract_file">{{ __('Source Wallet') }}:</label>
+                    <label for="extract_file">{{ __('Extract File') }}:</label>
                     <input type="file" accept=".txt,.csv,.xlsx" name="extract_file" id="extract_file" disabled />
+                </div>
+                <div class="col_25 md_col_50 sm_col">
+                    <label for="transaction_base_id_in">{{ __('Transaction Base In') }}:</label>
+                    <select name="transaction_base_id_in" id="transaction_base_id_in" required>
+                        <option value="" selected hidden>{{ __('Choose an Transaction Base') }}</option>
+                        @foreach ($transactionBases as $transactionBase)
+                            <option value="{{ $transactionBase->id }}">{{ $transactionBase->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col_25 md_col_50 sm_col">
+                    <label for="transaction_base_id_out">{{ __('Transaction Base Out') }}:</label>
+                    <select name="transaction_base_id_out" id="transaction_base_id_out" required>
+                        <option value="" selected hidden>{{ __('Choose an Transaction Base') }}</option>
+                        @foreach ($transactionBases as $transactionBase)
+                            <option value="{{ $transactionBase->id }}">{{ $transactionBase->title }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </form>
@@ -66,6 +84,7 @@ use App\Enums\Relevance;
         <h2 class="card-title">{{__('Transaction Approval')}}</h2>
         @foreach($importTransactions as $key => $importTransaction)
         <div class="separator-with-text"><span>{{__('Transactionto Approve #1', ['index' => $importTransaction->id])}}</span></div>
+        <br>
         <div class="flex-container">
             <input type="hidden" form="form-approve-{{$key}}" name="id" value="{{$importTransaction->id}}">
             <div class="col_25 md_col">
@@ -89,7 +108,7 @@ use App\Enums\Relevance;
                 <label for="relevance">{{__('Relevance')}}:</label>
                 <select form="form-approve-{{$key}}" name="relevance" id="transaction[{{$key}}][relevance]">
                     @foreach (Relevance::cases() as $relevance)
-                        <option value='{{ $relevance->value }}' {{ $importTransaction->category->relevance->value == $relevance->value ? 'selected' : '' }}>{{ __($relevance->name) }}</option>
+                        <option value='{{ $relevance->value }}' {{ $importTransaction->category?->relevance->value == $relevance->value ? 'selected' : '' }}>{{ __($relevance->name) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -126,17 +145,48 @@ use App\Enums\Relevance;
                 <select name="card_id" form="form-approve-{{$key}}" id="card_id[{{$key}}]" data-selected="{{old('card_id')}}" required>
                 </select>
             </div>
+            <div class="col">
+                <label for="description">{{__('Description')}}:</label>
+                <textarea form="form-approve-{{$key}}" class="textarea" name="description" rows="3" placeholder="{{__('Default Placeholder')}}">{{$importTransaction->description}}</textarea>
+            </div>
             <div class="col_25 md_col">
                 <label for="gross_value">{{__('Gross Value')}}:</label>
-                <input type="text" form="form-approve-{{$key}}" class="money" name="gross_value" id="transaction[{{$key}}][gross_value]" value="{{$importTransaction->gross_value ?? '0,00'}}" required pattern="^(?!0,00$).+" title="{{__('A value needs to be entered')}}">
+                <input type="hidden" form="form-approve-{{$key}}" name="gross_value" value="{{$importTransaction->gross_value ?? '0,00'}}">
+                <input type="text" form="form-approve-{{$key}}" class="money" name="gross_value" id="transaction[{{$key}}][gross_value]" value="{{$importTransaction->gross_value ?? '0,00'}}" 
+                    @if ($importTransaction->installment_total == 1 || $importTransaction->installment_number != 1) disabled @endif>
             </div>
-            <div class="col_25 md_col_50 sm_col">
-                <input class="button-as-input" type="submit" form="form-approve-{{$key}}" value="{{ __('Ready') }}">
-            </div>
-            <form method="post" id="form-approve-{{$key}}" action="{{route('extract-import.ready')}}"> @csrf </form>
+            @if ($importTransaction->paymentMethod->type == \App\Enums\PaymentType::Credit)
+                <input type="hidden" form="form-approve-{{$key}}" name="installment_number" value="{{$importTransaction->installment_number}}">
+                <input type="hidden" form="form-approve-{{$key}}" name="installment_total" value="{{$importTransaction->installment_total}}">
+                @if ($importTransaction->installment_total > 1)
+                    <div class="col_25 md_col">
+                        <label for="gross_value">{{__('Gross Value (Installment)')}}:</label>
+                        <input type="hidden" form="form-approve-{{$key}}" name="installment_gross_value" value="{{$importTransaction->installment_gross_value ?? '0,00'}}">
+                        <input type="text" form="form-approve-{{$key}}" class="money" id="transaction[{{$key}}][gross_value]" value="{{$importTransaction->installment_gross_value ?? '0,00'}}" disabled>
+                    </div>
+                    <div class="col_25 md_col">
+                        <label>{{__('Installment')}}:</label>
+                        <input type="text" value="{{ __('Installment :number from :total', ['number' => $importTransaction->installment_number, 'total' => $importTransaction->installment_total]) }}" disabled>
+                    </div>
+                @endif
+            @endif
+        </div>
+        <div class="flex-container">
+            @if ($importTransaction->installment_number > 1)
+                <div class="col">
+                    <p><b>{{__('Credit Transactions (and their Installments) must have their Transaction Date within the period of the open (or soon-to-be-opened) invoice.')}}</b></p>
+                    <br>
+                    <p>{{__('Since this installment is not the first of this transaction, it cannot be included. Check if the transaction has already been posted; if so, this installment should already exist in the system and will not need to be imported again. Otherwise, proceed with manual inclusion.')}}</p>
+                </div>
+            @else
+                <div class="col_25 md_col_50 sm_col">
+                    <input class="button-as-input" type="submit" form="form-approve-{{$key}}" value="{{ __('Ready') }}">
+                </div>
+            @endif
             <div class="col_25 md_col_50 sm_col">
                 <input class="button-as-input" type="submit" form="form-remove-{{$key}}" value="{{ __('Delete') }}">
             </div>
+            <form method="post" id="form-approve-{{$key}}" action="{{route('extract-import.ready')}}"> @csrf </form>
             <form method="post" id="form-remove-{{$key}}" action="{{route('extract-import.destroy', ['id' => $importTransaction->id])}}"> @csrf @method('DELETE') </form>
         </div>
         @endforeach

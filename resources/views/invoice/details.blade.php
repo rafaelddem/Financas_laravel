@@ -22,7 +22,7 @@ use Carbon\Carbon;
                             <span class="td-content">
                                 {{ $installment->installment_date->format('d/m/Y') }} | {{ $installment->net_value_formatted }} | {{ $installment->transaction->title }}
                                 @if ($installment->installment_total > 1)
-                                    ({{ $installment->installment_number }} de {{ $installment->installment_total }})
+                                    ({{ __('Installment :number from :total', ['number' => $installment->installment_number, 'total' => $installment->installment_total]) }})
                                 @endif
                                 @php( $destinationOwner = $installment->transaction->destinationWallet->owner )
                                 @if ($destinationOwner->id != env('SYSTEM_ID'))

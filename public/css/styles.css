@@ -197,6 +197,9 @@ body {
     flex-grow: 1;
     overflow-y: auto;
 }
+.menu-final {
+    overflow-y: auto;
+}
 .menu-main,
 .menu-final ul {
     list-style: none;

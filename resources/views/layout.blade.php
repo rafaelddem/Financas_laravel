@@ -45,7 +45,6 @@
 
                     @can('admin')
                         <li class="navbar-item"><a href="{{route('transaction-base.list')}}"><i class="fa-solid fa-diagram-predecessor"></i><span>{{__('Transaction Base')}}</span></a></li>
-                        <li class="navbar-item"><a href="{{route('extract-module.index')}}"><i class="fa-solid fa-arrow-up-from-bracket"></i><span>{{__('Extract Module')}}</span></a></li>
                     @endcan
                 </ul>
                 @can('admin')

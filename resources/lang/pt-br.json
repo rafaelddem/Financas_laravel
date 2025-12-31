@@ -9,6 +9,8 @@
     "An error was encountered while trying to apply the rules required for the action. Please try again or contact support.": "Foi encontrado um erro ao tentar aplicar as regras necessárias para a ação. Tente novamente ou entre em contato com o suporte.",
     "An error occurred while trying to perform the action on the database. Please try again or contact support.": "Ocorreu um erro ao tentar executar a ação na base de dados. Tente novamente ou entre em contato com o suporte.",
     "The record cannot be inactivated because it still has outstanding monetary balances.": "O registro não pode ser inativado porque ainda tem saldos monetários pendentes.",
+    "The file extension is not compatible with the module.": "A extensão do arquivo não é compatível com o módulo.",
+    "The data format (or source) is not compatible.": "O formato (ou fonte) dos dados não é compatível.",
 
     "The reported record was not found.": "O registro relatado não foi encontrado.",
 
@@ -143,6 +145,7 @@
     "Payment Date": "Data do Pagamento",
     "Invalid value for field of installment installmentNumber.": "Valor inválido para o campo :field da Parcela #:installmentNumber.",
     "Sum of installment installmentNumber cannot be negative.": "Somatório da Parcela #:installmentNumber não pode ser negativo.",
+    "Installment :number from :total": "Parcela :number de :total",
 
     "Do you confirm the invoice payment? This action cannot be undone.": "Você confirma o pagamento da Fatura? Esta ação não poderá ser desfeita.",
     "The wallet does not have enough value for payment.": "A carteira não possui valor suficiente para pagamento.",
@@ -160,6 +163,7 @@
 
     "Extract Module": "Módulo de Extração",
     "Extract Modules": "Módulos de Extração",
+    "Extract File": "Arquivo para extração",
 
     "Extract Import": "Importação de Extrato",
     "Select A Extract Module": "Selecione um módulo de extração",
@@ -171,6 +175,8 @@
     "Files Left": "{1} :count Transação por aprovar|[2,*] :count Transações por aprovar",
     "File Not Found": "Arquivo não encontrado",
     "Transactionto Approve #1": "Transação à aprovar :index",
+    "Credit Transactions (and their Installments) must have their Transaction Date within the period of the open (or soon-to-be-opened) invoice.": "Transações no crédito (e suas Parcelas) precisam ter sua Data de Transação dentro do período da fatura aberta (ou por abrir).",
+    "Since this installment is not the first of this transaction, it cannot be included. Check if the transaction has already been posted; if so, this installment should already exist in the system and will not need to be imported again. Otherwise, proceed with manual inclusion.": "Como esta Parcela não é a primeira desta Transação, não poderá ser incluída. Verifique se a transação já foi lançada, nesse caso esta parcela já deve existir no sistema e não precisará ser reimportada. Caso contrário, proceda com a sua inclusão manual.",
 
     "Profile": "Perfil",
     "Configurations": "Configurações",

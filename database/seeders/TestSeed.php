@@ -12,14 +12,12 @@ use App\Models\Owner;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
 use App\Models\Category;
-use App\Models\ExtractModule;
 use App\Models\TransactionBase;
 use App\Models\Wallet;
 use App\Services\CardService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class TestSeed extends Seeder
 {
@@ -197,15 +195,6 @@ class TestSeed extends Seeder
             // 'card_id' => $categoryGenericIn->id,
             'source_wallet_id' => $walletNuBank->id,
             'destination_wallet_id' => $walletMeDefault->id,
-        ]);
-
-
-
-        /* Extract Module */
-        ExtractModule::create([
-            'name' => 'NuBank',
-            'transaction_base_in_id' => $transactionBaseNuBankIn->id,
-            'transaction_base_out_id' => $transactionBaseNuBankOut->id,
         ]);
 
 
