@@ -23,15 +23,17 @@ class NuBankCSVCredit extends BaseModule
         if (in_array($attributes[1], self::INSTALLMENT_TO_IGNORE)) 
             return [];
 
+        $originalDescription = str_replace("•", "*", $attributes[1]);
+
         $installmentDate = Carbon::createFromFormat('Y-m-d', $attributes[0])->startOfDay();
-        $cleanTitle = $this->cleanTitle($attributes[1]);
+        $cleanTitle = $this->cleanTitle($originalDescription);
 
         $transactionsAttributes = [
             'file_name' => $fileName,
             'title' => $cleanTitle,
             'transaction_date' => $installmentDate,
             'processing_date' => $installmentDate,
-            'description' => "Título original: " . $attributes[1],
+            'description' => "Título original: " . $originalDescription,
         ];
 
         if ($attributes[2] > 0) {
@@ -62,7 +64,7 @@ class NuBankCSVCredit extends BaseModule
             ];
         }
 
-        [$installment_number, $installment_total] = $this->extractInstallmentData($attributes[1]);
+        [$installment_number, $installment_total] = $this->extractInstallmentData($originalDescription);
 
         $installmentGrossValue = $attributes[2];
         if ($installment_total > 1) {

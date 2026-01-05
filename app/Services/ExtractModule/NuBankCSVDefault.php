@@ -15,12 +15,14 @@ class NuBankCSVDefault extends BaseModule
 
     public function defineModelData(string $fileName, array $attributes, TransactionBase $transactionBaseIdIn, TransactionBase $transactionBaseIdOut): array
     {
+        $originalDescription = str_replace("•", "*", $attributes[3]);
+
         $transactionsAttributes = [
             'file_name' => $fileName,
-            'title' => mb_strlen($attributes[3]) <= 50 ? $attributes[3] : mb_substr($attributes[3], 0, 47) . '...',
+            'title' => mb_strlen($originalDescription) <= 50 ? $originalDescription : mb_substr($originalDescription, 0, 47) . '...',
             'transaction_date' => Carbon::createFromFormat('d/m/Y', $attributes[0])->startOfDay(),
             'processing_date' => Carbon::createFromFormat('d/m/Y', $attributes[0])->startOfDay(),
-            'description' => $attributes[3],
+            'description' => $originalDescription,
         ];
 
         if ($attributes[1] > 0) {
