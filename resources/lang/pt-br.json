@@ -61,6 +61,7 @@
     "Wallets from owner": "Carteiras de :owner",
     "Standard Owner's Wallet": "Carteira padrão de :owner",
     "The :attribute field must contain only letters, numbers, periods, dashes and spaces.": "O campo :attribute deve conter apenas letras, números, pontos, traços e espaços.",
+    "The :attribute field must contain only letters, numbers and the characters: :characters.": "O campo :attribute deve conter apenas letras, números e os caracteres :characters.",
     "It is necessary to inform who this wallet belongs to.": "É necessário informar a quem pertence esta Carteira.",
     "A wallet marked as main cannot be inactive.": "Uma Carteira marcada como principal não pode estar inativa ou ser inativada.",
     "A wallet cannot be unmarked as the main wallet.": "Uma Carteira não pode ser desmarcada como sendo a principal.",

@@ -17,26 +17,26 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:categories|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-. ]+$"',
+            'name' => 'required|unique:categories|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-() ]+$"',
             'relevance' => 'required|in:' . implode(',', Relevance::values()),
             'active' => 'required|boolean',
-            'description' => 'max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-., ]+$"',
+            'description' => 'max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.,_*(): ]+$"',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => __('validation.required', ['attribute' => 'Nome']),
-            'name.unique' => __('validation.unique', ['attribute' => 'Nome']),
-            'name.between' => __('validation.between', ['attribute' => 'Nome']),
-            'name.regex' => __('The :attribute field must contain only letters, numbers, periods, dashes and spaces.', ['attribute' => 'Nome']),
-            'relevance.required' => __('validation.required', ['attribute' => 'Relevância']),
-            'relevance.in' => __('validation.in', ['attribute' => 'Relevância']),
-            'active.required' => __('validation.required', ['attribute' => 'Ativo']),
-            'active.boolean' => __('validation.boolean', ['attribute' => 'Ativo']),
-            'description.max' => __('validation.max', ['attribute' => __('Category')]),
-            'description.regex' => __('The :attribute field must contain only letters, numbers, periods, dashes and spaces.', ['attribute' => __('Category')]),
+            'name.required' => __('validation.required', ['attribute' => __('Name')]),
+            'name.unique' => __('validation.unique', ['attribute' => __('Name')]),
+            'name.between' => __('validation.between', ['attribute' => __('Name')]),
+            'name.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Name'), 'characters' => '"-", "(" e ")"']),
+            'relevance.required' => __('validation.required', ['attribute' => __('Relevancy')]),
+            'relevance.in' => __('validation.in', ['attribute' => __('Relevancy')]),
+            'active.required' => __('validation.required', ['attribute' => __('Active')]),
+            'active.boolean' => __('validation.boolean', ['attribute' => __('Active')]),
+            'description.max' => __('validation.max', ['attribute' => __('Description')]),
+            'description.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Description'), 'characters' => '"-", ".", ",", "_", "*", ":", "(" e ")"']),
         ];
     }
 }

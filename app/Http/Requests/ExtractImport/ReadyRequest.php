@@ -28,7 +28,7 @@ class ReadyRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|between:3,50|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-.,\/ ]+$"',
+            'title' => 'required|between:3,50|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-\/.*() ]+$"',
             'transaction_date' => 'required|date_format:Y-m-d',
             'category_id' => 'required|exists:categories,id',
             'relevance' => 'required|in:' . implode(',', Relevance::values()),
@@ -36,7 +36,7 @@ class ReadyRequest extends FormRequest
             'source_wallet_id' => 'required|exists:wallets,id',
             'destination_wallet_id' => 'required|exists:wallets,id',
             'card_id' => 'required_if:payment_type,credit|required_if:payment_type,debit|exists:cards,id',
-            'description' => 'nullable|max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿ0-9-., ]+$"',
+            'description' => 'nullable|max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.,_*(): ]+$"',
             'installment_number' => 'sometimes|numeric|max:1',
 
             'gross_value' => 'sometimes|numeric|between:0.01,99999.99',
@@ -48,7 +48,7 @@ class ReadyRequest extends FormRequest
         return [
             'title.required' => __('validation.required', ['attribute' => __('Title')]),
             'title.between' => __('validation.between', ['attribute' => __('Title')]),
-            'title.regex' => __('The :attribute field must contain only letters, numbers, periods, dashes and spaces.', ['attribute' => __('Title')]),
+            'title.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Title'), 'characters' => '"-", "/", ".", "*", "(" e ")"']),
             'transaction_date.required' => __('validation.required', ['attribute' => __('Transaction Date')]),
             'transaction_date.date_format' => __('validation.date_format', ['attribute' => __('Transaction Date')]),
             'category_id.required' => __('validation.required', ['attribute' => __('Category')]),
@@ -64,7 +64,7 @@ class ReadyRequest extends FormRequest
             'card_id.required_if' => __('validation.required_if', ['attribute' => __('Card'), 'other' => __('Payment Method'), 'value' => __('Card')]),
             'card_id.exists' => __('validation.exists', ['attribute' => __('Card')]),
             'description.max' => __('validation.max', ['attribute' => __('Description')]),
-            'description.regex' => __('The :attribute field must contain only letters, numbers, periods, dashes and spaces.', ['attribute' => __('Description')]),
+            'description.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Description'), 'characters' => '"-", ".", ",", "_", "*", ":", "(" e ")"']),
             'installment_number.max' => __('Credit Transactions (and their Installments) must have their Transaction Date within the period of the open (or soon-to-be-opened) invoice.'),
 
             'gross_value.required' => __('validation.required', ['attribute' => __('Gross Value')]),
