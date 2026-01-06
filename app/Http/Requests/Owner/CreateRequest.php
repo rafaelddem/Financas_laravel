@@ -16,7 +16,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:owners|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-() ]+$"',
+            'name' => 'required|unique:owners,name|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.() ]+$"',
             'active' => 'required|boolean',
         ];
     }
@@ -27,7 +27,7 @@ class CreateRequest extends FormRequest
             'name.required' => __('validation.required', ['attribute' => __('Name')]),
             'name.unique' => __('validation.unique', ['attribute' => __('Name')]),
             'name.between' => __('validation.between', ['attribute' => __('Name')]),
-            'name.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Name'), 'characters' => '"-", "(" e ")"']),
+            'name.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Name'), 'characters' => '"-", ".", "(" e ")"']),
             'active.boolean' => __('validation.boolean', ['attribute' => __('Active')]),
         ];
     }

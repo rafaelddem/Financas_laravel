@@ -49,7 +49,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|between:3,50|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-() ]+$"',
+            'title' => 'required|between:3,50|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.() ]+$"',
             'transaction_date' => 'required|date_format:Y-m-d',
             'processing_date' => 'required|date_format:Y-m-d|after_or_equal:transaction_date',
             'category_id' => 'required|exists:categories,id',
@@ -79,7 +79,7 @@ class CreateRequest extends FormRequest
         return [
             'title.required' => __('validation.required', ['attribute' => __('Title')]),
             'title.between' => __('validation.between', ['attribute' => __('Title')]),
-            'title.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Title'), 'characters' => '"-", "(" e ")"']),
+            'title.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Title'), 'characters' => '"-", ".", "(" e ")"']),
             'transaction_date.required' => __('validation.required', ['attribute' => __('Transaction Date')]),
             'transaction_date.date_format' => __('validation.date_format', ['attribute' => __('Transaction Date')]),
             'processing_date.required' => __('validation.required', ['attribute' => __('Processing Date')]),

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Owner;
+use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -10,6 +11,14 @@ use Tests\TestCase;
 class WalletTest extends TestCase
 {
     use DatabaseTransactions;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $user = User::factory()->create([ 'role' => 'admin' ]);
+        $this->actingAs($user);
+    }
 
     public function test_index(): void
     {

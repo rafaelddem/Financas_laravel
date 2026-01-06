@@ -3,53 +3,22 @@
 namespace Tests\Feature;
 
 use App\Models\Owner;
+use App\Models\User;
 use App\Models\Wallet;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class OwnerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    // public static function validCharacters(): array
-    // {
-    //     return [
-    //         '.' => ['.'],
-    //         '-' => ['-'],
-    //     ];
-    // }
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    // public static function invalidCharacters(): array
-    // {
-    //     return [
-    //         '!' => ['!'],
-    //         '@' => ['@'],
-    //         '#' => ['#'],
-    //         '$' => ['$'],
-    //         '%' => ['%'],
-    //         '&' => ['&'],
-    //         '*' => ['*'],
-    //         '(' => ['('],
-    //         ')' => [')'],
-    //         '{' => ['{'],
-    //         '}' => ['}'],
-    //         '[' => ['['],
-    //         ']' => [']'],
-    //         '<' => ['<'],
-    //         '>' => ['>'],
-    //         '/' => ['/'],
-    //         '\\' => ['\\'],
-    //         '_' => ['_'],
-    //         '+' => ['+'],
-    //         '=' => ['='],
-    //         '?' => ['?'],
-    //         ':' => [':'],
-    //         ';' => [';'],
-    //         ',' => [','],
-    //     ];
-    // }
+        $user = User::factory()->create([ 'role' => 'admin' ]);
+        $this->actingAs($user);
+    }
 
     public function test_index(): void
     {
@@ -75,7 +44,7 @@ class OwnerTest extends TestCase
 
         $this->post(route('owner.store'), $dataOwner->toArray())
             ->assertRedirect(route('owner.list', ['message' => __('Data created successfully.')]));
-        
+
         $owner = Owner::where('name', $dataOwner['name'])->with('wallets')->first();
         $this->assertCount(1, $owner->wallets);
         $this->assertEquals(__('Standard Owner\'s Wallet', ['owner' => $dataOwner->name]), $owner->wallets->first()->name);

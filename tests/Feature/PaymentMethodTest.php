@@ -3,12 +3,21 @@
 namespace Tests\Feature;
 
 use App\Models\PaymentMethod;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class PaymentMethodTest extends TestCase
 {
     use DatabaseTransactions;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $user = User::factory()->create([ 'role' => 'admin' ]);
+        $this->actingAs($user);
+    }
 
     public function test_index(): void
     {

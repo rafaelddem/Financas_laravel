@@ -3,12 +3,21 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
     use DatabaseTransactions;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $user = User::factory()->create([ 'role' => 'admin' ]);
+        $this->actingAs($user);
+    }
 
     public function test_index(): void
     {
@@ -71,7 +80,7 @@ class CategoryTest extends TestCase
         unset($categoryData['relevance']);
 
         $this->post(route('category.store'), $categoryData->toArray())
-            ->assertSessionHasErrors(['relevance' => __('validation.required', ['attribute' => 'Relevância'])]);
+            ->assertSessionHasErrors(['relevance' => __('validation.required', ['attribute' => __('Relevance')])]);
     }
 
     public function test_create_fail_invalid_relevance(): void
@@ -80,7 +89,7 @@ class CategoryTest extends TestCase
         $categoryData['relevance'] = '12345';
 
         $this->post(route('category.store'), $categoryData)
-            ->assertSessionHasErrors(['relevance' => __('validation.in', ['attribute' => 'Relevância'])]);
+            ->assertSessionHasErrors(['relevance' => __('validation.in', ['attribute' => __('Relevance')])]);
     }
 
     public function test_update_successfully(): void
