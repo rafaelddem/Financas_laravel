@@ -27,8 +27,12 @@ class TransactionFactory extends Factory
     {
         $category = Category::factory()->create();
 
+        $title = $this->faker->name();
+        $title = preg_replace('/[^A-Za-z0-9À-ÖØ-öø-ÿç.\-\(\) ]/', '', $title);
+        $title = substr($title, 0, 50);
+
         return [
-            'title' => substr($this->faker->name(), 0, 50),
+            'title' => $title,
             'transaction_date' => Carbon::now(),
             'processing_date' => Carbon::now(),
             'category_id' => $category->id,
