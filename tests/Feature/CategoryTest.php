@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -43,7 +44,7 @@ class CategoryTest extends TestCase
         unset($categoryData['name']);
 
         $this->post(route('category.store'), $categoryData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_duplicate_name(): void
@@ -51,7 +52,7 @@ class CategoryTest extends TestCase
         $categoryData = Category::factory()->create();
 
         $this->post(route('category.store'), $categoryData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_very_short_name(): void
@@ -61,7 +62,7 @@ class CategoryTest extends TestCase
         ]);
 
         $this->post(route('category.store'), $categoryData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 30])]);
     }
 
     public function test_create_fail_very_long_name(): void
@@ -71,7 +72,7 @@ class CategoryTest extends TestCase
         ]);
 
         $this->post(route('category.store'), $categoryData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 30])]);
     }
 
     public function test_create_fail_without_relevance(): void
@@ -106,5 +107,38 @@ class CategoryTest extends TestCase
         
         $this->assertEquals($categoryUpdatedData['relevance'], $categoryUpdateData['relevance']);
         $this->assertEquals($categoryUpdatedData['active'], $categoryUpdateData['active']);
+    }
+
+    public function test_remove_successfully(): void
+    {
+        $category = Category::factory()->create();
+
+        $this->delete(route('category.destroy'), $category->toArray())
+            ->assertRedirect(route('category.list', ['message' => __('Data deleted successfully.')]));
+
+        $this->assertDatabaseMissing('transaction_bases', [
+            'id' => $category->id,
+        ]);
+    }
+
+    public function test_remove_fail(): void
+    {
+        $this->delete(route('category.destroy'), ['id' => 999999999999 ])
+            ->assertRedirect(route('category.list'))
+            ->assertSessionHasErrors(['message' => __("The reported record was not found.")]);
+    }
+
+    public function test_remove_fail_used_category(): void
+    {
+        $category = Category::factory()->create();
+        Transaction::factory()->create([
+            'category_id' => $category->id,
+        ]);
+
+        $this->delete(route('category.destroy'), $category->toArray())
+            ->assertRedirect(route('category.list'))
+            ->assertSessionHasErrors(['message' => __("It is not allowed to remove a Category that is linked to a transaction.")]);
+
+        $this->assertDatabaseHas('categories', $category->toArray());
     }
 }

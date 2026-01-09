@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Owner;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -65,7 +67,7 @@ class WalletTest extends TestCase
         unset($dataWallet['name']);
 
         $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_duplicate_name(): void
@@ -74,7 +76,7 @@ class WalletTest extends TestCase
         $dataWallet = Wallet::factory()->create();
 
         $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_very_short_name(): void
@@ -85,7 +87,7 @@ class WalletTest extends TestCase
         ]);
 
         $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 45])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 45])]);
     }
 
     public function test_create_fail_very_long_name(): void
@@ -96,7 +98,7 @@ class WalletTest extends TestCase
         ]);
 
         $this->post(route('owner.wallet.store', ['owner_id' => $owner->id]), $dataWallet->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 45])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 45])]);
     }
 
     public function test_create_fail_inactivate_main_wallet(): void
@@ -201,9 +203,52 @@ class WalletTest extends TestCase
         ->assertSessionHasErrors(['message' => __('It is not allowed to activate a Wallet whose Owner is inactive.')]);
     }
 
-    /**
-     * O método para verifição de pendências de uma Carteira ainda não foi implementado
-     * Por esse motivo, os testes referentes a remoção de registros (softDelete) não foram implementados
-     * Assim como os testes referentes a inativação de uma Carteira quando a mesma possuir pendências
-     */
+    public function test_remove_successfully(): void
+    {
+        $wallet = Wallet::factory()->fromOwner()->create();
+
+        $this->delete(route('owner.wallet.destroy', ['owner_id' => $wallet->owner_id]), $wallet->toArray())
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $wallet->owner_id, 'message' => __('Data deleted successfully.')]));
+
+        $this->assertDatabaseMissing('wallets', [
+            'id' => $wallet->id,
+        ]);
+    }
+
+    public function test_remove_fail(): void
+    {
+        $wallet = Wallet::factory()->fromOwner()->create();
+
+        $this->delete(route('owner.wallet.destroy', ['owner_id' => $wallet->owner_id]), ['id' => 999999999999 ])
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $wallet->owner_id]))
+            ->assertSessionHasErrors(['message' => __("The reported record was not found.")]);
+    }
+
+    public function test_remove_fail_main_wallet(): void
+    {
+        $wallet = Wallet::factory()->fromOwner()->create([
+            'main_wallet' => true,
+        ]);
+
+        $this->delete(route('owner.wallet.destroy', ['owner_id' => $wallet->owner_id]), $wallet->toArray())
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $wallet->owner_id]))
+            ->assertSessionHasErrors(['message' => __("It is not allowed to remove the main Wallet.")]);
+
+        $this->assertDatabaseHas('wallets', ['id' => $wallet->id]);
+    }
+
+    public function test_remove_fail_wallet_with_values(): void
+    {
+        $wallet = Wallet::factory()->fromOwner()->create();
+        Transaction::factory()->wallets($wallet, null)->create([
+            'transaction_date' => Carbon::now()->addMonth(),
+            'processing_date' => Carbon::now()->addMonth(),
+        ]);
+
+        $this->delete(route('owner.wallet.destroy', ['owner_id' => $wallet->owner_id]), $wallet->toArray())
+            ->assertRedirect(route('owner.wallet.list', ['owner_id' => $wallet->owner_id]))
+            ->assertSessionHasErrors(['message' => __("It is not allowed to remove a Wallet that has outstanding monetary balances.")]);
+
+        $this->assertDatabaseHas('wallets', ['id' => $wallet->id]);
+    }
 }

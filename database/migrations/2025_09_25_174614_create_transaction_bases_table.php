@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaction_bases', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title', 50)->nullable(false);
+            $table->string('title', 50)->unique()->nullable(false);
             $table->integer('category_id')->unsigned()->nullable(false);
             $table->integer('payment_method_id')->unsigned()->nullable(false);
             $table->integer('card_id')->unsigned()->nullable(true);

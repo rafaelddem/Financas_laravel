@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Card;
+use App\Models\Invoice;
 use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -37,6 +39,15 @@ class CardFactory extends Factory
             return [
                 'wallet_id' => $wallet->id,
             ];
+        });
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Card $card) {
+            Invoice::factory()->create([
+                'card_id' => $card->id,
+            ]);
         });
     }
 }

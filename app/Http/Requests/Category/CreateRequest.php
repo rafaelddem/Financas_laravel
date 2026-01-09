@@ -20,7 +20,7 @@ class CreateRequest extends FormRequest
             'name' => 'required|unique:categories|between:3,30|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.() ]+$"',
             'relevance' => 'required|in:' . implode(',', Relevance::values()),
             'active' => 'required|boolean',
-            'description' => 'max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.,_*(): ]+$"',
+            'description' => 'nullable|max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.,_*(): ]+$"',
         ];
     }
 

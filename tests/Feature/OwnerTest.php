@@ -82,7 +82,7 @@ class OwnerTest extends TestCase
         unset($dataOwner['name']);
 
         $this->post(route('owner.store'), $dataOwner->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_duplicate_name(): void
@@ -90,7 +90,7 @@ class OwnerTest extends TestCase
         $dataOwner = Owner::factory()->create();
 
         $this->post(route('owner.store'), $dataOwner->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_very_short_name(): void
@@ -100,7 +100,7 @@ class OwnerTest extends TestCase
         ]);
 
         $this->post(route('owner.store'), $dataOwner->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 30])]);
     }
 
     public function test_create_fail_very_long_name(): void
@@ -110,7 +110,7 @@ class OwnerTest extends TestCase
         ]);
 
         $this->post(route('owner.store'), $dataOwner->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 30])]);
     }
 
     // #[DataProvider('invalidCharacters')]

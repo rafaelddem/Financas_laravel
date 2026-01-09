@@ -58,7 +58,7 @@ class CardTest extends TestCase
         unset($cardData['name']);
 
         $this->post(route('owner.wallet.card.store', ['owner_id' => $wallet->owner->id, 'wallet_id' => $wallet->id]), $cardData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_duplicate_name(): void
@@ -67,7 +67,7 @@ class CardTest extends TestCase
         $cardData = Card::factory()->fromWallet($wallet)->create();
 
         $this->post(route('owner.wallet.card.store', ['owner_id' => $wallet->owner->id, 'wallet_id' => $wallet->id]), $cardData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_very_short_name(): void
@@ -78,7 +78,7 @@ class CardTest extends TestCase
         ]);
 
         $this->post(route('owner.wallet.card.store', ['owner_id' => $wallet->owner->id, 'wallet_id' => $wallet->id]), $cardData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 20])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 20])]);
     }
 
     public function test_create_fail_very_long_name(): void
@@ -89,7 +89,7 @@ class CardTest extends TestCase
         ]);
 
         $this->post(route('owner.wallet.card.store', ['owner_id' => $wallet->owner->id, 'wallet_id' => $wallet->id]), $cardData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 20])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 20])]);
     }
 
     public function test_update_main_wallet_active_owner(): void

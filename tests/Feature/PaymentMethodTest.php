@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\PaymentMethod;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -43,7 +44,7 @@ class PaymentMethodTest extends TestCase
         unset($paymentMethodData['name']);
 
         $this->post(route('payment-method.store'), $paymentMethodData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.required', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_duplicate_name(): void
@@ -51,7 +52,7 @@ class PaymentMethodTest extends TestCase
         $paymentMethodData = PaymentMethod::factory()->create();
 
         $this->post(route('payment-method.store'), $paymentMethodData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => 'Nome'])]);
+            ->assertSessionHasErrors(['name' => __('validation.unique', ['attribute' => __('Name')])]);
     }
 
     public function test_create_fail_very_short_name(): void
@@ -61,7 +62,7 @@ class PaymentMethodTest extends TestCase
         ]);
 
         $this->post(route('payment-method.store'), $paymentMethodData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 30])]);
     }
 
     public function test_create_fail_very_long_name(): void
@@ -71,7 +72,7 @@ class PaymentMethodTest extends TestCase
         ]);
 
         $this->post(route('payment-method.store'), $paymentMethodData->toArray())
-            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => 'Nome', 'min' => 3, 'max' => 30])]);
+            ->assertSessionHasErrors(['name' => __('validation.between.string', ['attribute' => __('Name'), 'min' => 3, 'max' => 30])]);
     }
 
     public function test_create_fail_without_type(): void
@@ -80,7 +81,7 @@ class PaymentMethodTest extends TestCase
         unset($paymentMethodData['type']);
 
         $this->post(route('payment-method.store'), $paymentMethodData->toArray())
-            ->assertSessionHasErrors(['type' => __('validation.required', ['attribute' => 'Tipo'])]);
+            ->assertSessionHasErrors(['type' => __('validation.required', ['attribute' => __('Type')])]);
     }
 
     public function test_create_fail_invalid_type(): void
@@ -89,7 +90,7 @@ class PaymentMethodTest extends TestCase
         $paymentMethodData['type'] = '12345';
 
         $this->post(route('payment-method.store'), $paymentMethodData)
-            ->assertSessionHasErrors(['type' => __('validation.in', ['attribute' => 'Tipo'])]);
+            ->assertSessionHasErrors(['type' => __('validation.in', ['attribute' => __('Type')])]);
     }
 
     public function test_update_inactivate_successfully(): void
@@ -122,5 +123,38 @@ class PaymentMethodTest extends TestCase
         $this->assertEquals($paymentMethodUpdatedData->type->value, $paymentMethodDataOriginalData['type']);         // Atributo não pode ser modificado
 
         $this->assertEquals($paymentMethodUpdatedData['active'], $paymentMethodUpdateData['active']);
+    }
+
+    public function test_remove_successfully(): void
+    {
+        $paymentMethod = PaymentMethod::factory()->create();
+
+        $this->delete(route('payment-method.destroy'), $paymentMethod->toArray())
+            ->assertRedirect(route('payment-method.list', ['message' => __('Data deleted successfully.')]));
+
+        $this->assertDatabaseMissing('payment_methods', [
+            'id' => $paymentMethod->id,
+        ]);
+    }
+
+    public function test_remove_fail(): void
+    {
+        $this->delete(route('payment-method.destroy'), ['id' => 999999999999 ])
+            ->assertRedirect(route('payment-method.list'))
+            ->assertSessionHasErrors(['message' => __("The reported record was not found.")]);
+    }
+
+    public function test_remove_fail_used_PaymentMethod(): void
+    {
+        $paymentMethod = PaymentMethod::factory()->create();
+        Transaction::factory()->create([
+            'payment_method_id' => $paymentMethod->id,
+        ]);
+
+        $this->delete(route('payment-method.destroy'), $paymentMethod->toArray())
+            ->assertRedirect(route('payment-method.list'))
+            ->assertSessionHasErrors(['message' => __("It is not allowed to remove a Payment Method that is linked to a transaction.")]);
+
+        $this->assertDatabaseHas('payment_methods', $paymentMethod->toArray());
     }
 }

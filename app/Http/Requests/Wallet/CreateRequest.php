@@ -18,7 +18,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:wallets,name,NULL,NULL,owner_id,' . $this->get('owner_id') . '|between:3,45|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.() ]+$"',
-            'description' => 'max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.,_*(): ]+$"',
+            'description' => 'nullable|max:255|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.,_*(): ]+$"',
             'active' => 'required_if:main_wallet,true|accepted_if:main_wallet,true',
         ];
     }

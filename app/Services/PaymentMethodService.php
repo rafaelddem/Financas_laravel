@@ -16,10 +16,12 @@ class PaymentMethodService extends BaseService
     public function delete(int $id)
     {
         try {
-            if ($this->repository->hasRelatedTransactions($id)) 
-                throw new ServiceException('It is not allowed to remove a payment method that is linked to a transaction.');
+            $paymentMethod = $this->repository->find($id);
 
-            $this->repository->delete($id);
+            if ($this->repository->hasRelatedTransactions($id)) 
+                throw new ServiceException('It is not allowed to remove a Payment Method that is linked to a transaction.');
+
+            $paymentMethod->delete($id);
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {

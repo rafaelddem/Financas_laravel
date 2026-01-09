@@ -23,4 +23,13 @@ class PaymentMethodFactory extends Factory
             'active' => true,
         ];
     }
+
+    public function simple()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'type' => $this->faker->randomElement([PaymentType::Notes->value, PaymentType::Transfer->value]),
+            ];
+        });
+    }
 }

@@ -16,7 +16,7 @@ class CreateRequest extends FormRequest
             'discount_value' => $this->convertToFloat($this->discount_value ?? null),
             'interest_value' => $this->convertToFloat($this->interest_value ?? null),
             'rounding_value' => $this->convertToFloat($this->rounding_value ?? null),
-            'payment_type' => PaymentMethod::find($this->payment_method_id)->type->value,
+            'payment_type' => PaymentMethod::find($this->payment_method_id)?->type->value,
         ]);
 
         $installments = [];
@@ -39,9 +39,15 @@ class CreateRequest extends FormRequest
 
     private function convertToFloat($value = null)
     {
-        if (is_null($value) || $value == '0,00') {
-            return 0;
-        }
+        if (is_null($value)) 
+            return null;
+
+        if ($value == '0,00') 
+            return 0.0;
+
+        if (is_float($value)) 
+            return $value;
+
         $value = str_replace(['.', ','], ['', '.'], $value);
         return is_numeric($value) ? (float) $value : 'invalid value';
     }
@@ -81,9 +87,9 @@ class CreateRequest extends FormRequest
             'title.between' => __('validation.between', ['attribute' => __('Title')]),
             'title.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Title'), 'characters' => '"-", ".", "(" e ")"']),
             'transaction_date.required' => __('validation.required', ['attribute' => __('Transaction Date')]),
-            'transaction_date.date_format' => __('validation.date_format', ['attribute' => __('Transaction Date')]),
+            'transaction_date.date_format' => __('validation.date_format', ['attribute' => __('Transaction Date'), 'format' => 'Y-m-d']),
             'processing_date.required' => __('validation.required', ['attribute' => __('Processing Date')]),
-            'processing_date.date_format' => __('validation.date_format', ['attribute' => __('Processing Date')]),
+            'processing_date.date_format' => __('validation.date_format', ['attribute' => __('Processing Date'), 'format' => 'Y-m-d']),
             'processing_date.after_or_equal' => __('validation.after_or_equal', ['attribute' => __('Processing Date'), 'date' => __('Transaction Date')]),
             'category_id.required' => __('validation.required', ['attribute' => __('Category')]),
             'category_id.exists' => __('validation.exists', ['attribute' => __('Category')]),
@@ -104,8 +110,8 @@ class CreateRequest extends FormRequest
             'gross_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Gross Value'), 'min' => '0,01', 'max' => '99999,99']),
             'gross_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Gross Value'), 'min' => '0,01', 'max' => '99999,99']),
             'discount_value.required' => __('validation.required', ['attribute' => __('Gross Value')]),
-            'discount_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value'), 'min' => '0,01', 'max' => '99999,99']),
-            'discount_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value'), 'min' => '0,01', 'max' => '99999,99']),
+            'discount_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value'), 'min' => '0,00', 'max' => '99999,99']),
+            'discount_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value'), 'min' => '0,00', 'max' => '99999,99']),
             'interest_value.required' => __('validation.required', ['attribute' => __('Gross Value')]),
             'interest_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Interest Value'), 'min' => '-99999,99', 'max' => '99999,99']),
             'interest_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Interest Value'), 'min' => '-99999,99', 'max' => '99999,99']),
@@ -118,8 +124,8 @@ class CreateRequest extends FormRequest
             'installments.*.gross_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Gross Value (Installment)'), 'min' => '0,01', 'max' => '99999,99']),
             'installments.*.gross_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Gross Value (Installment)'), 'min' => '0,01', 'max' => '99999,99']),
             'installments.*.discount_value.required_if' => __('validation.required_if', ['attribute' => __('Gross Value (Installment)'), 'other' => __('Payment Method'), 'value' => __(PaymentType::Credit->name)]),
-            'installments.*.discount_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value (Installment)'), 'min' => '0,01', 'max' => '99999,99']),
-            'installments.*.discount_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value (Installment)'), 'min' => '0,01', 'max' => '99999,99']),
+            'installments.*.discount_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value (Installment)'), 'min' => '0,00', 'max' => '99999,99']),
+            'installments.*.discount_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Discount Value (Installment)'), 'min' => '0,00', 'max' => '99999,99']),
             'installments.*.interest_value.required_if' => __('validation.required_if', ['attribute' => __('Gross Value (Installment)'), 'other' => __('Payment Method'), 'value' => __(PaymentType::Credit->name)]),
             'installments.*.interest_value.numeric' => __('The value must have two decimal places and be between min and max.', ['value' => __('Interest Value (Installment)'), 'min' => '-99999,99', 'max' => '99999,99']),
             'installments.*.interest_value.between' => __('The value must have two decimal places and be between min and max.', ['value' => __('Interest Value (Installment)'), 'min' => '-99999,99', 'max' => '99999,99']),

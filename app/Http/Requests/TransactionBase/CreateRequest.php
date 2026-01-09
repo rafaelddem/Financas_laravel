@@ -10,14 +10,14 @@ class CreateRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'payment_type' => PaymentMethod::find($this->payment_method_id)->type->value,
+            'payment_type' => PaymentMethod::find($this->payment_method_id)?->type->value,
         ]);
     }
 
     public function rules()
     {
         return [
-            'title' => 'required|between:3,50|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.() ]+$',
+            'title' => 'required|unique:transaction_bases,title|between:3,50|regex:"^[A-Za-zÀ-ÖØ-öø-ÿç0-9\-.() ]+$"',
             'category_id' => 'required|exists:categories,id',
             'payment_method_id' => 'required|exists:payment_methods,id',
             'source_wallet_id' => 'required|exists:wallets,id',
@@ -30,6 +30,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'title.required' => __('validation.required', ['attribute' => __('Title')]),
+            'title.unique' => __('validation.unique', ['attribute' => __('Title')]),
             'title.between' => __('validation.between', ['attribute' => __('Title')]),
             'title.regex' => __('The :attribute field must contain only letters, numbers and the characters: :characters.', ['attribute' => __('Title'), 'characters' => '"-", ".", "(" e ")"']),
             'category_id.required' => __('validation.required', ['attribute' => __('Category')]),

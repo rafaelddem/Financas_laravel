@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,13 @@ class InstallmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'installment_number' => 1,
+            'installment_total' => 1,
+            'installment_date' => Carbon::now(),
+            'gross_value' => $this->faker->randomFloat(2, 20, 750), 
+            'discount_value' => 0.00, 
+            'interest_value' => 0.00, 
+            'rounding_value' => 0.00, 
         ];
     }
 }

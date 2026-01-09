@@ -28,6 +28,8 @@ class TransactionService extends BaseService
         try {
             \DB::beginTransaction();
 
+            $this->validateTransactionValues($input);
+
             $transaction = $this->repository->create($input);
 
             if (isset($input['card_id'])) {
@@ -59,6 +61,18 @@ class TransactionService extends BaseService
             \DB::rollBack();
             throw new ServiceException();
         }
+    }
+
+    private function validateTransactionValues(array $transactionValues)
+    {
+        $gross_value = $transactionValues['gross_value'];
+        $discount_value = $transactionValues['discount_value'] ?? 0;
+        $interest_value = $transactionValues['interest_value'] ?? 0;
+        $rounding_value = $transactionValues['rounding_value'] ?? 0;
+        $net_value = $gross_value - $discount_value + $interest_value + $rounding_value;
+
+        if ($net_value <= 0) 
+            throw new ServiceException(__('The sum of values of the Transaction cannot be zero.'));
     }
 
     private function validateInstallmentsValues(float $netValue, array $installmentsData): bool

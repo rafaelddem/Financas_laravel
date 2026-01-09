@@ -78,7 +78,7 @@
     "Transfer": "Transações Bancárias",
     "Debit": "Débito (cartão)",
     "Credit": "Crédito (cartão)",
-    "It is not allowed to remove a payment method that is linked to a transaction.": "Não é permitido remover um Método de Pagamento que esteja vinculado a uma Transação.",
+    "It is not allowed to remove a Payment Method that is linked to a transaction.": "Não é permitido remover um Método de Pagamento que esteja vinculado a uma Transação.",
 
     "Category": "Categoria",
     "Relevance": "Relevância",
@@ -135,6 +135,7 @@
     "A value needs to be entered": "Um valor precisa ser informado",
     "A card needs to be entered": "Um Cartão precisa ser informado",
     "The value must have two decimal places and be between min and max.": "O :value deve ter duas casas decimais e estar entre :min e :max.",
+    "The sum of values of the Transaction cannot be zero.": "A soma dos valores da Transação não pode ser zero.",
     "The sum of the Gross Values of the Installments cannot be greater than the Net Value of the Transaction.": "A soma dos Valores Brutos das Parcelas não poderá ser maior que o Valor Líquido da Transação.",
     "The selected Card must belong to the Source Wallet.": "O Cartão selecionado deve pertencer a Carteira Origem.",
     "Transaction Details": "Dados da Transação",

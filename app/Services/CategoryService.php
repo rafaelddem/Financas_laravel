@@ -16,10 +16,12 @@ class CategoryService extends BaseService
     public function delete(int $id)
     {
         try {
+            $category = $this->repository->find($id);
+
             if ($this->repository->hasRelatedTransactions($id)) 
                 throw new ServiceException('It is not allowed to remove a Category that is linked to a transaction.');
 
-            $this->repository->delete($id);
+            $category->delete($id);
         } catch (BaseException $exception) {
             throw $exception;
         } catch (\Throwable $th) {
