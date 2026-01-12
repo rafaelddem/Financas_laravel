@@ -1047,6 +1047,10 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 Possíveis alterações no projeto:
 
+Relatório por carteira, descriminando os movimentos por carteira
+
+Adicionar detalhes da transação também na tela de emprestimos
+
 No cadastro de carteiras, adicionar o relacionamento com uma tabela "Bancos", que manteria os banco (BB, Caixa, Santander...) pré-cadastrados
 
 Na Categoria, ver a necessidade de um campo 'descrição' e um campo 'nome abreviado'.
