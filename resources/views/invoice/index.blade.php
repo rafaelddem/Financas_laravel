@@ -65,12 +65,17 @@ use Carbon\Carbon;
                                     <span class="tag">{{__('Overdue')}}</span>
                                 @endif
                             </span>
-                            <button type="button"
-                                class="open-confirm"
-                                data-id="{{ $invoice->id }}"
-                                data-subtitle="{{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }}">
-                                {{ __('Pay') }}
-                            </button>
+                            <div class="td-buttons">
+                                <button type="button" onclick="window.location='{{ route('invoice.details', ['invoice_id' => $invoice->id]) }}'" title="{{__('Invoice Details')}}">
+                                    <i class="fa-solid fa-align-left"></i>
+                                </button>
+                                <button type="button"
+                                    class="open-confirm"
+                                    data-id="{{ $invoice->id }}"
+                                    data-subtitle="{{ $invoice->card->name }} | {{ $invoice->start_date->format('d/m/Y') }} - {{ $invoice->end_date->format('d/m/Y') }}">
+                                    {{ __('Pay') }}
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
