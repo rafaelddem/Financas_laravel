@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\BaseException;
 use App\Services\OwnerService;
 use App\Services\ReportService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -67,10 +68,24 @@ class ReportController extends Controller
             $owner_id = $request->get('owner_id', $owners->first()?->id);
             $ownerLoans = $this->service->ownerLoansTransactions($owner_id, $start_date, $end_date);
 
+            if ($request->print) {
+                $owner_name = $owners->find($owner_id)->name;
+                $report = Pdf::loadView('reports.loans_print', compact('owner_name', 'owner_id', 'start_date', 'end_date', 'ownerLoans'))
+                    ->setPaper('a4', 'landscape')
+                    ->setOptions(['isRemoteEnabled' => true, 'defaultFont' => 'DejaVu Sans']);
+
+                $reportTitle = __('Report File Name from :origin', ['origin' => "Emprestimos"]);
+                $reportTitle .= '_' . $owner_name;
+                $reportTitle .= '_' . Carbon::now()->format('YmdHis') . '.pdf';
+                $reportTitle = iconv('UTF-8', 'ASCII//TRANSLIT', strtolower($reportTitle));
+
+                return $report->download($reportTitle);
+            }
+
             return view('reports.loans', compact('owners', 'owner_id', 'start_date', 'end_date', 'ownerLoans'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
-        } catch (\Throwable $th) {
+        } catch (\Throwable $th) {dd($th);
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 

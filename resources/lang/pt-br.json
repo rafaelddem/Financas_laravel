@@ -33,7 +33,12 @@
     "Return": "Voltar",
     "Filter": "Filtrar",
     "Filters": "Filtros",
+    "Print": "Imprimir",
     "Extract": "Extrair",
+    "Start Date": "Data de Início",
+    "End Date": "Data Final",
+    "Period": "Período",
+    "Period Between :start_date and :end_date": "Período entre :start_date e :end_date",
     "Default Placeholder": "Digite aqui...",
 
     "Username": "E-mail",
@@ -103,8 +108,6 @@
     "Open Invoices": "Faturas Abertas",
     "Unpaid Invoice": "Faturas Pendentes",
     "Paid Invoices": "Faturas Pagas",
-    "Start Date": "Início do Período",
-    "End Date": "Fim do Período",
     "Invoices created successfully.": "Faturas criadas com sucesso.",
     "Open": "Aberta",
     "Closed": "Fechada",
@@ -204,6 +207,7 @@
     "Report Label Total Until Date": "Até a data",
     "Report Label Total From Period": "Do período",
     "Expenses By Period": "Gastos por Período",
+    "Report File Name from :origin": "relatorio_de_:origin",
 
     "": ""
 }

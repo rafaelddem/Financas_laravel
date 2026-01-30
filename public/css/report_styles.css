@@ -1,0 +1,93 @@
+@page {
+    margin-top: 10mm;
+    margin-bottom: 10mm;
+    margin-left: 10mm;
+    margin-right: 10mm;
+}
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: 'DejaVu Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.base-page {
+    background-color: #ffffff;
+    color: #000000;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 12px;
+}
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+
+.tag {
+    background-color: #387f75;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.table_header {
+    font-weight:bold;
+    background:#f2f2f2;
+}
+.table_col {
+    width: 100%;
+}
+.table_col_10 {
+    width: 10%;
+}
+.table_col_15 {
+    width: 15%;
+}
+.table_col_20 {
+    width: 20%;
+}
+.table_col_25 {
+    width: 25%;
+}
+.table_col_30 {
+    width: 30%;
+}
+.table_col_33 {
+    width: 33.3%;
+}
+.table_col_40 {
+    width: 40%;
+}
+.table_col_50 {
+    width: 50%;
+}
+.table_col_66 {
+    width: 66.6%;
+}
+.table_col_75 {
+    width: 75%;
+}
+.table_footer {
+    font-weight:bold;
+}
