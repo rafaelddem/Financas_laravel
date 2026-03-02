@@ -34,6 +34,7 @@ class InstallmentRepository extends BaseRepository
     {
         try {
             $installments = $this->model
+                ->select('installments.*')
                 ->join('transactions', 'transactions.id', '=', 'installments.transaction_id')
                 ->where('transactions.card_id', $invoice->card_id)
                 ->whereBetween('installment_date', [$invoice->start_date, $invoice->end_date]);
