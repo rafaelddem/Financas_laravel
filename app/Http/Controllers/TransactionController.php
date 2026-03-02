@@ -102,4 +102,20 @@ class TransactionController extends Controller
 
         return redirect()->back()->withErrors(compact('message'))->withInput();
     }
+
+    public function destroy(Request $request)
+    {
+        try {
+            $this->service->delete($request->get('id'));
+
+            $message = __('Data deleted successfully.');
+            return redirect(route('transaction.list'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect()->back()->withErrors(compact('message'))->withInput();
+    }
 }

@@ -147,9 +147,18 @@ use Carbon\Carbon;
         <div class="flex-container"><div class="col"></div></div>
 
         <div class="flex-container">
-            <div class="col">
-                <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->previous()}}'">
+            <div class="col_50 sm_col">
+                <div class="td-buttons">
+                    <input type="hidden" form="form-delete" name="id" value={{$transaction->id}}>
+                    <button type="submit" class="col" form="form-delete">{{__('Delete')}}</button>
+                </div>
+            </div>
+            <div class="col_50 sm_col">
+                <div class="td-buttons">
+                    <button type="button" class="col" onclick="window.location='{{route('transaction.list')}}'">{{__('Return')}}</button>
+                </div>
             </div>
         </div>
+        <form method="post" id="form-delete" action="{{route('transaction.destroy')}}"> @csrf @method('DELETE') </form>
     </div>
 @endsection

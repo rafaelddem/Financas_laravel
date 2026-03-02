@@ -142,6 +142,7 @@
     "The sum of the Gross Values of the Installments cannot be greater than the Net Value of the Transaction.": "A soma dos Valores Brutos das Parcelas não poderá ser maior que o Valor Líquido da Transação.",
     "The selected Card must belong to the Source Wallet.": "O Cartão selecionado deve pertencer a Carteira Origem.",
     "Transaction Details": "Dados da Transação",
+    "You cannot remove a transaction that belongs to an already closed invoice.": "Não é permitido a remoção de uma Transação que pertença a uma fatura fechada.",
 
     "Installment": "Parcela",
     "Installments": "Parcelas",

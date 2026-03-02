@@ -37,6 +37,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/{id}', [TransactionController::class, 'show'])->name('show');
         Route::get('/novo/{base}', [TransactionController::class, 'create'])->name('createByBase');
         Route::post('/', [TransactionController::class, 'store'])->name('store');
+        Route::delete('/', [TransactionController::class, 'destroy'])->name('destroy');
     });
 
     Route::group(['prefix' => 'importacao-extrato', 'as' => 'extract-import.'], function () {

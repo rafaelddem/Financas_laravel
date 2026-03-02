@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\InvoiceStatus;
+use App\Enums\PaymentType;
 use App\Exceptions\BaseException;
 use App\Exceptions\ServiceException;
 use App\Repositories\CardRepository;
@@ -105,5 +107,25 @@ class TransactionService extends BaseService
             throw new ServiceException(__('Sum of installment installmentNumber cannot be negative.', ['installmentNumber' => $installmentNumber]));
 
         return $installmentData['gross_value'];
+    }
+
+    public function delete(int $id)
+    {
+        try {
+            $transaction = $this->repository->find($id, ['installments', 'card.invoices']);
+
+            if ($transaction->paymentMethod->type == PaymentType::Credit) {
+                $openInvoice = $transaction->card->invoices()->where('status', InvoiceStatus::Open->name)->first();
+
+                if ($openInvoice->start_date > $transaction->transaction_date) 
+                    throw new ServiceException('You cannot remove a transaction that belongs to an already closed invoice.');
+            }
+
+            $this->repository->delete($id);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
     }
 }
