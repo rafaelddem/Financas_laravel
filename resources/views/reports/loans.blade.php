@@ -74,7 +74,10 @@
                         | <span class="tag">{{__(\App\Enums\PaymentType::translate($transaction['payment_methods_type']))}}</span>
                     </div>
                     <div class="col_30">
-                        {{$transaction['transactions_title']}}
+                        <button type="button" class="button_small" onclick="window.location='{{ route('transaction.show', ['id' => $transaction['transaction_id']]) }}'" title="{{__('Transaction Details')}}">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        {{$transaction['transaction_title']}}
                     </div>
                     <div class="col_15">
                         @if ($transaction['source_owner_id'] == env('MY_OWNER_ID'))

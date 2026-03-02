@@ -196,8 +196,8 @@ class ReportService extends BaseService
                 $date = Carbon::createFromFormat('Y-m-d', $transaction->date);
                 $month = $date->format('m/Y');
                 $ownerLoans['fromPeriod'][$month][] = [
-                    'transactions_id' => $transaction->transactions_id,
-                    'transactions_title' => ($transaction->payment_methods_type == PaymentType::Credit->value && $transaction->installment_number > 1)
+                    'transaction_id' => $transaction->transactions_id,
+                    'transaction_title' => ($transaction->payment_methods_type == PaymentType::Credit->value && $transaction->installment_number > 1)
                         ? $transaction->transactions_title . ' (' . $transaction->installment_number . ' de ' . $transaction->installment_total . ')'
                         : $transaction->transactions_title,
                     'source_owner_id' => $transaction->source_owner_id,

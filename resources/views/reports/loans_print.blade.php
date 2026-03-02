@@ -50,7 +50,7 @@
                                 {{ $transaction['source_owner_name'] }} > {{ $transaction['destination_owner_name'] }}<br>
                                 {{__(\App\Enums\PaymentType::translate($transaction['payment_methods_type']))}}
                             </td>
-                            <td class="left table_col_50">{{ $transaction['transactions_title'] }}</td>
+                            <td class="left table_col_50">{{ $transaction['transaction_title'] }}</td>
                             <td class="table_col_10">
                                 @if ($transaction['source_owner_id'] == env('MY_OWNER_ID'))
                                     @php($in += $transaction['net_value'])

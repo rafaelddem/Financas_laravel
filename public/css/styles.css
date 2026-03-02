@@ -554,6 +554,11 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.button_small {
+    padding: 5px;
+}
+
 button:hover {
     background-color: var(--button-hover);
 }
