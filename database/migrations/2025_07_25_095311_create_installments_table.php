@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('payment_date')->nullable(true);
             
             $table->primary(['transaction_id', 'installment_number']);
-            $table->foreign('transaction_id')->references('id')->on('transactions');
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
         });
     }
 
