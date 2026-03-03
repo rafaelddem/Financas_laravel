@@ -37,9 +37,7 @@ class WalletRepository extends BaseRepository
         try {
             return $this->model
                 ->with('owner')
-                ->when($ownerId, function ($query, $ownerId) {
-                    $query->where('owner_id', $ownerId);
-                })
+                ->where('owner_id', $ownerId)
                 ->orderby('owner_id', 'asc')
                 ->orderby('main_wallet', 'desc')
                 ->orderby('active', 'desc')
