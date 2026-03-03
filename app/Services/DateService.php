@@ -17,44 +17,26 @@ class DateService extends BaseService
         }
 
         switch ($period) {
-            case Period::LAST_MONTH:
+            case Period::TODAY:
                 return [
-                    Carbon::now()->startOfMonth()->startOfDay(),
-                    Carbon::now()->endOfMonth()->endOfDay(),
+                    Carbon::now()->startOfDay(),
+                    Carbon::now()->endOfDay(),
                 ];
                 break;
 
-            case Period::LAST_3_MONTHS:
+            case Period::LAST_7_DAYS:
                 return [
-                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(2),
-                    Carbon::now()->endOfMonth()->endOfDay(),
+                    Carbon::now()->startOfDay()->subDays(6),
+                    Carbon::now()->endOfDay(),
                 ];
                 break;
 
-            case Period::LAST_6_MONTHS:
+            case Period::LAST_14_DAYS:
                 return [
-                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(5),
-                    Carbon::now()->endOfMonth()->endOfDay(),
+                    Carbon::now()->startOfDay()->subDays(13),
+                    Carbon::now()->endOfDay(),
                 ];
                 break;
-
-            case Period::LAST_YEAR:
-                return [
-                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(11),
-                    Carbon::now()->endOfMonth()->endOfDay(),
-                ];
-
-            case Period::LAST_2_YEARS:
-                return [
-                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(23),
-                    Carbon::now()->endOfMonth()->endOfDay(),
-                ];
-
-            case Period::LAST_3_YEARS:
-                return [
-                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(35),
-                    Carbon::now()->endOfMonth()->endOfDay(),
-                ];
 
             case Period::LAST_30_DAYS:
                 return [
@@ -97,6 +79,45 @@ class DateService extends BaseService
                     Carbon::now()->endOfDay(),
                 ];
                 break;
+
+            case Period::LAST_MONTH:
+                return [
+                    Carbon::now()->startOfMonth()->startOfDay(),
+                    Carbon::now()->endOfMonth()->endOfDay(),
+                ];
+                break;
+
+            case Period::LAST_3_MONTHS:
+                return [
+                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(2),
+                    Carbon::now()->endOfMonth()->endOfDay(),
+                ];
+                break;
+
+            case Period::LAST_6_MONTHS:
+                return [
+                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(5),
+                    Carbon::now()->endOfMonth()->endOfDay(),
+                ];
+                break;
+
+            case Period::LAST_YEAR:
+                return [
+                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(11),
+                    Carbon::now()->endOfMonth()->endOfDay(),
+                ];
+
+            case Period::LAST_2_YEARS:
+                return [
+                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(23),
+                    Carbon::now()->endOfMonth()->endOfDay(),
+                ];
+
+            case Period::LAST_3_YEARS:
+                return [
+                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(35),
+                    Carbon::now()->endOfMonth()->endOfDay(),
+                ];
 
             default:
                 return [
