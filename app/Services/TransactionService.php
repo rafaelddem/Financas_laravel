@@ -128,4 +128,17 @@ class TransactionService extends BaseService
             throw new ServiceException();
         }
     }
+
+    public function listLastTransactionsCreated()
+    {
+        try {
+            return $this->repository->listLastTransactionsCreated();
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+
+        return [];
+    }
 }

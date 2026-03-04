@@ -11,7 +11,7 @@ use App\Enums\Relevance;
     <div class="presentation">
         <div class="flex-container">
             <div class="col">
-                <input type="button" value="Novo" onclick="window.location='{{ route('category.create') }}'">
+                <input type="button" value="{{__('Create')}}" onclick="window.location='{{ route('category.create') }}'">
             </div>
         </div>
         <div class="flex-container">

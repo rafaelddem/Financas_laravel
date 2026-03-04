@@ -23,6 +23,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::group(['prefix' => 'relatorios', 'as' => 'reports.'], function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
         Route::get('/emprestimos', [ReportController::class, 'loans'])->name('loans');
+        Route::get('/transacoes-por-carteira', [ReportController::class, 'transactionByWallet'])->name('transactionByWallet');
     });
     
     Route::group(['prefix' => 'faturas', 'as' => 'invoice.'], function () {

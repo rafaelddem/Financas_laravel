@@ -6,6 +6,7 @@ use App\Enums\PaymentType;
 use App\Exceptions\RepositoryException;
 use App\Models\Invoice;
 use App\Models\Transaction;
+use Carbon\Carbon;
 
 class TransactionRepository extends BaseRepository
 {
@@ -14,7 +15,7 @@ class TransactionRepository extends BaseRepository
         parent::__construct(Transaction::class);
     }
 
-    public function list(bool $onlyActive = true)
+    public function listLastTransactionsCreated()
     {
         try {
             return $this->model
@@ -24,6 +25,31 @@ class TransactionRepository extends BaseRepository
                     'sourceWallet', 
                     'destinationWallet', 
                 ])
+                ->orderBy('id', 'desc')
+                ->limit(5)
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function listTransactionsByWallets(Carbon $startDate, Carbon $endDate, ?array $wallets = null)
+    {
+        try {
+            return $this->model
+                ->with([
+                    'paymentMethod', 
+                    'category', 
+                    'sourceWallet', 
+                    'destinationWallet', 
+                ])
+                ->when($wallets, function ($query) use ($wallets) {
+                    $query->where(function ($query) use ($wallets) {
+                        $query->whereIn('source_wallet_id', $wallets)
+                            ->orWhereIn('destination_wallet_id', $wallets);
+                    });
+                })
+                ->whereBetween('transactions.transaction_date', [$startDate, $endDate])
                 ->orderBy('transaction_date', 'desc')
                 ->orderBy('id', 'desc')
                 ->get();

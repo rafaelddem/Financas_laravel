@@ -155,7 +155,7 @@ use Carbon\Carbon;
             </div>
             <div class="col_50 sm_col">
                 <div class="td-buttons">
-                    <button type="button" class="col" onclick="window.location='{{route('transaction.list')}}'">{{__('Return')}}</button>
+                    <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->previous()}}'">
                 </div>
             </div>
         </div>

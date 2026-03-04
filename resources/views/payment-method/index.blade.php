@@ -11,7 +11,7 @@ use App\Enums\PaymentType;
     <div class="presentation">
         <div class="flex-container">
             <div class="col">
-                <input type="button" value="Novo" onclick="window.location='{{ route('payment-method.create') }}'">
+                <input type="button" value="{{__('Create')}}" onclick="window.location='{{ route('payment-method.create') }}'">
             </div>
         </div>
         <div class="flex-container">

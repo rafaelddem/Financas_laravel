@@ -22,7 +22,12 @@
 
     "Fill out the form": "Preencha o formulário",
     "Yes": "Sim",
+    "All_m": "Todos",
+    "All_f": "Todas",
     "No": "Não",
+    "New_m": "Novo",
+    "New_f": "Nova",
+    "Create": "Criar",
     "Save": "Salvar",
     "Edit": "Editar",
     "Delete": "Excluir",
@@ -209,6 +214,8 @@
     "Report Label Total From Period": "Do período",
     "Expenses By Period": "Gastos por Período",
     "Report File Name from :origin": "relatorio_de_:origin",
+    "There Are No Wallets": "Não há Carteiras cadastradas",
+    "Transactions By Wallet": "Transações por Carteira",
 
     "": ""
 }

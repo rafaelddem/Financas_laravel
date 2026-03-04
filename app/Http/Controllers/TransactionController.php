@@ -33,7 +33,7 @@ class TransactionController extends Controller
         $transactions = [];
 
         try {
-            $transactions = $this->service->list();
+            $transactions = $this->service->listLastTransactionsCreated();
             $message = $request->get('message');
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());

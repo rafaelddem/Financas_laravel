@@ -228,4 +228,15 @@ class ReportService extends BaseService
 
         return new Collection();
     }
+
+    public function listTransactionsByWallets(Carbon $startDate, Carbon $endDate, ?array $wallets = null)
+    {
+        try {
+            return $this->transactionRepository->listTransactionsByWallets($startDate, $endDate, $wallets);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+    }
 }

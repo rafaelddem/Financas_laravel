@@ -8,8 +8,8 @@
     <div class="presentation">
         <div class="flex-container">
             <div class="col">
-                <input type="button" value="Novo" onclick="window.location='{{ route('owner.wallet.create', ['owner_id' => $owner->id]) }}'">
-                <input type="button" value="Voltar" onclick="window.location='{{ app('url')->route('owner.list') }}'">
+                <input type="button" value="{{__('Create')}}" onclick="window.location='{{ route('owner.wallet.create', ['owner_id' => $owner->id]) }}'">
+                <input type="button" value="{{__('Return')}}" onclick="window.location='{{ app('url')->route('owner.list') }}'">
             </div>
         </div>
         <div class="flex-container">

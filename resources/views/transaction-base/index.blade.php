@@ -6,7 +6,7 @@
     </div>
     <div class="presentation">
         <div class="col">
-            <input type="button" value="Novo" onclick="window.location='{{ route('transaction-base.create') }}'">
+            <input type="button" value="{{__('Create')}}" onclick="window.location='{{ route('transaction-base.create') }}'">
         </div>
         <div class="col">
             <table>

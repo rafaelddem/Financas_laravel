@@ -6,7 +6,10 @@
     </div>
     <div class="presentation">
         <div class="col">
-            <input type="button" value="Novo" onclick="window.location='{{ route('transaction.create') }}'">
+            <input type="button" value="{{__('Create')}}" onclick="window.location='{{ route('transaction.create') }}'">
+        </div>
+        <div class="col">
+            <input type="button" value="{{__('Transactions By Wallet')}}" onclick="window.location='{{ route('reports.transactionByWallet') }}'">
         </div>
         <div class="col">
             <table>

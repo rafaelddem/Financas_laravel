@@ -7,6 +7,7 @@ use App\Exceptions\BaseException;
 use App\Services\DateService;
 use App\Services\OwnerService;
 use App\Services\ReportService;
+use App\Services\WalletService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,11 +16,13 @@ class ReportController extends Controller
 {
     private ReportService $service;
     private OwnerService $ownerService;
+    private WalletService $walletService;
 
     public function __construct()
     {
         $this->service = app(ReportService::class);
         $this->ownerService = app(OwnerService::class);
+        $this->walletService = app(WalletService::class);
     }
 
     public function index(Request $request, DateService $dateService)
@@ -73,6 +76,33 @@ class ReportController extends Controller
             }
 
             return view('reports.loans', compact('owners', 'owner_id', 'start_date', 'end_date', 'ownerLoans'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('home'))->withErrors(compact('message'));
+    }
+
+    public function transactionByWallet(Request $request, DateService $dateService)
+    {
+        try {
+            [$start_date, $end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_30_DAYS, $request->get('start_date'), $request->get('end_date'));
+
+            $wallets = $this->walletService->listWalletsFromOwner(env('MY_OWNER_ID'));
+
+            if ($wallets->count() < 1) 
+                throw new BaseException(__('There Are No Wallets'));
+
+            $wallet_id = $request->get('wallet_id');
+            $filterWallet = $wallet_id != 0
+                ? [$request->get('wallet_id')]
+                : null;
+
+            $transactions = $this->service->listTransactionsByWallets($start_date, $end_date, $filterWallet);
+
+            return view('reports.transactions', compact('wallets', 'wallet_id', 'start_date', 'end_date', 'transactions'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
