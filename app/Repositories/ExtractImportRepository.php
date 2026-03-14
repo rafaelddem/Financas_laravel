@@ -65,4 +65,15 @@ class ExtractImportRepository extends BaseRepository
             throw new RepositoryException();
         }
     }
+
+    public function removeByFile(string $fileName)
+    {
+        try {
+            return $this->model
+                ->where('file_name', $fileName)
+                ->delete();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
 }

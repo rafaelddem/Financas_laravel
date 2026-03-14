@@ -62,6 +62,7 @@ use App\Enums\PaymentType;
         @foreach($filesToImport as $key => $file)
         <div class="flex-container">
             <input type="hidden" form="form-import-{{$key}}" name="file_name" value="{{$file->file_name}}">
+            <input type="hidden" form="form-remove-{{$key}}" name="file_name" value="{{$file->file_name}}">
             <div class="col_25 md_col_50 md_col">
                 <h4><label id="installmentData" class="label-as-input">{{$file->file_name}}</label></h4>
             </div>
@@ -74,7 +75,11 @@ use App\Enums\PaymentType;
                 @endphp
                 <input class="button-as-input" type="submit" form="form-import-{{$key}}" value="{{ $label }}" {{ $disabled }}>
             </div>
+            <div class="col_25 md_col_50 sm_col">
+                <input class="button-as-input" type="submit" form="form-remove-{{$key}}" value="{{__('Remove Extract')}}">
+            </div>
             <form method="post" id="form-import-{{$key}}" action="{{route('extract-import.import')}}"> @csrf </form>
+            <form method="post" id="form-remove-{{$key}}" action="{{route('extract-import.destroy')}}"> @csrf @method('DELETE') </form>
         </div>
         @endforeach
     </div>
@@ -88,6 +93,7 @@ use App\Enums\PaymentType;
         <br>
         <div class="flex-container">
             <input type="hidden" form="form-approve-{{$key}}" name="id" value="{{$importTransaction->id}}">
+            <input type="hidden" form="form-remove-{{$key}}" name="id" value="{{$importTransaction->id}}">
             <div class="col_25 md_col">
                 <label for="title">{{__('Title')}}:</label>
                 <input type="text" form="form-approve-{{$key}}" name="title" id="transaction[{{$key}}][title]" value="{{$importTransaction->title}}" required>
@@ -187,8 +193,8 @@ use App\Enums\PaymentType;
             <div class="col_25 md_col_50 sm_col">
                 <input class="button-as-input" type="submit" form="form-remove-{{$key}}" value="{{ __('Delete') }}">
             </div>
-            <form method="post" id="form-approve-{{$key}}" action="{{route('extract-import.ready')}}"> @csrf </form>
-            <form method="post" id="form-remove-{{$key}}" action="{{route('extract-import.destroy', ['id' => $importTransaction->id])}}"> @csrf @method('DELETE') </form>
+            <form method="post" id="form-approve-{{$key}}" action="{{route('transaction-import.ready')}}"> @csrf </form>
+            <form method="post" id="form-remove-{{$key}}" action="{{route('transaction-import.destroy', ['id' => $importTransaction->id])}}"> @csrf @method('DELETE') </form>
         </div>
         @endforeach
     </div>

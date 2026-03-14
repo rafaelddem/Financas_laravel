@@ -46,9 +46,13 @@ Route::middleware(['auth:web'])->group(function () {
     Route::group(['prefix' => 'importacao-extrato', 'as' => 'extract-import.'], function () {
         Route::get('/', [ExtractImportController::class, 'index'])->name('index');
         Route::post('/extrair', [ExtractImportController::class, 'extract'])->name('extract');
+        Route::post('/importar', [ExtractImportController::class, 'import'])->name('import');
+        Route::delete('/', [ExtractImportController::class, 'fileRemove'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'importacao-transacao', 'as' => 'transaction-import.'], function () {
         Route::post('/', [ExtractImportController::class, 'ready'])->name('ready');
         Route::delete('/', [ExtractImportController::class, 'destroy'])->name('destroy');
-        Route::post('/importar', [ExtractImportController::class, 'import'])->name('import');
     });
 
     Route::middleware(['can:admin'])->group(function () {

@@ -158,6 +158,17 @@ class ExtractorService
         }
     }
 
+    public function fileRemove(string $fileName)
+    {
+        try {
+            $this->extractImportRepository->removeByFile($fileName);
+        } catch (BaseException $exception) {
+            throw $exception;
+        } catch (\Throwable $th) {
+            throw new ServiceException();
+        }
+    }
+
     public function delete(int $id)
     {
         try {

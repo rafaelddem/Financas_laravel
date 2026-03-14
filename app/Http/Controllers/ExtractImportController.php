@@ -79,6 +79,23 @@ class ExtractImportController extends Controller
         return redirect(route('extract-import.index'))->withErrors(compact('message'));
     }
 
+    public function fileRemove(Request $request)
+    {
+        try {
+            $this->extractorService->fileRemove($request->get('file_name'));
+
+            return redirect(route('extract-import.index', [
+                'message' => __('The extract data was removed successfully.'),
+            ]));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect(route('extract-import.index'))->withErrors(compact('message'));
+    }
+
     public function ready(ReadyRequest $request)
     {
         try {
@@ -96,7 +113,7 @@ class ExtractImportController extends Controller
             ));
 
             return redirect(route('extract-import.index', [
-                'message' => __('The extract data was entered successfully.'),
+                'message' => __('Transaction data was aproved.'),
             ]));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
@@ -113,7 +130,7 @@ class ExtractImportController extends Controller
             $this->extractorService->delete($request->get('id'));
 
             return redirect(route('extract-import.index', [
-                'message' => __('The extract data was removed successfully.'),
+                'message' => __('Transaction data was removed.'),
             ]));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
@@ -130,7 +147,7 @@ class ExtractImportController extends Controller
             $this->extractorService->import($request->get('file_name'));
 
             return redirect(route('extract-import.index', [
-                'message' => __('The extract data was entered successfully.'),
+                'message' => __('The extract data was aproved successfully.'),
             ]));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
