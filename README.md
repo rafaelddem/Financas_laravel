@@ -1045,23 +1045,22 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 **********************************
 
-Erros a corrigir:
-
-Corrigir mensagens de retorno na importação de extrato
-
-Bloquear (ou adicionar confirmação) na importação de extrato para faturas já pagas\vencidas
-
-Renomear o "transction_credit_template". Ver se erro no lanlamento de transação no crédito ainda da erro.
-
-Corrigir botões "Voltar" pois alguns vão paara outra tela que não a anterior
-
-
-
 Alterações por finalizar:
 
 Edição de Transações ainda não funciona para vendas no crédito. Dentre as alterações que faltam:
     - Quando retorna um erro (validação ou exception) o valor é alterado de float para int
     - Não carrega as datas das parcelas originais, ao invés disso é recalculado novamente a partir da data de transação, o que pode gerar conflitos
+
+
+
+
+
+Erros a corrigir:
+
+Bloquear (ou adicionar confirmação) na importação de extrato para faturas já pagas\vencidas
+
+Corrigir botões "Voltar" pois alguns vão paara outra tela que não a anterior
+
 
 
 

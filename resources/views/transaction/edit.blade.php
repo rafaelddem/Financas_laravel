@@ -110,7 +110,7 @@ use Carbon\Carbon;
 
         <div id="installmentFields"></div>
 
-        <div id="transction_credit_template" style="display: none;">
+        <div id="transaction_credit_template" style="display: none;">
             <div class="flex-container">
                 <div class="col_10 md_col_20 sm_col">
                     <h4><label id="installmentData" class="label-as-input">Parcela #1</label></h4>

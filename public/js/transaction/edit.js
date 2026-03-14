@@ -126,7 +126,7 @@ function addInstallmentFields(installments) {
 
     for (let i = 0; i < installments; i++) {
         const installmentNumber = i + 1;
-        const installmentData = document.getElementById('transction_credit_template').firstElementChild.cloneNode(true);
+        const installmentData = document.getElementById('transaction_credit_template').firstElementChild.cloneNode(true);
         installmentData.querySelector("#installmentData").textContent = "Parcela #" + installmentNumber;
         installmentData.querySelectorAll('input').forEach(input => {
             const field = input.getAttribute('data-name');
