@@ -16,11 +16,11 @@ use Carbon\Carbon;
     <div class="presentation">
         <h2 class="card-title">{{__('Fill out the form')}}</h2>
         <div class="flex-container">
-            <div class="col_50 md_col">
+            <div class="col_50 md_col_50 sm_col">
                 <label for="title">{{__('Title')}}:</label>
                 <input type="text" form="form-insert" name="title" id="title" value="{{old('title')}}" placeholder="{{__('Title')}}" required>
             </div>
-            <div class="col_50 sm_col">
+            <div class="col_50 md_col_50 sm_col">
                 <label for="category_id">{{__('Category')}}:</label>
                 <select name="category_id" form="form-insert" id="category_id">
                     @foreach ($categories as $presentation)
@@ -28,7 +28,7 @@ use Carbon\Carbon;
                     @endforeach
                 </select>
             </div>
-            <div class="col_50 md_col">
+            <div class="col_50 md_col_50 sm_col">
                 <label for="source_wallet_id">{{__('Source Wallet')}}:</label>
                 <select name="source_wallet_id" form="form-insert" id="source_wallet_id">
                     @foreach ($sourceWallets as $sourceWallet)
@@ -38,7 +38,7 @@ use Carbon\Carbon;
                     @endforeach
                 </select>
             </div>
-            <div class="col_50 md_col">
+            <div class="col_50 md_col_50 sm_col">
                 <label for="destination_wallet_id">{{__('Destination Wallet')}}:</label>
                 <select name="destination_wallet_id" form="form-insert" id="destination_wallet_id">
                     @foreach ($destinationWallets as $destinationWallet)
@@ -48,7 +48,7 @@ use Carbon\Carbon;
                     @endforeach
                 </select>
             </div>
-            <div class="col_50 sm_col">
+            <div class="col_50 md_col_50 sm_col">
                 <label for="payment_method_id">{{__('Payment Method')}}:</label>
                 <select name="payment_method_id" form="form-insert" id="payment_method_id">
                     @foreach ($paymentMethods as $paymentMethod)
@@ -56,7 +56,7 @@ use Carbon\Carbon;
                     @endforeach
                 </select>
             </div>
-            <div id="div_card" class="col_50 md_col">
+            <div id="div_card" class="col_50 md_col_50 sm_col">
                 <label for="card_id">{{__('Card')}}:</label>
                 <select name="card_id" form="form-insert" id="card_id" required>
                 </select>

@@ -89,50 +89,38 @@ use Carbon\Carbon;
         </div>
 
         @if($transaction->installments->count() > 0)
+            <div class="flex-container"><div class="col"></div></div>
+            <div class="flex-container"><div class="col"></div></div>
             <div class="flex-container">
-                <div class="col_10 md_col_20 sm_col">
-                    <h4><label>{{__('Installment')}}:</label></h4>
+                <div class="col">
+                    <h4><label>{{__('Installments')}}</label></h4>
                 </div>
-                <div class="col_15 md_col_40 sm_col">
-                    <h4><label>{{__('Installment Date')}}:</label></h4>
-                </div>
-                <div class="col_15 md_col_40 sm_col">
-                    <h4><label>{{__('Gross Value')}}:</label></h4>
-                </div>
-                <div class="col_15 md_col_50 sm_col">
-                    <h4><label>{{__('Discount Value')}}:</label></h4>
-                </div>
-                <div class="col_15 md_col_50 sm_col">
-                    <h4><label>{{__('Interest Value')}}:</label></h4>
-                </div>
-                <div class="col_15 md_col_50 sm_col">
-                    <h4><label>{{__('Rounding Value')}}:</label></h4>
-                </div>
-                <div class="col_15 md_col_50 sm_col">
-                    <h4><label>{{__('Net Value')}}:</label></h4>
-            </div>
             </div>
             @foreach ($transaction->installments as $installment)
+                <div class="separator-with-text"><span>{{__('Installment :number from :total', ['number' => $installment->installment_number, 'total' => $installment->installment_total])}}</span></div>
                 <div class="flex-container">
-                    <div class="col_10 md_col_20 sm_col">
-                        <label>{{$installment->installment_number}}ª</label>
-                    </div>
-                    <div class="col_15 md_col_40 sm_col">
+                    <div class="col_15 md_col_33 sm_col">
+                        <h4><label>{{__('Installment Date')}}:</label></h4>
                         <label>{{__($installment->installment_date->format('d/m/Y'))}}</label>
                     </div>
-                    <div class="col_15 md_col_40 sm_col">
+                    <div class="col_20 md_col_33 sm_col">
+                        <h4><label>{{__('Gross Value')}}:</label></h4>
                         <label>{{__(MoneyHelper::format($installment->gross_value))}}</label>
                     </div>
-                    <div class="col_15 md_col_50 sm_col">
+                    <div class="col_15 md_col_33 sm_col">
+                        <h4><label>{{__('Discount Value')}}:</label></h4>
                         <label>{{__(MoneyHelper::format($installment->discount_value))}}</label>
                     </div>
-                    <div class="col_15 md_col_50 sm_col">
+                    <div class="col_15 md_col_33 sm_col">
+                        <h4><label>{{__('Interest Value')}}:</label></h4>
                         <label>{{__(MoneyHelper::format($installment->interest_value))}}</label>
                     </div>
-                    <div class="col_15 md_col_50 sm_col">
+                    <div class="col_15 md_col_33 sm_col">
+                        <h4><label>{{__('Rounding Value')}}:</label></h4>
                         <label>{{__(MoneyHelper::format($installment->rounding_value))}}</label>
                     </div>
-                    <div class="col_15 md_col_50 sm_col">
+                    <div class="col_20 md_col_33 sm_col">
+                        <h4><label>{{__('Net Value')}}:</label></h4>
                         <label>{{__(MoneyHelper::format($installment->net_value))}}</label>
                     </div>
                 </div>

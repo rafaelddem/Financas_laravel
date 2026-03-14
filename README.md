@@ -1076,8 +1076,6 @@ Na Categoria, adicionar novamente o campo 'status', para os casos de registros q
 
 Revisar bloqueio de inativação, quando owner/wallet tiver movimentações agendadas ou valores pendentes
 
-Ajustar CSS, pois no redimencionamento algumas telas "quebram"
-
 
 
 

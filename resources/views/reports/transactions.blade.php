@@ -15,7 +15,7 @@ use App\Enums\PaymentType;
     <div class="presentation">
         <h2 class="card-title">{{__('Filters')}}</h2>
         <div class="flex-container">
-            <div class="col_33 sm_col">
+            <div class="col_40 md_col_50 sm_col">
                 <label for="wallet_id">{{ __('Wallet') }}:</label>
                 @if($wallets->count() > 0)
                     <select name="wallet_id" form="form-loans">
@@ -33,18 +33,18 @@ use App\Enums\PaymentType;
                     </select>
                 @endif
             </div>
-            <div class="col_33 sm_col">
+            <div class="col_15 md_col_25 sm_col">
                 <label for="title">{{__('Start Date')}}:</label>
                 <input type="date" form="form-loans" name="start_date" id="start_date" value="{{$start_date->format('Y-m-d')}}" required>
             </div>
-            <div class="col_33 sm_col">
+            <div class="col_15 md_col_25 sm_col">
                 <label for="title">{{__('End Date')}}:</label>
                 <input type="date" form="form-loans" name="end_date" id="end_date" value="{{$end_date->format('Y-m-d')}}" required>
             </div>
-            <div class="col_50 md_col">
+            <div class="col_15 md_col_50 sm_col">
                 <input class="button-as-input" type="submit" form="form-loans" value="{{ __('Filter') }}" @if($wallets->count() == 0) disabled @endif>
             </div>
-            <div class="col_50 md_col">
+            <div class="col_15 md_col_50 sm_col">
                 <input class="button-as-input" type="button" value="{{__('New_f')}}" onclick="window.location='{{app('url')->route('transaction.create')}}'">
             </div>
         </div>
