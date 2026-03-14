@@ -1,3 +1,8 @@
+@php
+use App\Enums\PaymentType;
+use App\Helpers\MoneyHelper;
+@endphp
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -34,7 +39,7 @@
                     @php($parcial = $ownerLoans['beforePeriod'])
                     <tr>
                         <td colspan="3" class="right"><b>{{__('Amounts Before Period')}}</b></td>
-                        <td colspan="2" class="left"><b>{{ \App\Helpers\MoneyHelper::format($ownerLoans['beforePeriod'] ?? 0) }}</b></td>
+                        <td colspan="2" class="left"><b>{{MoneyHelper::format($ownerLoans['beforePeriod'] ?? 0)}}</b></td>
                     </tr>
                 @endif
                 @foreach($ownerLoans['fromPeriod'] as $month => $transactionsByMonth)
@@ -48,19 +53,19 @@
                             <td class="table_col_10">{{ $transaction['date']->format('d/m/Y') }}</td>
                             <td class="left table_col_20">
                                 {{ $transaction['source_owner_name'] }} > {{ $transaction['destination_owner_name'] }}<br>
-                                {{__(\App\Enums\PaymentType::translate($transaction['payment_methods_type']))}}
+                                {{__(PaymentType::translate($transaction['payment_methods_type']))}}
                             </td>
                             <td class="left table_col_50">{{ $transaction['transaction_title'] }}</td>
                             <td class="table_col_10">
                                 @if ($transaction['source_owner_id'] == env('MY_OWNER_ID'))
                                     @php($in += $transaction['net_value'])
-                                    {{ \App\Helpers\MoneyHelper::format($transaction['net_value']) }}
+                                    {{MoneyHelper::format($transaction['net_value'])}}
                                 @endif
                             </td>
                             <td class="table_col_10">
                                 @if ($transaction['source_owner_id'] != env('MY_OWNER_ID'))
                                     @php($out += $transaction['net_value'])
-                                    {{ \App\Helpers\MoneyHelper::format($transaction['net_value']) }}
+                                    {{MoneyHelper::format($transaction['net_value'])}}
                                     @if ($transaction['source_owner_id'] != env('MY_OWNER_ID') && $transaction['destination_owner_id'] != env('MY_OWNER_ID')) * @endif
                                 @endif
                             </td>
@@ -69,7 +74,7 @@
                     @php($parcial += ($in - $out))
                     <tr class="table_footer">
                         <td colspan="3" class="right"><b>{{__('Amount Until End Date')}}</b></td>
-                        <td colspan="2" class="left"><b>{{ \App\Helpers\MoneyHelper::format($parcial) }}</b></td>
+                        <td colspan="2" class="left"><b>{{MoneyHelper::format($parcial)}}</b></td>
                     </tr>
                     @php($in = $out = 0)
                 @endforeach

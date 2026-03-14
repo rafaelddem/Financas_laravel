@@ -21,4 +21,5 @@ enum Period: string {
     case LAST_YEAR = 'last_year';
     case LAST_2_YEARS = 'last_2_years';
     case LAST_3_YEARS = 'last_3_years';
+    case LAST_10_YEARS = 'last_10_years';
 }

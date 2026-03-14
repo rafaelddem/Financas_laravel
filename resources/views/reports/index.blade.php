@@ -1,3 +1,7 @@
+@php
+use App\Helpers\MoneyHelper;
+@endphp
+
 @extends('layout')
 
 @section('page_content')
@@ -11,7 +15,7 @@
             <div class="cards">
                 <div class="card">
                     <h2 class="card-title">{{__('Total Amount')}}</h2>
-                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($income) }}</p>
+                    <p class="card-value">{{MoneyHelper::format($income)}}</p>
                 </div>
             </div>
         </div>
@@ -19,7 +23,7 @@
             <div class="cards">
                 <div class="card">
                     <h2 class="card-title">{{__('Future Invoices Value')}}</h2>
-                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($future_credit_value) }}</p>
+                    <p class="card-value">{{MoneyHelper::format($future_credit_value)}}</p>
                 </div>
             </div>
         </div>
@@ -27,7 +31,7 @@
             <div class="cards">
                 <div class="card">
                     <h2 class="card-title">{{__('Amounts to Received')}}</h2>
-                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($total_loans['positive']) }}</p>
+                    <p class="card-value">{{MoneyHelper::format($total_loans['positive'])}}</p>
                 </div>
             </div>
         </div>
@@ -35,7 +39,7 @@
             <div class="cards">
                 <div class="card">
                     <h2 class="card-title">{{__('Amounts to Refunded')}}</h2>
-                    <p class="card-value">{{ \App\Helpers\MoneyHelper::format($total_loans['negative']) }}</p>
+                    <p class="card-value">{{MoneyHelper::format($total_loans['negative'])}}</p>
                 </div>
             </div>
         </div>

@@ -63,7 +63,6 @@ A chave 'values' conterá os valores que compõem uma coluna. No exemplo anterio
 
         const datasets = Object.entries(values).map(([label, data], index) => {
             const colorPositive = dataSetColors[index % 10];
-            console.log(label, data, index);
 
             return {
                 label: label,

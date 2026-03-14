@@ -1,5 +1,6 @@
 @php
 use App\Enums\Relevance;
+use App\Enums\PaymentType;
 @endphp
 
 @extends('layout')
@@ -155,7 +156,7 @@ use App\Enums\Relevance;
                 <input type="text" form="form-approve-{{$key}}" class="money" name="gross_value" id="transaction[{{$key}}][gross_value]" value="{{$importTransaction->gross_value ?? '0,00'}}" 
                     @if ($importTransaction->installment_total == 1 || $importTransaction->installment_number != 1) disabled @endif>
             </div>
-            @if ($importTransaction->paymentMethod->type == \App\Enums\PaymentType::Credit)
+            @if ($importTransaction->paymentMethod->type == PaymentType::Credit)
                 <input type="hidden" form="form-approve-{{$key}}" name="installment_number" value="{{$importTransaction->installment_number}}">
                 <input type="hidden" form="form-approve-{{$key}}" name="installment_total" value="{{$importTransaction->installment_total}}">
                 @if ($importTransaction->installment_total > 1)

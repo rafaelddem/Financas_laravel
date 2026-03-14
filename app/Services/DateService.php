@@ -119,6 +119,12 @@ class DateService extends BaseService
                     Carbon::now()->endOfMonth()->endOfDay(),
                 ];
 
+            case Period::LAST_10_YEARS:
+                return [
+                    Carbon::now()->startOfMonth()->startOfDay()->subMonths(119),
+                    Carbon::now()->endOfMonth()->endOfDay(),
+                ];
+
             default:
                 return [
                     Carbon::now()->startOfMonth()->startOfDay(),

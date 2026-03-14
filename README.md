@@ -1045,11 +1045,32 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 **********************************
 
+Erros a corrigir:
+
+Corrigir mensagens de retorno na importação de extrato
+
+Bloquear (ou adicionar confirmação) na importação de extrato para faturas já pagas\vencidas
+
+Renomear o "transction_credit_template". Ver se erro no lanlamento de transação no crédito ainda da erro.
+
+Corrigir botões "Voltar" pois alguns vão paara outra tela que não a anterior
+
+
+
+Alterações por finalizar:
+
+Edição de Transações ainda não funciona para vendas no crédito. Dentre as alterações que faltam:
+    - Quando retorna um erro (validação ou exception) o valor é alterado de float para int
+    - Não carrega as datas das parcelas originais, ao invés disso é recalculado novamente a partir da data de transação, o que pode gerar conflitos
+
+
+
+
 Possíveis alterações no projeto:
 
-Relatório por carteira, descriminando os movimentos por carteira
+No lançamento de Transações, por padrão o sistema usa a data da transação como a data da primeira parcela. No entanto alguns bancos consideram a data de processamento da transação na hora de incluir a parcela na fatura. Essa diferença faz com que uma parcela possa ser incluída pelo banco a uma fatura, mesmo com sua data da parcela não pertencendo ao mesmo período. Por exemplo, a fatura muda todo dia 1º (sendo exatamente o mês em questão), então uma compra feita no dia 30 de abril mas processada no dia 2 de maio, seria mantida pelo sistema como sendo do dia 30 de abril e seria incluída a fatura do mês de abril. Mas o banco trataria diferente, mantendo a mesma data (30 de abril) mas incluíndo a fatura de maio. Essa diferença atrapalha inclusive se eu alterar a data da parcela para o primeiro dia do mês de maio, já que assim ficaria na fatura correta mas no dia errado. Algo parecido acontece com as mensalidades da TIM, talvez seja necessário adicionar um campo data de processamento também a parcela
 
-Adicionar detalhes da transação também na tela de emprestimos
+Padronizar Exceptions, alguns recebem a mensagem em português e outras em inglês
 
 No cadastro de carteiras, adicionar o relacionamento com uma tabela "Bancos", que manteria os banco (BB, Caixa, Santander...) pré-cadastrados
 
@@ -1079,3 +1100,5 @@ Criar um arquivo de configurações para dados default como um método de pagame
 Implementar pagamento parcial de fatura. 
     Obs.: Considerar a possibilidade de dois cartões de crédito para a mesma carteira
     Obs.: Revisar o total da fatura após o pagamento, pois hoje considera somente o último valor pago, e não o valor cheio da fatura. Em oturas palavras, uma fatura onde o total foi de 1000, mas que antes do seu fechamento já havia sido pago 500, vai aparecer na listagem de fatura pagas como 500 apenas, e não como uma fatura de 100
+
+Adicionar lançamento de logs

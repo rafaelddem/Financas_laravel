@@ -37,7 +37,7 @@ class CreateRequest extends FormRequest
         }
     }
 
-    private function convertToFloat($value = null)
+    protected function convertToFloat($value = null)
     {
         if (is_null($value)) 
             return null;

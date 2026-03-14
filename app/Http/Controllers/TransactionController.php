@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\BaseException;
+use App\Http\Requests\Transaction\UpdateRequest;
 use App\Http\Requests\Transaction\CreateRequest;
 use App\Services\PaymentMethodService;
 use App\Services\TransactionService;
@@ -42,21 +43,6 @@ class TransactionController extends Controller
         }
 
         return view('transaction.index', compact('transactions', 'message'));
-    }
-
-    public function show(int $id)
-    {
-        try {
-            $transaction = $this->service->find($id, ['installments', 'category', 'paymentMethod', 'sourceWallet', 'destinationWallet', 'card']);
-
-            return view('transaction.show', compact('transaction'));
-        } catch (BaseException $exception) {
-            $message = __($exception->getMessage());
-        } catch (\Throwable $th) {
-            $message = __(self::DEFAULT_CONTROLLER_ERROR);
-        }
-
-        return redirect()->back()->withErrors(compact('message'));
     }
 
     public function create(Request $request)
@@ -103,13 +89,64 @@ class TransactionController extends Controller
         return redirect()->back()->withErrors(compact('message'))->withInput();
     }
 
+    public function show(int $id)
+    {
+        try {
+            $transaction = $this->service->find($id, ['installments', 'category', 'paymentMethod', 'sourceWallet', 'destinationWallet', 'card']);
+
+            return view('transaction.show', compact('transaction'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect()->back()->withErrors(compact('message'));
+    }
+
+    public function edit(int $id)
+    {
+        try {
+            $categories = $this->categoryService->list();
+            $paymentMethods = $this->paymentMethodService->list();
+            $sourceWallets = $destinationWallets = $this->walletService->list();
+            $transactionBases = $this->transactionBaseService->list();
+            
+            $transaction = $this->service->find($id, ['installments', 'category', 'paymentMethod', 'sourceWallet', 'destinationWallet', 'card']);
+
+            return view('transaction.edit', compact('transaction', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect()->back()->withErrors(compact('categories', 'paymentMethods', 'sourceWallets', 'destinationWallets', 'message'));
+    }
+
+    public function update(UpdateRequest $request)
+    {
+        try {
+            $this->service->update($request->get('id'), $request->all());
+
+            $message = __('Data updated successfully.');
+            return redirect(route('transaction.list', compact('message')));
+        } catch (BaseException $exception) {
+            $message = __($exception->getMessage());
+        } catch (\Throwable $th) {
+            $message = __(self::DEFAULT_CONTROLLER_ERROR);
+        }
+
+        return redirect()->back()->withErrors(compact('message'))->withInput();
+    }
+
     public function destroy(Request $request)
     {
         try {
             $this->service->delete($request->get('id'));
 
             $message = __('Data deleted successfully.');
-            return redirect(route('transaction.list'));
+            return redirect(route('transaction.list', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

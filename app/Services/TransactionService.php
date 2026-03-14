@@ -6,10 +6,14 @@ use App\Enums\InvoiceStatus;
 use App\Enums\PaymentType;
 use App\Exceptions\BaseException;
 use App\Exceptions\ServiceException;
+use App\Models\Installment;
+use App\Models\Invoice;
+use App\Models\Transaction;
 use App\Repositories\CardRepository;
 use App\Repositories\InstallmentRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\TransactionRepository;
+use Carbon\Carbon;
 
 class TransactionService extends BaseService
 {
@@ -25,14 +29,17 @@ class TransactionService extends BaseService
         $this->cardRepository = app(CardRepository::class);
     }
 
+    public static function validPaymentType(Transaction $transaction, PaymentType $paymentType): bool
+    {
+        return $transaction->paymentMethod->type == $paymentType;
+    }
+
     public function create(array $input)
     {
         try {
             \DB::beginTransaction();
 
             $this->validateTransactionValues($input);
-
-            $transaction = $this->repository->create($input);
 
             if (isset($input['card_id'])) {
                 $card = $this->cardRepository->find($input['card_id']);
@@ -42,16 +49,65 @@ class TransactionService extends BaseService
                 }
             }
 
+            $transaction = $this->repository->create($input);
+
             if (isset($input['installments'])) {
                 $this->validateInstallmentsValues($transaction->net_value, $input['installments']);
 
                 $this->installmentRepository->insertMultiples($transaction->id, $input['installments']);
 
-                $invoiceValue = $this->installmentRepository->getSumByInvoice($card->invoices()->get()->last());
-                $partialPayments = $this->repository->totalInvoicePartialPayment($card->invoices()->get()->last());
-                $newInvoiceValue = $invoiceValue - $partialPayments;
+                $invoice = $card->invoices()->get()->last();
+                if ($invoice->end_date->gte($transaction->transaction_date)) {
+                    $invoiceValue = $this->installmentRepository->getSumByInvoice($invoice);
+                    $partialPayments = $this->repository->totalInvoicePartialPayment($invoice);
+                    $newInvoiceValue = $invoiceValue - $partialPayments;
 
-                $this->invoiceRepository->addValueToInvoice($transaction->card_id, $newInvoiceValue);
+                    $this->invoiceRepository->addValueToInvoice($transaction->card_id, $newInvoiceValue);
+                }
+            }
+
+            \DB::commit();
+            return $transaction;
+        } catch (BaseException $exception) {
+            \DB::rollBack();
+            throw $exception;
+        } catch (\Throwable $th) {
+            \DB::rollBack();
+            throw new ServiceException();
+        }
+    }
+
+    public function update(int $id, array $input)
+    {
+        try {
+            \DB::beginTransaction();
+
+            $transaction = $this->repository->find($id, ['installments', 'card.invoices']);
+
+            $this->transactionHasPermissionUpdate($transaction);
+
+            $this->transactionAcceptNewData($transaction, $input);
+
+            $this->validateTransactionValues($input);
+
+            $transaction = $this->repository->update($id, $input);
+
+            if (isset($input['installments'])) {
+                $openInvoice = $this->invoiceRepository->listInvoices($transaction->startDate->clone()->subMonth(), $transaction->endDate->clone()->addMonth(), InvoiceStatus::Open, null, $transaction->card_id)->first();
+
+                $this->transactionAcceptNewInstallment($transaction, $input['installments'], $openInvoice);
+
+                $this->validateInstallmentsValues($transaction->net_value, $input['installments']);
+
+                $this->installmentRepository->updateMultiples($transaction->id, $input['installments']);
+
+                if ($openInvoice->end_date->gte($transaction->transaction_date)) {
+                    $invoiceValue = $this->installmentRepository->getSumByInvoice($openInvoice);
+                    $partialPayments = $this->repository->totalInvoicePartialPayment($openInvoice);
+                    $newInvoiceValue = $invoiceValue - $partialPayments;
+
+                    $this->invoiceRepository->addValueToInvoice($transaction->card_id, $newInvoiceValue);
+                }
             }
 
             \DB::commit();
@@ -93,6 +149,10 @@ class TransactionService extends BaseService
 
     private function validateInstallmentValues(int $installmentNumber, array $installmentData): float
     {
+        // Quando da atualização, garantir que a chave usada no array de parcelas é correspondente ao identificado da parcela
+        if (isset($installmentData['installment_number']) && $installmentNumber != ($installmentData['installment_number'])) 
+            throw new ServiceException(__('Invalid value for field of installment installmentNumber.', ['field' => __('Installment Number'), 'installmentNumber' => $installmentNumber]));
+
         if ($installmentData['gross_value'] <= $installmentData['discount_value']) 
             throw new ServiceException(__('Invalid value for field of installment installmentNumber.', ['field' => __('Discount Value'), 'installmentNumber' => $installmentNumber]));
 
@@ -107,6 +167,62 @@ class TransactionService extends BaseService
             throw new ServiceException(__('Sum of installment installmentNumber cannot be negative.', ['installmentNumber' => $installmentNumber]));
 
         return $installmentData['gross_value'];
+    }
+
+    private function transactionHasPermissionUpdate(Transaction $transaction)
+    {
+        if (self::validPaymentType($transaction, PaymentType::Credit)) 
+            return;
+
+        if ($transaction->transaction_date < Carbon::now()->subDays(env('TRANSACTION_LIMIT_DAYS_TO_UPDATE'))) 
+            throw new ServiceException(__('You cannot edit a transaction that occurred more than number_of_days days ago.', ['number_of_days' => env('TRANSACTION_LIMIT_DAYS_TO_UPDATE')]));
+    }
+
+    private function transactionAcceptNewData(Transaction $transaction, array $newData)
+    {
+        $newTransaction = new Transaction($newData);
+
+        if ($transaction->payment_method_id != $newTransaction->payment_method_id) 
+            throw new ServiceException(__('You cannot edit the field transaction_field from a transaction.', ['transaction_field' => __('Payment Method')]));
+
+        if ($transaction->source_wallet_id != $newTransaction->source_wallet_id) 
+            throw new ServiceException(__('You cannot edit the field transaction_field from a transaction.', ['transaction_field' => __('Source Wallet')]));
+
+        if ($transaction->card_id != null && $transaction->card_id != $newTransaction->card_id) 
+            throw new ServiceException(__('You cannot edit the field transaction_field from a transaction.', ['transaction_field' => __('Card')]));
+    }
+
+    private function transactionAcceptNewInstallment(Transaction $transaction, array $newInstallments, Invoice $openInvoice)
+    {
+        if ($transaction->installments->count() != count($newInstallments)) 
+            throw new ServiceException('You cannot change the number of Installments from a Transaction.');
+
+
+        throw new ServiceException('A atualização de parcelas ainda não foi finalizada. Favor aguardar a próxima versão');
+
+        /**
+         * Melhorar\Finalizar validação para impedir alteração das parcelas que pertencem a faturas já fechadas
+         */
+
+
+        foreach ($newInstallments as $newInstallment) {
+            $installment = $transaction->installments->where('installment_number', $newInstallment['installment_number'])->first();
+            $newInstallment = new Installment($newInstallment);
+
+            if ($installment->payment_date != null || $installment->installment_date->lt($openInvoice->start_date)) {
+                if (
+                    $installment->installment_total != $newInstallment->installment_total
+                    || $installment->installment_date != $newInstallment->installment_date
+                    || $installment->gross_value != $newInstallment->gross_value
+                    || $installment->discount_value != $newInstallment->discount_value
+                    || $installment->interest_value != $newInstallment->interest_value
+                    || $installment->rounding_value != $newInstallment->rounding_value
+                    || $installment->payment_date != $newInstallment->payment_date
+                ) {
+                    dd("Falha");
+                }
+            }
+        }
     }
 
     public function delete(int $id)

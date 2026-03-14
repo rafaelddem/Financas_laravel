@@ -35,9 +35,11 @@ Route::middleware(['auth:web'])->group(function () {
     Route::group(['prefix' => 'transacoes', 'as' => 'transaction.'], function () {
         Route::get('/', [TransactionController::class, 'index'])->name('list');
         Route::get('/novo', [TransactionController::class, 'create'])->name('create');
-        Route::get('/{id}', [TransactionController::class, 'show'])->name('show');
         Route::get('/novo/{base}', [TransactionController::class, 'create'])->name('createByBase');
         Route::post('/', [TransactionController::class, 'store'])->name('store');
+        Route::get('/{id}/detalhes', [TransactionController::class, 'show'])->name('show');
+        Route::get('/{id}/edicao', [TransactionController::class, 'edit'])->name('edit');
+        Route::put('/', [TransactionController::class, 'update'])->name('update');
         Route::delete('/', [TransactionController::class, 'destroy'])->name('destroy');
     });
 

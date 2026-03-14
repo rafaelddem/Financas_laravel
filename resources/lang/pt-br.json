@@ -133,6 +133,7 @@
     "Interest Value": "Juros",
     "Rounding Value": "Arredondamento",
     "Net Value": "Valor Líquido",
+    "Installment Number": "Número da Parcela",
     "Gross Value (Installment)": "Valor Bruto (Parcela)",
     "Discount Value (Installment)": "Desconto (Parcela)",
     "Interest Value (Installment)": "Juros (Parcela)",
@@ -147,6 +148,10 @@
     "The sum of the Gross Values of the Installments cannot be greater than the Net Value of the Transaction.": "A soma dos Valores Brutos das Parcelas não poderá ser maior que o Valor Líquido da Transação.",
     "The selected Card must belong to the Source Wallet.": "O Cartão selecionado deve pertencer a Carteira Origem.",
     "Transaction Details": "Dados da Transação",
+    "You cannot edit the field transaction_field from a transaction.": "Não é permitido a edição do campo :transaction_field de uma Transação.",
+    "You cannot edit a transaction that occurred more than number_of_days days ago.": "Não é permitido a edição de uma Transação feita a mais de :number_of_days dias.",
+    "You cannot edit a transaction that belongs to an already closed invoice.": "Não é permitido a edição de uma Transação que pertença a uma fatura fechada.",
+    "You cannot change the number of Installments from a Transaction.": "Não é permitido a a alteração do número de Parcelas de uma Transação.",
     "You cannot remove a transaction that belongs to an already closed invoice.": "Não é permitido a remoção de uma Transação que pertença a uma fatura fechada.",
 
     "Installment": "Parcela",

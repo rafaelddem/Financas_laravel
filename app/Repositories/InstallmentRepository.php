@@ -30,6 +30,25 @@ class InstallmentRepository extends BaseRepository
         }
     }
 
+    public function updateMultiples(int $transactionId, array $input)
+    {
+        try {
+            foreach ($input as $installment) {
+                Installment::where('transaction_id', $transactionId)->where('installment_number', $installment['installment_number'])
+                    ->update($installment + [
+                    'installment_total' => count($input),
+                    'installment_date' => $installment['installment_date'],
+                    'gross_value' => $installment['gross_value'],
+                    'discount_value' => $installment['discount_value'],
+                    'interest_value' => $installment['interest_value'],
+                    'rounding_value' => $installment['rounding_value'],
+                ]);
+            }
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
     public function updateInstallmentDate(Invoice $invoice): float
     {
         try {

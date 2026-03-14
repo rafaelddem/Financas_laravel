@@ -1,11 +1,8 @@
 @php
 use App\Enums\Relevance;
+use App\Helpers\MoneyHelper;
 use Carbon\Carbon;
 @endphp
-
-@push('head-script')
-    <script src="{{ asset('js/transaction/script.js') }}" defer></script>
-@endpush('head-script')
 
 @extends('layout')
 
@@ -71,19 +68,19 @@ use Carbon\Carbon;
         <div class="flex-container">
             <div class="col_20 md_col_50 sm_col">
                 <h4><label>{{__('Gross Value')}}:</label></h4>
-                <label>{{__(\App\Helpers\MoneyHelper::format($transaction->gross_value))}}</label>
+                <label>{{__(MoneyHelper::format($transaction->gross_value))}}</label>
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <h4><label>{{__('Discount Value')}}:</label></h4>
-                <label>{{__(\App\Helpers\MoneyHelper::format($transaction->discount_value))}}</label>
+                <label>{{__(MoneyHelper::format($transaction->discount_value))}}</label>
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <h4><label>{{__('Interest Value')}}:</label></h4>
-                <label>{{__(\App\Helpers\MoneyHelper::format($transaction->interest_value))}}</label>
+                <label>{{__(MoneyHelper::format($transaction->interest_value))}}</label>
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <h4><label>{{__('Rounding Value')}}:</label></h4>
-                <label>{{__(\App\Helpers\MoneyHelper::format($transaction->rounding_value))}}</label>
+                <label>{{__(MoneyHelper::format($transaction->rounding_value))}}</label>
             </div>
             <div class="col_20 md_col_50 sm_col">
                 <h4><label>{{__('Net Value')}}:</label></h4>
@@ -124,19 +121,19 @@ use Carbon\Carbon;
                         <label>{{__($installment->installment_date->format('d/m/Y'))}}</label>
                     </div>
                     <div class="col_15 md_col_40 sm_col">
-                        <label>{{__(\App\Helpers\MoneyHelper::format($installment->gross_value))}}</label>
+                        <label>{{__(MoneyHelper::format($installment->gross_value))}}</label>
                     </div>
                     <div class="col_15 md_col_50 sm_col">
-                        <label>{{__(\App\Helpers\MoneyHelper::format($installment->discount_value))}}</label>
+                        <label>{{__(MoneyHelper::format($installment->discount_value))}}</label>
                     </div>
                     <div class="col_15 md_col_50 sm_col">
-                        <label>{{__(\App\Helpers\MoneyHelper::format($installment->interest_value))}}</label>
+                        <label>{{__(MoneyHelper::format($installment->interest_value))}}</label>
                     </div>
                     <div class="col_15 md_col_50 sm_col">
-                        <label>{{__(\App\Helpers\MoneyHelper::format($installment->rounding_value))}}</label>
+                        <label>{{__(MoneyHelper::format($installment->rounding_value))}}</label>
                     </div>
                     <div class="col_15 md_col_50 sm_col">
-                        <label>{{__(\App\Helpers\MoneyHelper::format($installment->net_value))}}</label>
+                        <label>{{__(MoneyHelper::format($installment->net_value))}}</label>
                     </div>
                 </div>
             @endforeach
@@ -147,18 +144,24 @@ use Carbon\Carbon;
         <div class="flex-container"><div class="col"></div></div>
 
         <div class="flex-container">
-            <div class="col_50 sm_col">
+            <div class="col_33 sm_col">
+                <div class="td-buttons">
+                    <button type="submit" class="col" form="form-edit">{{__('Edit')}}</button>
+                </div>
+            </div>
+            <div class="col_33 sm_col">
                 <div class="td-buttons">
                     <input type="hidden" form="form-delete" name="id" value={{$transaction->id}}>
                     <button type="submit" class="col" form="form-delete">{{__('Delete')}}</button>
                 </div>
             </div>
-            <div class="col_50 sm_col">
+            <div class="col_33 sm_col">
                 <div class="td-buttons">
                     <input type="button" value="{{__('Return')}}" onclick="window.location='{{app('url')->previous()}}'">
                 </div>
             </div>
         </div>
+        <form method="get" id="form-edit" action="{{route('transaction.edit', ['id' => $transaction->id])}}"></form>
         <form method="post" id="form-delete" action="{{route('transaction.destroy')}}"> @csrf @method('DELETE') </form>
     </div>
 @endsection

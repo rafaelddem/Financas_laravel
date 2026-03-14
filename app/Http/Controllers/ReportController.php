@@ -28,7 +28,7 @@ class ReportController extends Controller
     public function index(Request $request, DateService $dateService)
     {
         try {
-            [$start_date, $end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_YEAR, $request->get('start_date'), $request->get('end_date'));
+            [$start_date, $end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_10_YEARS, $request->get('start_date'), $request->get('end_date'));
 
             $income = $this->service->income($start_date, $end_date);
             $income_by_period = $this->service->incomeByPeriod($end_date->clone()->subYears(2), $end_date);
