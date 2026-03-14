@@ -23,7 +23,7 @@ use App\Enums\Relevance;
                         <option value='{{ $relevance->value }}' @if ($category->relevance->value == $relevance->value) selected @endif>{{ __($relevance->name) }}</option>
                     @endforeach
                 </select>
-                <label>{{_('Status')}}:</label>
+                <label>{{__('Status')}}:</label>
                 <div class="radio-container">
                     <label class="radio-option"><input type="radio" form="form-update" name="active" value="1" @if ($category->active) checked @endif>{{__('Active')}}</label>
                     <label class="radio-option"><input type="radio" form="form-update" name="active" value="0" @if (!$category->active) checked @endif>{{__('Inactive')}}</label>

@@ -1050,6 +1050,7 @@ Alterações por finalizar:
 Edição de Transações ainda não funciona para vendas no crédito. Dentre as alterações que faltam:
     - Quando retorna um erro (validação ou exception) o valor é alterado de float para int
     - Não carrega as datas das parcelas originais, ao invés disso é recalculado novamente a partir da data de transação, o que pode gerar conflitos
+    - Rever o bloqueio na alteração dos valores das parcelas. Uma alternativa seria distribuir a diferença no valor entre as parcelas ainda não quitadas
 
 
 
@@ -1059,7 +1060,9 @@ Erros a corrigir:
 
 Bloquear (ou adicionar confirmação) na importação de extrato para faturas já pagas\vencidas
 
-Corrigir botões "Voltar" pois alguns vão paara outra tela que não a anterior
+No cadastro de carteiras, adicionar o relacionamento com uma tabela "Bancos", que manteria os banco (BB, Caixa, Santander...) pré-cadastrados
+
+No lançamento de Transações, por padrão o sistema usa a data da transação como a data da primeira parcela. No entanto alguns bancos consideram a data de processamento da transação na hora de incluir a parcela na fatura. Essa diferença faz com que uma parcela possa ser incluída pelo banco a uma fatura, mesmo com sua data da parcela não pertencendo ao mesmo período. Por exemplo, a fatura muda todo dia 1º (sendo exatamente o mês em questão), então uma compra feita no dia 30 de abril mas processada no dia 2 de maio, seria mantida pelo sistema como sendo do dia 30 de abril e seria incluída a fatura do mês de abril. Mas o banco trataria diferente, mantendo a mesma data (30 de abril) mas incluíndo a fatura de maio. Essa diferença atrapalha inclusive se eu alterar a data da parcela para o primeiro dia do mês de maio, já que assim ficaria na fatura correta mas no dia errado. Algo parecido acontece com as mensalidades da TIM, talvez seja necessário adicionar um campo data de processamento também a parcela
 
 
 
@@ -1067,13 +1070,7 @@ Corrigir botões "Voltar" pois alguns vão paara outra tela que não a anterior
 
 Possíveis alterações no projeto:
 
-No lançamento de Transações, por padrão o sistema usa a data da transação como a data da primeira parcela. No entanto alguns bancos consideram a data de processamento da transação na hora de incluir a parcela na fatura. Essa diferença faz com que uma parcela possa ser incluída pelo banco a uma fatura, mesmo com sua data da parcela não pertencendo ao mesmo período. Por exemplo, a fatura muda todo dia 1º (sendo exatamente o mês em questão), então uma compra feita no dia 30 de abril mas processada no dia 2 de maio, seria mantida pelo sistema como sendo do dia 30 de abril e seria incluída a fatura do mês de abril. Mas o banco trataria diferente, mantendo a mesma data (30 de abril) mas incluíndo a fatura de maio. Essa diferença atrapalha inclusive se eu alterar a data da parcela para o primeiro dia do mês de maio, já que assim ficaria na fatura correta mas no dia errado. Algo parecido acontece com as mensalidades da TIM, talvez seja necessário adicionar um campo data de processamento também a parcela
-
 Padronizar Exceptions, alguns recebem a mensagem em português e outras em inglês
-
-No cadastro de carteiras, adicionar o relacionamento com uma tabela "Bancos", que manteria os banco (BB, Caixa, Santander...) pré-cadastrados
-
-Na Categoria, ver a necessidade de um campo 'descrição' e um campo 'nome abreviado'.
 
 Na Categoria, adicionar novamente o campo 'status', para os casos de registros que não oram excluídos, mas que não precisam mais ser apresentados.
 
@@ -1081,16 +1078,12 @@ Revisar bloqueio de inativação, quando owner/wallet tiver movimentações agen
 
 Ajustar CSS, pois no redimencionamento algumas telas "quebram"
 
-Ajustam "print" da tela, para sair somente o relatório
-
 
 
 
 Bloqueei a alterações dos nomes por que creio que isso cria a possibilidade de que o usuário fique trocando o nome de uma determinada entidade, e depois de algum tempo o histórico de movimentos da entidade tenha valores misturados. Por exemplo: Nomear um Cartão como "Banco A" e depois renomear para "Banco B". Tal alteração faria com que os movimentos relativos ao primeiro cartão "se misturassem" com os movimentos do segundo, já que para o sistema, os dois cartões sempre foram o mesmo cartão, apenas com nomes diferentes. No entanto, isso cria um cenário onde o usuário não pode corrigir erros de digitação, depois de a entidade salva, sendo necessário (para a correção) a exclusão e recriação da entidade. Uma alternativa de correção seria criar uma tabela adicional, com o registro dos nomes das entidades, antigos e o atual. Nesse caso, a tabela não teria o registro do nome da entidade, mas sim, uma referência a um registro na tabela "Nomes".
 
 Mantive um padrão de formatação para os valores de duas casas decimais (000.00), mas tenho receio de que isso crie problemas de arredondamento em algum cálculo. Uma possível alternativa seria manter o valor, mas ignorar a marcação de casas decimais, por exemplo, nesse caso o número "123.45" se tornaria "12345". Preciso ver se isso realmente soluciona o problema, uma vez que adiciona mais uma camada de tratamento dos valores.
-
-Rever o bloqueio na alteração dos valores das parcelas. Uma alternativa seria distribuir a diferença no valor entre as parcelas ainda não quitadas
 
 Ao invés de fazer apenas a inativação, utilizar também o softdelete, dessa forma a inativação seria apenas para organização dos dados, e o softdelete para quando não for mais necessário o registro
 
