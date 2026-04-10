@@ -18,6 +18,7 @@ class ConfigurationService extends BaseService
         try {
             foreach ($input as $key => $value) {
                 $this->repository->updateConfigurations($key, ['value' => $value]);
+                config(['services.settings.' . strtolower($key) => $value]);
             }
         } catch (BaseException $exception) {
             throw $exception;
