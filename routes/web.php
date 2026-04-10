@@ -6,6 +6,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ExtractImportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReportController;
@@ -103,6 +104,11 @@ Route::middleware(['auth:web'])->group(function () {
             Route::get('/{id}', [CategoryController::class, 'edit'])->name('edit');
             Route::put('/', [CategoryController::class, 'update'])->name('update');
             Route::delete('/', [CategoryController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::group(['prefix' => 'configuracoes', 'as' => 'configuration.'], function () {
+            Route::get('/', [ConfigController::class, 'index'])->name('index');
+            Route::put('/', [ConfigController::class, 'update'])->name('update');
         });
     });
 });

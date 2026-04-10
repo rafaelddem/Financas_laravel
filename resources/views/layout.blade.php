@@ -62,7 +62,9 @@
             <ul>
                 <li class="navbar-item" onclick="toggleSubmenu(event, 'login')"><i class="fa-solid fa-user"></i><span>{{__('Profile')}}</span><i class="fa-solid fa-caret-left"></i></li>
                 <ul class="submenu login">
-                    <li class="navbar-item"><a href="/"><i class="fa-solid fa-gear"></i><span>{{__('Configurations')}}</span></a></li>
+                    @can('admin')
+                        <li class="navbar-item"><a href="{{route('configuration.index')}}"><i class="fa-solid fa-gear"></i><span>{{__('Configurations')}}</span></a></li>
+                    @endcan
                     <li class="navbar-item"><a href="{{route('sign_out')}}"><i class="fa-solid fa-right-from-bracket"></i><span>{{__('Logout')}}</span></a></li>
                 </ul>
             </ul>
