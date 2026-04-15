@@ -110,9 +110,9 @@ class ConfigurationService extends BaseService
                 // Encontrar uma forma de salvar o $output e $resultCode sem enviar para o front
             }
 
-        } catch (BaseException $exception) {
+        } catch (BaseException $exception) {dd($exception);
             throw $exception;
-        } catch (\Throwable $th) {
+        } catch (\Throwable $th) {dd($th);
             throw new ServiceException();
         } finally {
             if (file_exists($configPath)) unlink($configPath);
