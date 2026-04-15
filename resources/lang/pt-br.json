@@ -202,6 +202,11 @@
 
     "Profile": "Perfil",
     "Configurations": "Configurações",
+    "Backup File (Data)": "Arquivo de backup (Transações e demais registros)",
+    "Restore": "Restaurar",
+    "Backup": "Backup",
+    "Backup created successfully.": "Backup criado com sucesso.",
+    "Backup restored successfully.": "Backup restaurado com sucesso.",
     "Logout": "Sair",
 
     "Wallet Totals": "Totais por Carteira",

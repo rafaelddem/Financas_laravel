@@ -109,6 +109,8 @@ Route::middleware(['auth:web'])->group(function () {
         Route::group(['prefix' => 'configuracoes', 'as' => 'configuration.'], function () {
             Route::get('/', [ConfigController::class, 'index'])->name('index');
             Route::put('/', [ConfigController::class, 'update'])->name('update');
+            Route::post('/restaurar-dados', [ConfigController::class, 'restore'])->name('restore');
+            Route::post('/salvar-dados', [ConfigController::class, 'backup'])->name('backup');
         });
     });
 });
