@@ -18,13 +18,23 @@ class CreateCalculateWalletValueProcedure extends Migration
                 DECLARE sum_out DECIMAL(10,2);
                 DECLARE total DECIMAL(10,2);
 
+                IF start_date IS NULL THEN
+                    SELECT DATE_FORMAT(MIN(transaction_date), '%Y-%m-01') INTO start_date FROM transactions;
+                END IF;
+
+                IF end_date IS NULL THEN
+                    SELECT NOW() INTO end_date;
+                END IF;
+
                 select sum(gross_value - discount_value + interest_value + rounding_value) INTO sum_in
                 from transactions
                     join wallets on wallets.id = transactions.destination_wallet_id
                     join payment_methods on payment_methods.id = transactions.payment_method_id
                 where
                     payment_methods.type != 'credit'
-                    and transactions.destination_wallet_id = wallet_id;
+                    and transactions.destination_wallet_id = wallet_id
+                    and transactions.processing_date is not null
+                    and transactions.transaction_date between start_date and end_date;
 
                 select sum(gross_value - discount_value + interest_value + rounding_value) INTO sum_out
                 from transactions
@@ -32,7 +42,9 @@ class CreateCalculateWalletValueProcedure extends Migration
                     join payment_methods on payment_methods.id = transactions.payment_method_id
                 where
                     payment_methods.type != 'credit'
-                    and transactions.source_wallet_id = wallet_id;
+                    and transactions.source_wallet_id = wallet_id
+                    and transactions.processing_date is not null
+                    and transactions.transaction_date between start_date and end_date;
 
                 SET total = coalesce(sum_in, 0) - coalesce(sum_out, 0);
 
@@ -46,7 +58,7 @@ class CreateCalculateWalletValueProcedure extends Migration
                 DECLARE wallet_id INT;
 
                 IF start_date IS NULL THEN
-                    SELECT DATE_FORMAT(MIN(processing_date), '%Y-%m-01') INTO start_date FROM transactions;
+                    SELECT DATE_FORMAT(MIN(transaction_date), '%Y-%m-01') INTO start_date FROM transactions;
                 END IF;
 
                 IF end_date IS NULL THEN
@@ -76,7 +88,7 @@ class CreateCalculateWalletValueProcedure extends Migration
                 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
                 IF start_date IS NULL THEN
-                    SELECT DATE_FORMAT(MIN(processing_date), '%Y-%m-01') INTO start_date FROM transactions;
+                    SELECT DATE_FORMAT(MIN(transaction_date), '%Y-%m-01') INTO start_date FROM transactions;
                 END IF;
 
                 IF end_date IS NULL THEN

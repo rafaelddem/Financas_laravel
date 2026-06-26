@@ -1045,6 +1045,23 @@ Tarefa #1: Definir o valor do atributo *data da parcela*.
 
 **********************************
 
+Revisar regras aqui do README:
+
+Adicionar lógica do processing_date, que agora pode ser nulo para indicar que a transação é apenas planejada\esperada, mas ainda não ocorreu.
+Transações ainda terão a data de processamento como obrigatória, apenas as planejadas (nova tela) será nulo
+
+
+
+Lógicas de negócio a corrigir:
+
+Data da Transação\Processamento:
+
+Alguns cartões fecham as faturas usando a data de processamento, como NuBank, e outros com a data da transação, como Sicoob. Isso causa um problema na hora de contabilizar os valores, pois não tenho uma forma unificada de filtrar os registros. Por exemplo, se eu considerar duas transações feitas no mesmo dia, uma para cada cartão, e as duas demorando dois dias para serem processadas, a transação feita com o NuBank será contabilizada como sendo efetuada no dia seguinte, enquanto que o Sicoob contabiliza na mesma data da compra. O efeito disso é que se eu filtrar usando a data da transação, registros do NuBank podem ficar de fora, e se eu usar a data de processamento, registros do Sicoob de dias posteriores podem ser incluídos.
+Como forma de contornar isso, por padrão, quando houver filtros por data, será utilizada a data de transação. As exceções serão as consultas relacionadas a fatura, onde será utilizado a data informada no cadastro do cartão.
+Obs.: Ainda que o padrão seja a data da transação, a data de processamento ainda será utilizada como forma de confirmar se a transação foi confirmada (transações não confirmadas incluem transações planejadas, mas também as que esperam confirmação do cartão).
+
+
+
 Alterações por finalizar:
 
 Edição de Transações ainda não funciona para vendas no crédito. Dentre as alterações que faltam:

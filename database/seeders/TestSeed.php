@@ -76,6 +76,40 @@ class TestSeed extends Seeder
         $ownerSystem = Owner::find(1);
         $ownerMe = Owner::find(2);
 
+        $ownerFriend_1 = Owner::create([
+            'id' => 3,
+            'name' => 'Amigo #1',
+            'active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+            $walletFriend_1 = Wallet::create([
+                'name' => 'Carteira Amigo #1',
+                'owner_id' => $ownerFriend_1->id,
+                'main_wallet' => true,
+                'description' => 'Carteira padrão Amigo #1',
+                'active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+        $ownerFriend_2 = Owner::create([
+            'id' => 4,
+            'name' => 'Amigo #2',
+            'active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+            $walletFriend_2 = Wallet::create([
+                'name' => 'Carteira Amigo #2',
+                'owner_id' => $ownerFriend_2->id,
+                'main_wallet' => true,
+                'description' => 'Carteira padrão Amigo #2',
+                'active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
         /* Wallets | Cards */
         $walletSystem = Wallet::find(1);
         $walletMeDefault = Wallet::find(2);
@@ -216,7 +250,7 @@ class TestSeed extends Seeder
             'payment_method_id' => $paymentMethodNotes->id,
             'source_wallet_id' => $walletSystem->id,
             'destination_wallet_id' => $walletMeDefault->id,
-            'gross_value' => 500.00,
+            'gross_value' => 600.00,
             'discount_value' => 0.00,
             'interest_value' => 0.00,
             'rounding_value' => 0.00,
@@ -532,25 +566,21 @@ class TestSeed extends Seeder
 
         /* Débits */
 
-        $twoMonthsAgoDebits = new Collection();
-
-        $twoMonthsAgoDebits->push(
-            Transaction::create([
-                'title' => 'Ingresso show',
-                'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
-                'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
-                'category_id' => $categoryGenericOut->id,
-                'relevance' => Relevance::Banal->value,
-                'payment_method_id' => $paymentMethodPix->id,
-                'source_wallet_id' => $walletNuBank->id,
-                'destination_wallet_id' => $walletSystem->id,
-                'gross_value' => 89.90,
-                'discount_value' => 0.00,
-                'interest_value' => 0.00,
-                'rounding_value' => 0.00,
-                'description' => 'Ingresso show (dois meses atrás)',
-            ])
-        );
+        Transaction::create([
+            'title' => 'Ingresso show',
+            'transaction_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'processing_date' => $invoiceTwoMonthsAgo->end_date->clone()->addDay(),
+            'category_id' => $categoryGenericOut->id,
+            'relevance' => Relevance::Banal->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletSystem->id,
+            'gross_value' => 89.90,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Ingresso show (dois meses atrás)',
+        ]);
 
         /* Um mês atrás */
         $oneMonthAgo = $today->clone()->startOfMonth()->subMonth(1);
@@ -806,6 +836,56 @@ class TestSeed extends Seeder
 
         $oneMonthsAgoCredits->push(
             Transaction::create([
+                'title' => 'Emprestimo',
+                'transaction_date' => $oneMonthAgo->clone()->addDays(15),
+                'processing_date' => $oneMonthAgo->clone()->addDays(15),
+                'category_id' => $categoryGenericOut->id,
+                'relevance' => Relevance::Banal->value,
+                'payment_method_id' => $paymentMethodCredit->id,
+                'card_id' => $cardCreditNubank->id,
+                'source_wallet_id' => $cardCreditNubank->wallet_id,
+                'destination_wallet_id' => $walletFriend_1->id,
+                'gross_value' => 150.00,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+                'description' => 'Comprado para Amigo #1. Contabilizará como empréstimo.',
+            ])
+        );
+            $installment = Installment::create([
+                'transaction_id' => $oneMonthsAgoCredits->last()->id,
+                'installment_number' => 1,
+                'installment_total' => 3,
+                'installment_date' => $oneMonthsAgoCredits->last()->transaction_date,
+                'gross_value' => 50.00,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+            ]);
+            $oneMonthsAgoInvoiceValue += $installment->net_value;
+            Installment::create([
+                'transaction_id' => $oneMonthsAgoCredits->last()->id,
+                'installment_number' => 2,
+                'installment_total' => 3,
+                'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonth()->startOfMonth(),
+                'gross_value' => 50.00,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+            ]);
+            Installment::create([
+                'transaction_id' => $oneMonthsAgoCredits->last()->id,
+                'installment_number' => 3,
+                'installment_total' => 3,
+                'installment_date' => $oneMonthsAgoCredits->last()->transaction_date->addMonths(2),
+                'gross_value' => 50.00,
+                'discount_value' => 0.00,
+                'interest_value' => 0.00,
+                'rounding_value' => 0.00,
+            ]);
+
+        $oneMonthsAgoCredits->push(
+            Transaction::create([
                 'title' => 'Mercado',
                 'transaction_date' => $oneMonthAgo->clone()->addDays(20),
                 'processing_date' => $oneMonthAgo->clone()->addDays(20),
@@ -880,47 +960,57 @@ class TestSeed extends Seeder
             'description' => 'Pix para que a carteira tenha valores disponíveis para transações no no débito (um mês atrás)',
         ]);
 
-        $oneMonthAgoDebits = new Collection();
+        Transaction::create([
+            'title' => 'Cinema',
+            'transaction_date' => $oneMonthAgo->clone()->addDays(10),
+            'processing_date' => $oneMonthAgo->clone()->addDays(10),
+            'category_id' => $categoryGenericOut->id,
+            'relevance' => Relevance::Banal->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletSystem->id,
+            'gross_value' => 159.90,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Ingressos para o Cinema e pipoca (um mês atrás)',
+        ]);
 
-        $oneMonthAgoDebits->push(
-            Transaction::create([
-                'title' => 'Cinema',
-                'transaction_date' => $oneMonthAgo->clone()->addDays(10),
-                'processing_date' => $oneMonthAgo->clone()->addDays(10),
-                'category_id' => $categoryGenericOut->id,
-                'relevance' => Relevance::Banal->value,
-                'payment_method_id' => $paymentMethodPix->id,
-                'source_wallet_id' => $walletNuBank->id,
-                'destination_wallet_id' => $walletSystem->id,
-                'gross_value' => 159.90,
-                'discount_value' => 0.00,
-                'interest_value' => 0.00,
-                'rounding_value' => 0.00,
-                'description' => 'Ingressos para o Cinema e pipoca (um mês atrás)',
-            ])
-        );
-
-        $oneMonthAgoDebits->push(
-            Transaction::create([
-                'title' => 'Mercado',
-                'transaction_date' => $oneMonthAgo->clone()->addDays(15),
-                'processing_date' => $oneMonthAgo->clone()->addDays(15),
-                'category_id' => $categoryGenericOut->id,
-                'relevance' => Relevance::Banal->value,
-                'payment_method_id' => $paymentMethodPix->id,
-                'source_wallet_id' => $walletNuBank->id,
-                'destination_wallet_id' => $walletSystem->id,
-                'gross_value' => 29.90,
-                'discount_value' => 0.00,
-                'interest_value' => 0.00,
-                'rounding_value' => 0.10,
-                'description' => 'Mercado (um mês atrás)',
-            ])
-        );
+        Transaction::create([
+            'title' => 'Mercado',
+            'transaction_date' => $oneMonthAgo->clone()->addDays(15),
+            'processing_date' => $oneMonthAgo->clone()->addDays(15),
+            'category_id' => $categoryGenericOut->id,
+            'relevance' => Relevance::Banal->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletSystem->id,
+            'gross_value' => 29.90,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.10,
+            'description' => 'Mercado (um mês atrás)',
+        ]);
 
         /* Mês atual */
 
         $startOfMonth = $today->clone()->startOfMonth();
+
+        Transaction::create([
+            'title' => 'Devolução Parte Emprestimo',
+            'transaction_date' => $startOfMonth,
+            'processing_date' => $startOfMonth,
+            'category_id' => $categoryGenericIn->id,
+            'relevance' => Relevance::Indispensable->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletFriend_1->id,
+            'destination_wallet_id' => $walletMeDefault->id,
+            'gross_value' => 50.00,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Amigo #1 devolveu parte do valor pego em préstimo.',
+        ]);
 
         Transaction::create([
             'title' => 'Salário #3',
@@ -1052,44 +1142,52 @@ class TestSeed extends Seeder
 
         /* Débito */
 
-        $thisMonthAgoDebits = new Collection();
-
-        $thisMonthAgoDebits->push(
-            Transaction::create([
-                'title' => 'Gasolina',
-                'transaction_date' => $startOfMonth->clone()->addDays(7),
-                'processing_date' => $startOfMonth->clone()->addDays(7),
-                'category_id' => $categoryGenericOut->id,
-                'relevance' => Relevance::Banal->value,
-                'payment_method_id' => $paymentMethodPix->id,
-                'source_wallet_id' => $walletNuBank->id,
-                'destination_wallet_id' => $walletSystem->id,
-                'gross_value' => 50.00,
-                'discount_value' => 0.00,
-                'interest_value' => 0.00,
-                'rounding_value' => 0.00,
-                'description' => 'Gasolina (este mês)',
-            ])
-        );
+        Transaction::create([
+            'title' => 'Gasolina',
+            'transaction_date' => $startOfMonth->clone()->addDays(7),
+            'processing_date' => $startOfMonth->clone()->addDays(7),
+            'category_id' => $categoryGenericOut->id,
+            'relevance' => Relevance::Banal->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletSystem->id,
+            'gross_value' => 50.00,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Gasolina (este mês)',
+        ]);
 
         /* Transações previstas */
 
-        $thisMonthAgoDebits->push(
-            Transaction::create([
-                'title' => 'Gasolina',
-                'transaction_date' => Carbon::now()->addMonth(),
-                'processing_date' => Carbon::now()->addMonth(),
-                'category_id' => $categoryGenericOut->id,
-                'relevance' => Relevance::Banal->value,
-                'payment_method_id' => $paymentMethodPix->id,
-                'source_wallet_id' => $walletNuBank->id,
-                'destination_wallet_id' => $walletSystem->id,
-                'gross_value' => 50.00,
-                'discount_value' => 0.00,
-                'interest_value' => 0.00,
-                'rounding_value' => 0.00,
-                'description' => 'Gasolina (este mês)',
-            ])
-        );
+        Transaction::create([
+            'title' => 'Gasolina',
+            'transaction_date' => $startOfMonth->clone(),
+            'category_id' => $categoryGenericOut->id,
+            'relevance' => Relevance::Banal->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletSystem->id,
+            'gross_value' => 50.00,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Gasolina (este mês)',
+        ]);
+
+        Transaction::create([
+            'title' => 'Gasolina',
+            'transaction_date' => Carbon::now()->addMonth(),
+            'category_id' => $categoryGenericOut->id,
+            'relevance' => Relevance::Banal->value,
+            'payment_method_id' => $paymentMethodPix->id,
+            'source_wallet_id' => $walletNuBank->id,
+            'destination_wallet_id' => $walletSystem->id,
+            'gross_value' => 50.00,
+            'discount_value' => 0.00,
+            'interest_value' => 0.00,
+            'rounding_value' => 0.00,
+            'description' => 'Gasolina (este mês)',
+        ]);
     }
 }

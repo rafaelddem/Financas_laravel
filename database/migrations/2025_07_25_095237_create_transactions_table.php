@@ -16,7 +16,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('title', 50)->nullable(false);
             $table->date('transaction_date')->nullable(false);
-            $table->date('processing_date')->nullable(false);
+            $table->date('processing_date')->nullable(true);
             $table->integer('category_id')->unsigned()->nullable(false);
             $table->enum('relevance', Relevance::values())->nullable(false);
             $table->integer('payment_method_id')->unsigned()->nullable(false);

@@ -18,11 +18,10 @@ class CreateCalculateExpensesByCategoryProcedure extends Migration
                     select 
                         categories.id, 
                         categories.name, 
-                        DATE_FORMAT(transactions.processing_date, '%Y-%m') as period, 
+                        DATE_FORMAT(transactions.transaction_date, '%Y-%m') as period, 
                         sum(transactions.gross_value - transactions.discount_value + transactions.interest_value + transactions.rounding_value) as net_value 
                     from 
                         transactions 
-                        left join installments on installments.transaction_id = transactions.id
                         left join categories on categories.id = transactions.category_id
                         left join wallets as source_wallet on source_wallet.id = transactions.source_wallet_id
                         left join wallets as destination_wallet on destination_wallet.id = transactions.destination_wallet_id
@@ -31,7 +30,8 @@ class CreateCalculateExpensesByCategoryProcedure extends Migration
                         source_wallet.owner_id = admin_id 
                         and source_wallet.owner_id != destination_wallet.owner_id 
                         and transactions.category_id not in (4, 5) 
-                        and transactions.processing_date between start_date and end_date 
+                        and transactions.processing_date is not null 
+                        and transactions.transaction_date between start_date and end_date 
                         and payment_methods.type != 'credit'
                     group by 
                         categories.id, categories.name, period
@@ -54,6 +54,7 @@ class CreateCalculateExpensesByCategoryProcedure extends Migration
                         source_wallet.owner_id = admin_id 
                         and source_wallet.owner_id != destination_wallet.owner_id 
                         and transactions.category_id not in (4, 5) 
+                        and transactions.processing_date is not null 
                         and installments.installment_date between start_date and end_date 
                         and payment_methods.type = 'credit'
                     group by 

@@ -79,7 +79,8 @@ class TransactionRepository extends BaseRepository
             return $this->model
                 ->where('category_id', env('INVOICE_PARTIAL_PAYMENT_CATEGORY'))
                 ->where('source_wallet_id', $invoice->card->wallet_id)
-                ->whereBetween('transactions.processing_date', [$invoice->start_date, $invoice->end_date])
+                ->whereNotNull('transactions.processing_date')
+                ->whereBetween('transactions.transaction_date', [$invoice->start_date, $invoice->end_date])
                 ->get()->sum('net_value');
         } catch (\Throwable $th) {
             throw new RepositoryException();

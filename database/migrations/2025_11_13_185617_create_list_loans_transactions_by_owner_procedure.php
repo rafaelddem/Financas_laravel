@@ -15,7 +15,7 @@ class CreateListLoansTransactionsByOwnerProcedure extends Migration
             CREATE PROCEDURE list_loans_transactions_by_owner(owner_id INT, start_date DATE, end_date DATE)
             BEGIN
                 IF start_date IS NULL THEN
-                    SELECT DATE_FORMAT(MIN(processing_date), '%Y-%m-01') INTO start_date FROM transactions;
+                    SELECT DATE_FORMAT(MIN(transaction_date), '%Y-%m-01') INTO start_date FROM transactions;
                 END IF;
 
                 IF end_date IS NULL THEN
@@ -35,7 +35,7 @@ class CreateListLoansTransactionsByOwnerProcedure extends Migration
                     payment_methods.type as payment_methods_type, 
                     CASE 
                         WHEN payment_methods.type  = 'credit' THEN installments.installment_date 
-                        WHEN payment_methods.type != 'credit' THEN transactions.processing_date 
+                        WHEN payment_methods.type != 'credit' THEN transactions.transaction_date 
                     END as date, 
                     CASE 
                         WHEN payment_methods.type  = 'credit' THEN sum(installments.gross_value) 
@@ -65,10 +65,11 @@ class CreateListLoansTransactionsByOwnerProcedure extends Migration
                     LEFT JOIN owners AS source_owner ON source_owner.id = source_wallet.owner_id
                     LEFT JOIN owners AS destination_owner ON destination_owner.id = destination_wallet.owner_id
                 where
+                    transactions.processing_date is not null and 
                     (
                         (payment_methods.type  = 'credit' and installments.installment_date between start_date and end_date)
                         or 
-                        (payment_methods.type != 'credit' and transactions.processing_date between start_date and end_date)
+                        (payment_methods.type != 'credit' and transactions.transaction_date between start_date and end_date)
                     )
                     and 
                     (
@@ -76,9 +77,9 @@ class CreateListLoansTransactionsByOwnerProcedure extends Migration
                         and source_owner.id != destination_owner.id
                     )
                 group by
-                    transactions.id, transactions.title, source_owner.id, source_owner.name, destination_owner.id, destination_owner.name, payment_methods.id, payment_methods.type, installments.installment_date, transactions.processing_date, installments.installment_number, installments.installment_total 
+                    transactions.id, transactions.title, source_owner.id, source_owner.name, destination_owner.id, destination_owner.name, payment_methods.id, payment_methods.type, installments.installment_date, transactions.transaction_date, installments.installment_number, installments.installment_total 
                 order by
-                    processing_date, installment_date, transactions_id;
+                    transaction_date, installment_date, transactions_id;
             END;
         ");
     }

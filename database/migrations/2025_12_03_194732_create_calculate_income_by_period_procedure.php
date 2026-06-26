@@ -23,7 +23,9 @@ class CreateCalculateIncomeByPeriodProcedure extends Migration
                     left join wallets as source on source.id = transactions.source_wallet_id
                     left join wallets as destination on destination.id = transactions.destination_wallet_id
                 where
-                    payment_methods.type != 'credit' and processing_date between '2000-01-01' and limit_date
+                    payment_methods.type != 'credit' 
+                    and transactions.processing_date is not null 
+                    and transaction_date between '2000-01-01' and limit_date
                     and (source.owner_id = admin_id or destination.owner_id = admin_id);
             END;
         ");
@@ -32,7 +34,7 @@ class CreateCalculateIncomeByPeriodProcedure extends Migration
             CREATE PROCEDURE calculate_income_by_period(admin_id INT, start_date DATE, end_date DATE)
             BEGIN
                 select 
-                    DATE_FORMAT(transactions.processing_date, '%m/%Y') as date, 
+                    DATE_FORMAT(transactions.transaction_date, '%m/%Y') as date, 
                     COALESCE(SUM(case
                             when source.owner_id = admin_id and destination.owner_id = admin_id then 0
                             when source.owner_id = admin_id and destination.owner_id != admin_id then -(gross_value - discount_value + interest_value + rounding_value)
@@ -43,12 +45,14 @@ class CreateCalculateIncomeByPeriodProcedure extends Migration
                     left join wallets as source on source.id = transactions.source_wallet_id
                     left join wallets as destination on destination.id = transactions.destination_wallet_id
                 where
-                    payment_methods.type != 'credit' and processing_date between start_date and end_date
+                    payment_methods.type != 'credit' 
+                    and transactions.processing_date is not null 
+                    and transaction_date between start_date and end_date
                     and (source.owner_id = admin_id or destination.owner_id = admin_id)
                 group by 
-                    DATE_FORMAT(transactions.processing_date, '%m/%Y')
+                    DATE_FORMAT(transactions.transaction_date, '%m/%Y')
                 order by 
-                    transactions.processing_date;
+                    transactions.transaction_date;
             END;
         ");
     }
