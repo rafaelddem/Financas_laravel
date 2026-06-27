@@ -31,14 +31,17 @@ class ReportController extends Controller
             [$start_date, $end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_10_YEARS, $request->get('start_date'), $request->get('end_date'));
 
             $income = $this->service->income($start_date, $end_date);
-            $income_by_period = $this->service->incomeByPeriod($end_date->clone()->subYears(2), $end_date);
             $future_credit_value = $this->service->futureInvoiceAmounts();
             $total_loans = $this->service->totalLoans($start_date, null);
             $wallets_values = $this->service->incomeByWallet($start_date, $end_date);
-            $output_by_category = $this->service->expensesByCategory($end_date->clone()->subYears(1), $end_date);
             $loans = $this->service->loans($start_date, null);
 
-            return view('reports.index', compact('income', 'income_by_period', 'future_credit_value', 'total_loans', 'wallets_values', 'loans', 'output_by_category'));
+            [$income_by_period_filter_start_date, $income_by_period_filter_end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_2_YEARS, $end_date);
+            $income_by_period = $this->service->incomeByPeriod($income_by_period_filter_start_date, $income_by_period_filter_end_date);
+            [$output_by_category_filter_start_date, $output_by_category_filter_end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_YEAR, $end_date);
+            $output_by_category = $this->service->expensesByCategory($output_by_category_filter_start_date, $output_by_category_filter_end_date);
+
+            return view('reports.index', compact('start_date', 'end_date', 'income', 'future_credit_value', 'total_loans', 'wallets_values', 'loans', 'income_by_period', 'output_by_category'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

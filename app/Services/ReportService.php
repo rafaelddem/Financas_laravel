@@ -161,8 +161,6 @@ class ReportService extends BaseService
         try {
             $periods = $this->repository->calculateExpensesByCategory($startDate, $endDate);
 
-            $startDate = $startDate->clone()->startOfMonth();
-            $endDate = $endDate->clone()->startOfMonth();
             while ($startDate->lte($endDate)) {
                 array_push($output['labels'], $startDate->format('m/Y'));
                 $startDate->addMonth();
