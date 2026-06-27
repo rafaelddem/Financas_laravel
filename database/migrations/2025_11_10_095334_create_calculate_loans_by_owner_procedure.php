@@ -58,9 +58,12 @@ class CreateCalculateLoansByOwnerProcedure extends Migration
                             LEFT JOIN wallets AS source_wallet ON source_wallet.id = transactions.source_wallet_id
                             LEFT JOIN owners AS source_owner ON source_owner.id = source_wallet.owner_id
                         WHERE 
-                            transactions.processing_date is not null 
-                            and (installment_number IS NOT NULL AND installment_date BETWEEN start_date AND end_date) 
-                            OR (installment_number IS NULL AND transaction_date BETWEEN start_date AND end_date)
+                            transactions.processing_date is not null and 
+                            (
+                                (installment_number IS NOT NULL AND installment_date BETWEEN start_date AND end_date) 
+                                OR 
+                                (installment_number IS NULL AND transaction_date BETWEEN start_date AND end_date)
+                            )
                         GROUP BY 
                             source_owner.id, 
                             source_owner.name
@@ -92,9 +95,12 @@ class CreateCalculateLoansByOwnerProcedure extends Migration
                             LEFT JOIN wallets AS destination_wallet ON destination_wallet.id = transactions.destination_wallet_id
                             LEFT JOIN owners AS destination_owner ON destination_owner.id = destination_wallet.owner_id
                         WHERE 
-                            transactions.processing_date is not null 
-                            and (installment_number IS NOT NULL AND installment_date BETWEEN start_date AND end_date) 
-                            OR (installment_number IS NULL AND transaction_date BETWEEN start_date AND end_date)
+                            transactions.processing_date is not null and 
+                            (
+                                (installment_number IS NOT NULL AND installment_date BETWEEN start_date AND end_date) 
+                                OR 
+                                (installment_number IS NULL AND transaction_date BETWEEN start_date AND end_date)
+                            )
                         GROUP BY 
                             destination_owner.id, 
                             destination_owner.name

@@ -25,6 +25,7 @@ class TransactionRepository extends BaseRepository
                     'sourceWallet', 
                     'destinationWallet', 
                 ])
+                ->whereNotNull('processing_date')
                 ->orderBy('id', 'desc')
                 ->limit(5)
                 ->get();
@@ -49,7 +50,8 @@ class TransactionRepository extends BaseRepository
                             ->orWhereIn('destination_wallet_id', $wallets);
                     });
                 })
-                ->whereBetween('transactions.transaction_date', [$startDate, $endDate])
+                ->whereNotNull('processing_date')
+                ->whereBetween('transaction_date', [$startDate, $endDate])
                 ->orderBy('transaction_date', 'desc')
                 ->orderBy('id', 'desc')
                 ->get();
@@ -79,8 +81,8 @@ class TransactionRepository extends BaseRepository
             return $this->model
                 ->where('category_id', env('INVOICE_PARTIAL_PAYMENT_CATEGORY'))
                 ->where('source_wallet_id', $invoice->card->wallet_id)
-                ->whereNotNull('transactions.processing_date')
-                ->whereBetween('transactions.transaction_date', [$invoice->start_date, $invoice->end_date])
+                ->whereNotNull('processing_date')
+                ->whereBetween('transaction_date', [$invoice->start_date, $invoice->end_date])
                 ->get()->sum('net_value');
         } catch (\Throwable $th) {
             throw new RepositoryException();
