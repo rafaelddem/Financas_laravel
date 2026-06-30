@@ -27,8 +27,6 @@
                             @endif
                             <span class="tag">{{ __($transaction->relevance->name)}}</span>
                         </span>
-                        <form method="get" id="form-update-{{$transaction->id}}" action="{{route('category.edit', ['id' => $transaction->id])}}"></form>
-                        <form method="post" id="form-delete-{{$transaction->id}}" action="{{route('category.destroy')}}"> @csrf @method('DELETE') </form>
                         <div class="td-buttons">
                             <button type="button" onclick="window.location='{{ route('transaction.show', ['id' => $transaction->id]) }}'" title="{{__('Transaction Details')}}">
                                 <i class="fa-solid fa-magnifying-glass"></i>
