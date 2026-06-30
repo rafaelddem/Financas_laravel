@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Period;
 use App\Exceptions\BaseException;
-use App\Services\DateService;
 use App\Services\OwnerService;
 use App\Services\ReportService;
 use App\Services\WalletService;
@@ -25,10 +24,10 @@ class ReportController extends Controller
         $this->walletService = app(WalletService::class);
     }
 
-    public function index(Request $request, DateService $dateService)
+    public function index(Request $request)
     {
         try {
-            [$start_date, $end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_10_YEARS, $request->get('start_date'), $request->get('end_date'));
+            [$start_date, $end_date] = Period::LAST_10_YEARS->getDateLimits();
 
             $income = $this->service->income($start_date, $end_date);
             $future_credit_value = $this->service->futureInvoiceAmounts();
@@ -36,9 +35,9 @@ class ReportController extends Controller
             $wallets_values = $this->service->incomeByWallet($start_date, $end_date);
             $loans = $this->service->loans($start_date, null);
 
-            [$income_by_period_filter_start_date, $income_by_period_filter_end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_2_YEARS, $end_date);
+            [$income_by_period_filter_start_date, $income_by_period_filter_end_date] = Period::LAST_2_YEARS->getDateLimits();
             $income_by_period = $this->service->incomeByPeriod($income_by_period_filter_start_date, $income_by_period_filter_end_date);
-            [$output_by_category_filter_start_date, $output_by_category_filter_end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_YEAR, $end_date);
+            [$output_by_category_filter_start_date, $output_by_category_filter_end_date] = Period::LAST_YEAR->getDateLimits();
             $output_by_category = $this->service->expensesByCategory($output_by_category_filter_start_date, $output_by_category_filter_end_date);
 
             return view('reports.index', compact('start_date', 'end_date', 'income', 'future_credit_value', 'total_loans', 'wallets_values', 'loans', 'income_by_period', 'output_by_category'));
@@ -51,10 +50,10 @@ class ReportController extends Controller
         return redirect(route('home'))->withErrors(compact('message'));
     }
 
-    public function loans(Request $request, DateService $dateService)
+    public function loans(Request $request)
     {
         try {
-            [$start_date, $end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_YEAR, $request->get('start_date'), $request->get('end_date'));
+            [$start_date, $end_date] = Period::LAST_YEAR->getDateLimits();
 
             $owners = $this->ownerService->listOther();
 
@@ -88,10 +87,12 @@ class ReportController extends Controller
         return redirect(route('home'))->withErrors(compact('message'));
     }
 
-    public function transactionByWallet(Request $request, DateService $dateService)
+    public function transactionByWallet(Request $request)
     {
         try {
-            [$start_date, $end_date] = $dateService->extractFilterDateFromRequest(Period::LAST_30_DAYS, $request->get('start_date'), $request->get('end_date'));
+            [$start_date, $end_date] = ($request->has('start_date', 'end_date'))
+                ? [Carbon::createFromFormat('Y-m-d', $request->get('start_date'))->startOfDay(), Carbon::createFromFormat('Y-m-d', $request->get('end_date'))->endOfDay()]
+                : Period::THIS_MONTH->getDateLimits();
 
             $wallets = $this->walletService->listWalletsFromOwner(env('MY_OWNER_ID'));
 
