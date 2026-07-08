@@ -88,4 +88,58 @@ class TransactionRepository extends BaseRepository
             throw new RepositoryException();
         }
     }
+
+    public function listLastTransactionsToProcessingCreated(int $limit = 10)
+    {
+        try {
+            return $this->model->select([
+                    'transaction_planned_id',
+                    'title',
+                    'gross_value',
+                    'discount_value',
+                    'interest_value',
+                    'rounding_value',
+                    'relevance',
+                ])
+                ->selectRaw('MIN(transaction_date) as transaction_date')
+                ->selectRaw('COUNT(*) as total_planned')
+                ->with([
+                    'sourceWallet', 
+                    'destinationWallet', 
+                ])
+                ->whereNull('processing_date')
+                ->groupBy('transaction_planned_id', 'title', 'gross_value', 'discount_value', 'interest_value', 'rounding_value', 'relevance')
+                ->orderBy('transaction_date')
+                ->limit($limit)
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function findByTransactionPlannedId(int $transactionPlannedId)
+    {
+        try {
+            return $this->model
+                ->where('transaction_planned_id', $transactionPlannedId)
+                ->whereNull('processing_date')
+                ->orderBy('transaction_planned_id')
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
+    public function removeByTransactionPlannedId(int $transactionPlannedId)
+    {
+        try {
+            return $this->model
+                ->where('transaction_planned_id', $transactionPlannedId)
+                ->whereNull('processing_date')
+                ->orderBy('transaction_planned_id')
+                ->delete();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
 }

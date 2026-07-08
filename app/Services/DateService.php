@@ -37,9 +37,11 @@ class DateService extends BaseService
     public function eachDay(Carbon $startDate, Carbon $endDate, int $frequency)
     {
         $dates = [$startDate->clone()];
+        $startDate->addDays($frequency);
 
         while ($startDate->lte($endDate)) {
-            $dates[] = $startDate->addDays($frequency)->clone();
+            $dates[] = $startDate->clone();
+            $startDate->addDays($frequency);
         }
 
         return $dates;
@@ -48,14 +50,11 @@ class DateService extends BaseService
     public function eachMonth(Carbon $startDate, Carbon $endDate, int $frequency)
     {
         $dates = [$startDate->clone()];
-        $referenceDate = $startDate->clone();
-        $lastDate = $startDate->clone();
-        $months = 0;
+        $startDate->addMonthNoOverflows($frequency);
 
-        while ($lastDate->lte($endDate)) {
-            $months += $frequency;
-            $lastDate = $referenceDate->clone()->addMonthNoOverflows($months);
-            $dates[] = $referenceDate->clone()->addMonthNoOverflows($months);
+        while ($startDate->lte($endDate)) {
+            $dates[] = $startDate->clone();
+            $startDate->addMonthNoOverflows($frequency);
         }
 
         return $dates;

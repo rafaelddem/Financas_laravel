@@ -75,7 +75,7 @@ class TransactionService extends BaseService
             $transaction = $this->repository->find($id, ['installments', 'card.invoices']);
             $openInvoice = $this->invoiceRepository->listInvoices(
                 $transaction->transaction_date->clone()->subMonth(), 
-                $transaction->processing_date->clone()->addMonth(), 
+                $transaction->processing_date ? $transaction->processing_date->clone()->addMonth() : $transaction->transaction_date->clone()->addMonth(), 
                 InvoiceStatus::Open, 
                 null, 
                 $transaction->card_id

@@ -16,6 +16,7 @@ class Transaction extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'transaction_planned_id',
         'title', 
         'transaction_date', 
         'processing_date', 

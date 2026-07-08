@@ -11,6 +11,7 @@ use App\Http\Controllers\ExtractImportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionBaseController;
+use App\Http\Controllers\TransactionPlannedController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,16 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/{id}/edicao', [TransactionController::class, 'edit'])->name('edit');
         Route::put('/', [TransactionController::class, 'update'])->name('update');
         Route::delete('/', [TransactionController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'transacoes-planejadas', 'as' => 'transaction-planned.'], function () {
+        Route::get('/', [TransactionPlannedController::class, 'index'])->name('list');
+        Route::get('/novo', [TransactionPlannedController::class, 'create'])->name('create');
+        Route::get('/novo/{base}', [TransactionPlannedController::class, 'create'])->name('createByBase');
+        Route::post('/', [TransactionPlannedController::class, 'store'])->name('store');
+        Route::get('/{id}/detalhes', [TransactionPlannedController::class, 'show'])->name('show');
+        Route::get('/{id}/aprovar', [TransactionPlannedController::class, 'approve'])->name('approve');
+        Route::delete('/', [TransactionPlannedController::class, 'destroy'])->name('destroy');
     });
 
     Route::group(['prefix' => 'importacao-extrato', 'as' => 'extract-import.'], function () {

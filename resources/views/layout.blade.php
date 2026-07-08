@@ -40,8 +40,9 @@
                 </ul>
                 <li class="navbar-item" onclick="toggleSubmenu(event, 'transactions')"><i class="fa-solid fa-piggy-bank"></i><span>{{__('Transactions')}}</span><i class="fa-solid fa-caret-left"></i></li>
                 <ul class="submenu transactions">
-                    <li class="navbar-item"><a href="{{route('invoice.list')}}"><i class="fa-solid fa-file-invoice-dollar"></i><span>{{__('Invoices')}}</span></a></li>
                     <li class="navbar-item"><a href="{{route('transaction.list')}}"><i class="fa-solid fa-money-bill-transfer"></i><span>{{__('Transaction Entry')}}</span></a></li>
+                    <li class="navbar-item"><a href="{{route('transaction-planned.list')}}"><i class="fa-solid fa-arrows-spin"></i><span>{{__('Transaction Planned Entry')}}</span></a></li>
+                    <li class="navbar-item"><a href="{{route('invoice.list')}}"><i class="fa-solid fa-file-invoice-dollar"></i><span>{{__('Invoices')}}</span></a></li>
                     <li class="navbar-item"><a href="{{route('extract-import.index')}}"><i class="fa-solid fa-file-import"></i><span>{{__('Extract Import')}}</span></a></li>
 
                     @can('admin')

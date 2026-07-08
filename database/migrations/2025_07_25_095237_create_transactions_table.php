@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('transaction_planned_id', 20)->nullable(true);
             $table->string('title', 50)->nullable(false);
             $table->date('transaction_date')->nullable(false);
             $table->date('processing_date')->nullable(true);

@@ -26,7 +26,8 @@ use Carbon\Carbon;
             </div>
             <div class="col_25 md_col_33 sm_col">
                 <label for="processing_date">{{__('Processing Date')}}:</label>
-                <input type="date" form="form-update" name="processing_date" id="processing_date" value="{{old('processing_date', $transaction->processing_date->format('Y-m-d'))}}" placeholder="{{__('Processing Date')}}" required>
+                @php($transaction_processing_date = $transaction->processing_date ?? $transaction->transaction_date)
+                <input type="date" form="form-update" name="processing_date" id="processing_date" value="{{old('processing_date', $transaction_processing_date->format('Y-m-d'))}}" placeholder="{{__('Processing Date')}}" required>
             </div>
             <div class="col_33 sm_col">
                 <label for="category_id">{{__('Category')}}:</label>
