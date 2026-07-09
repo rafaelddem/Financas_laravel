@@ -150,7 +150,7 @@ body {
     top: 100%;
     left: 0;
     list-style: none;
-    width: 150px;
+    width: 250px;
     transition: 0.3s;
 }
 .dark-mode .topbar-dropdown {
