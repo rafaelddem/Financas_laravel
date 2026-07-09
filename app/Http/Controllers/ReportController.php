@@ -53,7 +53,9 @@ class ReportController extends Controller
     public function loans(Request $request)
     {
         try {
-            [$start_date, $end_date] = Period::LAST_YEAR->getDateLimits();
+            [$start_date, $end_date] = ($request->has('start_date', 'end_date'))
+                ? [Carbon::createFromFormat('Y-m-d', $request->get('start_date'))->startOfDay(), Carbon::createFromFormat('Y-m-d', $request->get('end_date'))->endOfDay()]
+                : Period::LAST_YEAR->getDateLimits();
 
             $owners = $this->ownerService->listOther();
 
