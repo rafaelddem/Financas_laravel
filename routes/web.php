@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ExtractImportController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionBaseController;
 use App\Http\Controllers\TransactionPlannedController;
@@ -21,6 +22,13 @@ Route::get('/sign_out', [LoginController::class, 'signOut'])->name('sign_out');
 
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/', [ReportController::class, 'index'])->name('home');
+
+    Route::group(['prefix' => 'avisos', 'as' => 'notice.'], function () {
+        Route::get('/', [NoticeController::class, 'index'])->name('list');
+        Route::get('/{id}', [NoticeController::class, 'access'])->name('access');
+        Route::put('/{id}', [NoticeController::class, 'read'])->name('read');
+        Route::delete('/', [NoticeController::class, 'destroy'])->name('destroy');
+    });
     
     Route::group(['prefix' => 'relatorios', 'as' => 'reports.'], function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');

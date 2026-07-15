@@ -19,12 +19,18 @@
 <body>
     <header class="topbar">
         <div class="menu-toggle-mobile"><i class="fa-solid fa-bars"></i></div>
-        <div class="menu-item" onclick="toggleNotificationsMenu()">Avisos
-            <span class="badge" id="notificationCount">3</span>
+        <div class="menu-item" onclick="toggleNotificationsMenu()">{{__('Notices')}}
+            <span class="badge" id="notificationCount">{{$top_bar_data['total_notices']}}</span>
             <ul class="topbar-dropdown notifications-options">
-                <li>Nova atualização disponível</li>
-                <li>Lembrete: reunião às 15h</li>
-                <li>Seu relatório foi aprovado</li>
+                @if ($top_bar_data['last_notices']->count() < 1)
+                    <li>{{__('There Are No New Notices')}}</li>
+                @else
+                    @foreach($top_bar_data['last_notices'] as $notice)
+                        <li><a href="{{route('notice.access', ['id' => $notice->id])}}">{{$notice->title}}</a></li>
+                    @endforeach
+                @endif
+                <hr>
+                <li><a href="{{route('notice.list')}}">{{__('All Notices (:qtd)', ['qtd' => $top_bar_data['total_notices']])}}</a></li>
             </ul>
         </div>
         <div class="menu-item" onclick="toggleDarkMode()"><i id="darkModeIcon" class="fa-solid fa-moon"></i></div>

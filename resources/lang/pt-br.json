@@ -256,5 +256,10 @@
     "Delete this :name": "Excluir este(a) :name",
     "Delete All (:qtd)": "Excluir todas (:qtd)",
 
+    "Notice": "Aviso",
+    "Notices": "Avisos",
+    "All Notices (:qtd)": "Todos os aviso (:qtd)",
+    "There Are No New Notices": "Não há novos avisos",
+
     "": ""
 }

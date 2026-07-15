@@ -169,6 +169,21 @@ body {
     background: var(--topbar-dropdown-hover-dm);
 }
 
+hr {
+    border: none;
+	background-color: var(--topbar-font);
+	height: 1px;
+	margin: 0px 10px;
+}
+.dark-mode hr {
+	background-color: var(--topbar-font-dm);
+}
+
+.topbar-dropdown li a {
+    text-decoration: none;
+    color: var(--sidebar-font);
+}
+
 /* menu superior fim */
 
 /* menu lateral inicio */
