@@ -14,6 +14,8 @@ class CategoryController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(CategoryService::class);
     }
 
@@ -24,18 +26,19 @@ class CategoryController extends Controller
         try {
             $categories = $this->service->list(false);
             $message = $request->get('message');
+            return view('category.index', ['top_bar_data' => $this->top_bar_data] + compact('categories', 'message'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('category.index', compact('categories', 'message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function create()
     {
-        return view('category.create');
+        return view('category.create', ['top_bar_data' => $this->top_bar_data]);
     }
 
     public function store(CreateRequest $request)
@@ -61,7 +64,7 @@ class CategoryController extends Controller
         try {
             $category = $this->service->find($id);
 
-            return view('category.edit', compact('category'));
+            return view('category.edit', ['top_bar_data' => $this->top_bar_data] + compact('category'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -76,7 +79,7 @@ class CategoryController extends Controller
         $message = '';
 
         try {
-            $category = $this->service->update($request->get('id'), $request->only([
+            $this->service->update($request->get('id'), $request->only([
                 'relevance', 'active', 'description'
             ]));
 

@@ -14,6 +14,8 @@ class OwnerController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(OwnerService::class);
     }
 
@@ -24,13 +26,14 @@ class OwnerController extends Controller
         try {
             $owners = $this->service->list(false);
             $message = $request->get('message');
+            return view('owner.index', ['top_bar_data' => $this->top_bar_data] + compact('owners', 'message'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('owner.index', compact('owners', 'message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function store(CreateRequest $request)

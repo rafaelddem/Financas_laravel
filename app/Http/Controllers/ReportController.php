@@ -19,6 +19,8 @@ class ReportController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(ReportService::class);
         $this->ownerService = app(OwnerService::class);
         $this->walletService = app(WalletService::class);
@@ -40,7 +42,7 @@ class ReportController extends Controller
             [$output_by_category_filter_start_date, $output_by_category_filter_end_date] = Period::LAST_YEAR->getDateLimits();
             $output_by_category = $this->service->expensesByCategory($output_by_category_filter_start_date, $output_by_category_filter_end_date);
 
-            return view('reports.index', compact('start_date', 'end_date', 'income', 'future_credit_value', 'total_loans', 'wallets_values', 'loans', 'income_by_period', 'output_by_category'));
+            return view('reports.index', ['top_bar_data' => $this->top_bar_data] + compact('start_date', 'end_date', 'income', 'future_credit_value', 'total_loans', 'wallets_values', 'loans', 'income_by_period', 'output_by_category'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -79,7 +81,7 @@ class ReportController extends Controller
                 return $report->download($reportTitle);
             }
 
-            return view('reports.loans', compact('owners', 'owner_id', 'start_date', 'end_date', 'ownerLoans'));
+            return view('reports.loans', ['top_bar_data' => $this->top_bar_data] + compact('owners', 'owner_id', 'start_date', 'end_date', 'ownerLoans'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -108,7 +110,7 @@ class ReportController extends Controller
 
             $transactions = $this->service->listTransactionsByWallets($start_date, $end_date, $filterWallet);
 
-            return view('reports.transactions', compact('wallets', 'wallet_id', 'start_date', 'end_date', 'transactions'));
+            return view('reports.transactions', ['top_bar_data' => $this->top_bar_data] + compact('wallets', 'wallet_id', 'start_date', 'end_date', 'transactions'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

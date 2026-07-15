@@ -12,6 +12,8 @@ class ConfigController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(ConfigurationService::class);
     }
 
@@ -28,16 +30,13 @@ class ConfigController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('configuration.index', compact('configurations', 'message'));
+        return view('configuration.index', ['top_bar_data' => $this->top_bar_data] + compact('configurations', 'message'));
     }
 
     public function update(Request $request)
     {
-        $configurations = [];
         try {
             $this->service->updateConfigurations($request->except(['_token', '_method']));
-
-            $configurations = $this->service->list(false);
 
             $message = __('Data updated successfully.');
         } catch (BaseException $exception) {
@@ -46,7 +45,7 @@ class ConfigController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('configuration.index', compact('configurations', 'message'));
+        return redirect(route('configuration.index', compact('message')));
     }
 
     public function backup(Request $request)

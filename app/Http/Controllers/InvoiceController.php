@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\InvoiceStatus;
+use App\Enums\Period;
 use App\Exceptions\BaseException;
 use App\Services\CardService;
 use App\Services\InvoiceService;
@@ -19,6 +20,8 @@ class InvoiceController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(InvoiceService::class);
         $this->walletService = app(WalletService::class);
         $this->cardService = app(CardService::class);
@@ -26,27 +29,18 @@ class InvoiceController extends Controller
 
     public function index(Request $request)
     {
-        $message = $request->get('message');
-        $openInvoices = new Collection();
-        $closedInvoices = new Collection();
-        $paidInvoices = new Collection();
-        $startDate = Carbon::now()->subYear();
-        $endDate = Carbon::now();
-        $walletId = $request->get('wallet_id');
-        $wallets = new Collection();
-        $cardId = $request->get('card_id');
-        $cards = new Collection();
-
-        if ($request->has('start_date', 'end_date')) {
-            $startDate = Carbon::createFromFormat('Y-m-d', $request->get('start_date'));
-            $endDate = Carbon::createFromFormat('Y-m-d', $request->get('end_date'));
-        }
-
         try {
+            [$startDate, $endDate] = ($request->has('start_date', 'end_date'))
+                ? [Carbon::createFromFormat('Y-m-d', $request->get('start_date'))->startOfDay(), Carbon::createFromFormat('Y-m-d', $request->get('end_date'))->endOfDay()]
+                : Period::LAST_YEAR->getDateLimits();
+
+            $message = $request->get('message');
+            $walletId = $request->get('wallet_id');
+            $cardId = $request->get('card_id');
             $wallets = $this->walletService->listWalletsWithCreditCards();
-            if ($walletId) {
-                $cards = $this->cardService->listCredit($walletId);
-            }
+            $cards = $walletId
+                ? $this->cardService->listCredit($walletId)
+                : new Collection();
 
             $openInvoices = $this->service->listInvoices($startDate, $endDate, InvoiceStatus::Open, $walletId, $cardId);
             $paidInvoices = $this->service->listInvoices($startDate, $endDate, InvoiceStatus::Paid, $walletId, $cardId);
@@ -54,24 +48,22 @@ class InvoiceController extends Controller
             $overdueInvoices = $this->service->listInvoices($startDate, $endDate, InvoiceStatus::Overdue, $walletId, $cardId);
             $closedInvoices = $closedInvoices->merge($overdueInvoices)->sortByDesc('status');
 
-            return view('invoice.index', compact('openInvoices', 'closedInvoices', 'paidInvoices', 'message', 'startDate', 'endDate', 'wallets', 'walletId', 'cards', 'cardId'));
+            return view('invoice.index', ['top_bar_data' => $this->top_bar_data] + compact('openInvoices', 'closedInvoices', 'paidInvoices', 'message', 'startDate', 'endDate', 'wallets', 'walletId', 'cards', 'cardId'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('invoice.index', compact('openInvoices', 'closedInvoices', 'paidInvoices', 'startDate', 'endDate', 'wallets', 'walletId', 'cards', 'cardId'))->withErrors(compact('message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function details(Request $request)
     {
-        $message = '';
-
         try {
             [$invoice, $installments, $futureInstallments] = $this->service->details($request->invoice_id);
 
-            return view('invoice.details', compact('invoice', 'installments', 'futureInstallments'));
+            return view('invoice.details', ['top_bar_data' => $this->top_bar_data] + compact('invoice', 'installments', 'futureInstallments'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

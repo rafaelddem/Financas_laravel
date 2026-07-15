@@ -16,6 +16,8 @@ class CardController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(CardService::class);
         $this->walletService = app(WalletService::class);
     }
@@ -38,7 +40,7 @@ class CardController extends Controller
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('card.index', compact('wallet', 'cards', 'message'));
+        return view('card.index', ['top_bar_data' => $this->top_bar_data] + compact('wallet', 'cards', 'message'));
     }
 
     public function listDebit(int $owner_id, int $wallet_id)
@@ -64,7 +66,7 @@ class CardController extends Controller
         try {
             $wallet = $this->walletService->find($wallet_id, ['owner']);
 
-            return view('card.create', compact('wallet'));
+            return view('card.create', ['top_bar_data' => $this->top_bar_data] + compact('wallet'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -95,7 +97,7 @@ class CardController extends Controller
         try {
             $card = $this->service->find($id, ['wallet.owner']);
 
-            return view('card.edit', compact('card'));
+            return view('card.edit', ['top_bar_data' => $this->top_bar_data] + compact('card'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

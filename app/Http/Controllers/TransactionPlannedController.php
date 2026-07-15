@@ -22,6 +22,8 @@ class TransactionPlannedController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(TransactionPlannedService::class);
         $this->transactionBaseService = app(TransactionBaseService::class);
         $this->categoryService = app(CategoryService::class);
@@ -31,41 +33,30 @@ class TransactionPlannedController extends Controller
 
     public function index(Request $request)
     {
-        $transactions = [];
-
         try {
             $transactions = $this->service->listLastTransactionsPlannedCreated();
             $message = $request->get('message');
+            return view('transaction-planned.index', ['top_bar_data' => $this->top_bar_data] + compact('transactions', 'message'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('transaction-planned.index', compact('transactions', 'message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function create(Request $request)
     {
-        $frequency = [];
-        $categories = [];
-        $paymentMethods = [];
-        $sourceWallets = [];
-        $destinationWallets = [];
-        $transactionBases = [];
-        $transactionBase = null;
-
         try {
             $frequency = Period::frequencyValues();
             $categories = $this->categoryService->list();
             $paymentMethods = $this->paymentMethodService->list();
             $sourceWallets = $destinationWallets = $this->walletService->list();
             $transactionBases = $this->transactionBaseService->list();
-            if ($request->has('base')) {
-                $transactionBase = $this->transactionBaseService->find($request->get('base'));
-            }
+            $transactionBase = ($request->has('base')) ? $this->transactionBaseService->find($request->get('base')) : null;
 
-            return view('transaction-planned.create', compact('frequency', 'transactionBases', 'transactionBase', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
+            return view('transaction-planned.create', ['top_bar_data' => $this->top_bar_data] + compact('frequency', 'transactionBases', 'transactionBase', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -98,7 +89,7 @@ class TransactionPlannedController extends Controller
             $transactionPlanned = $transactionsPlanned->first();
             $totalTransactionPlanned = $transactionsPlanned->count();
 
-            return view('transaction-planned.show', compact('transactionPlanned', 'totalTransactionPlanned'));
+            return view('transaction-planned.show', ['top_bar_data' => $this->top_bar_data] + compact('transactionPlanned', 'totalTransactionPlanned'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

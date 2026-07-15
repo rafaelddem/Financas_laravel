@@ -22,6 +22,8 @@ class TransactionController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(TransactionService::class);
         $this->transactionBaseService = app(TransactionBaseService::class);
         $this->categoryService = app(CategoryService::class);
@@ -31,39 +33,29 @@ class TransactionController extends Controller
 
     public function index(Request $request)
     {
-        $transactions = [];
-
         try {
             $transactions = $this->service->listLastTransactionsCreated();
             $message = $request->get('message');
+            return view('transaction.index', ['top_bar_data' => $this->top_bar_data] + compact('transactions', 'message'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('transaction.index', compact('transactions', 'message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function create(Request $request)
     {
-        $categories = [];
-        $paymentMethods = [];
-        $sourceWallets = [];
-        $destinationWallets = [];
-        $transactionBases = [];
-        $transactionBase = null;
-
         try {
             $categories = $this->categoryService->list();
             $paymentMethods = $this->paymentMethodService->list();
             $sourceWallets = $destinationWallets = $this->walletService->list();
             $transactionBases = $this->transactionBaseService->list();
-            if ($request->has('base')) {
-                $transactionBase = $this->transactionBaseService->find($request->get('base'));
-            }
+            $transactionBase = ($request->has('base')) ? $this->transactionBaseService->find($request->get('base')) : null;
 
-            return view('transaction.create', compact('transactionBases', 'transactionBase', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
+            return view('transaction.create', ['top_bar_data' => $this->top_bar_data] + compact('transactionBases', 'transactionBase', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -94,7 +86,7 @@ class TransactionController extends Controller
         try {
             $transaction = $this->service->find($id, ['installments', 'category', 'paymentMethod', 'sourceWallet', 'destinationWallet', 'card']);
 
-            return view('transaction.show', compact('transaction'));
+            return view('transaction.show', ['top_bar_data' => $this->top_bar_data] + compact('transaction'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -110,18 +102,17 @@ class TransactionController extends Controller
             $categories = $this->categoryService->list();
             $paymentMethods = $this->paymentMethodService->list();
             $sourceWallets = $destinationWallets = $this->walletService->list();
-            $transactionBases = $this->transactionBaseService->list();
             
             $transaction = $this->service->find($id, ['installments', 'category', 'paymentMethod', 'sourceWallet', 'destinationWallet', 'card']);
 
-            return view('transaction.edit', compact('transaction', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
+            return view('transaction.edit', ['top_bar_data' => $this->top_bar_data] + compact('transaction', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect()->back()->withErrors(compact('categories', 'paymentMethods', 'sourceWallets', 'destinationWallets', 'message'));
+        return redirect()->back()->withErrors(compact('message'));
     }
 
     public function update(UpdateRequest $request)

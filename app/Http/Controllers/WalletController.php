@@ -16,14 +16,14 @@ class WalletController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(WalletService::class);
         $this->ownerService = app(OwnerService::class);
     }
 
     public function index(int $owner_id, Request $request)
     {
-        $wallets = [];
-
         try {
             $owner = $this->ownerService->find($owner_id, ['wallets']);
             $wallets = $owner->wallets->sortBy([
@@ -33,13 +33,14 @@ class WalletController extends Controller
             ]);
 
             $message = $request->get('message');
+            return view('wallet.index', ['top_bar_data' => $this->top_bar_data] + compact('wallets', 'owner', 'message'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('wallet.index', compact('wallets', 'owner', 'message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function create(int $owner_id, Request $request)
@@ -47,7 +48,7 @@ class WalletController extends Controller
         try {
             $owner = $this->ownerService->find($owner_id);
 
-            return view('wallet.create', compact('owner'));
+            return view('wallet.create', ['top_bar_data' => $this->top_bar_data] + compact('owner'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -78,7 +79,7 @@ class WalletController extends Controller
         try {
             $wallet = $this->service->find($id, ['owner']);
 
-            return view('wallet.edit', compact('wallet'));
+            return view('wallet.edit', ['top_bar_data' => $this->top_bar_data] + compact('wallet'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

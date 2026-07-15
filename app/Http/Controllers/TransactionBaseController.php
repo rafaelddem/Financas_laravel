@@ -19,6 +19,8 @@ class TransactionBaseController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->service = app(TransactionBaseService::class);
         $this->categoryService = app(CategoryService::class);
         $this->paymentMethodService = app(PaymentMethodService::class);
@@ -27,18 +29,17 @@ class TransactionBaseController extends Controller
 
     public function index(Request $request)
     {
-        $transactionBases = [];
-
         try {
             $transactionBases = $this->service->list();
             $message = $request->get('message');
+            return view('transaction-base.index', ['top_bar_data' => $this->top_bar_data] + compact('transactionBases', 'message'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return view('transaction-base.index', compact('transactionBases', 'message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function create(Request $request)
@@ -53,7 +54,7 @@ class TransactionBaseController extends Controller
             $paymentMethods = $this->paymentMethodService->list();
             $sourceWallets = $destinationWallets = $this->walletService->list();
 
-            return view('transaction-base.create', compact('categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
+            return view('transaction-base.create', ['top_bar_data' => $this->top_bar_data] + compact('categories', 'paymentMethods', 'sourceWallets', 'destinationWallets'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {

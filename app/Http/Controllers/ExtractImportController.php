@@ -22,6 +22,8 @@ class ExtractImportController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->extractorService = app(ExtractorService::class);
         $this->transactionBaseService = app(TransactionBaseService::class);
         $this->categoryService = app(CategoryService::class);
@@ -31,15 +33,6 @@ class ExtractImportController extends Controller
 
     public function index(Request $request)
     {
-        $modules = [];
-        $transactionBases = [];
-        $filesToImport = [];
-        $importTransactions = [];
-        $categories = [];
-        $paymentMethods = [];
-        $sourceWallets = [];
-        $destinationWallets = [];
-
         try {
             $modules = $this->extractorService->getModules();
             $transactionBases = $this->transactionBaseService->list();
@@ -50,14 +43,14 @@ class ExtractImportController extends Controller
             $sourceWallets = $destinationWallets = $this->walletService->list();
 
             $message = $request->get('message');
-            return view('extract-import.index', compact('modules', 'transactionBases', 'filesToImport', 'importTransactions', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets', 'message'));
+            return view('extract-import.index', ['top_bar_data' => $this->top_bar_data] + compact('modules', 'transactionBases', 'filesToImport', 'importTransactions', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets', 'message'));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
             $message = __(self::DEFAULT_CONTROLLER_ERROR);
         }
 
-        return redirect(route('extract-import.index', compact('modules', 'filesToImport', 'importTransactions', 'categories', 'paymentMethods', 'sourceWallets', 'destinationWallets')))->withErrors(compact('message'));
+        return redirect(route('home'))->withErrors(compact('message'));
     }
 
     public function extract(ExtractRequest $request)
@@ -67,9 +60,8 @@ class ExtractImportController extends Controller
                 ->configure($request->get('module_id'), $request->get('transaction_base_id_in'), $request->get('transaction_base_id_out'))
                 ->extract($request->file('extract_file'));
 
-            return redirect(route('extract-import.index', [
-                'message' => __('The extract data was entered successfully.'),
-            ]));
+            $message = __('The extract data was entered successfully.');
+            return redirect(route('extract-import.index', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -84,9 +76,8 @@ class ExtractImportController extends Controller
         try {
             $this->extractorService->fileRemove($request->get('file_name'));
 
-            return redirect(route('extract-import.index', [
-                'message' => __('The extract data was removed successfully.'),
-            ]));
+            $message = __('The extract data was removed successfully.');
+            return redirect(route('extract-import.index', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -112,9 +103,8 @@ class ExtractImportController extends Controller
                 'installment_number',
             ));
 
-            return redirect(route('extract-import.index', [
-                'message' => __('Transaction data was aproved.'),
-            ]));
+            $message = __('Transaction data was aproved.');
+            return redirect(route('extract-import.index', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -129,9 +119,8 @@ class ExtractImportController extends Controller
         try {
             $this->extractorService->delete($request->get('id'));
 
-            return redirect(route('extract-import.index', [
-                'message' => __('Transaction data was removed.'),
-            ]));
+            $message = __('Transaction data was removed.');
+            return redirect(route('extract-import.index', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
@@ -146,9 +135,8 @@ class ExtractImportController extends Controller
         try {
             $this->extractorService->import($request->get('file_name'));
 
-            return redirect(route('extract-import.index', [
-                'message' => __('The extract data was aproved successfully.'),
-            ]));
+            $message = __('The extract data was aproved successfully.');
+            return redirect(route('extract-import.index', compact('message')));
         } catch (BaseException $exception) {
             $message = __($exception->getMessage());
         } catch (\Throwable $th) {
