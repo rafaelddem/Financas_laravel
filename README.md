@@ -1075,6 +1075,8 @@ Edição de Transações ainda não funciona para vendas no crédito. Dentre as 
 
 Erros a corrigir:
 
+Corrigir botões Voltar
+
 Bloquear (ou adicionar confirmação) na importação de extrato para faturas já pagas\vencidas
 
 No cadastro de carteiras, adicionar o relacionamento com uma tabela "Bancos", que manteria os banco (BB, Caixa, Santander...) pré-cadastrados
