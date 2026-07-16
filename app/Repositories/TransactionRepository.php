@@ -117,6 +117,25 @@ class TransactionRepository extends BaseRepository
         }
     }
 
+    public function listTransactionsToProcessing(?Carbon $startDate = null, ?Carbon $endDate = null, ?int $limit = null)
+    {
+        try {
+            return $this->model
+                ->whereNull('processing_date')
+                ->when($startDate, function ($query) use ($startDate) {
+                    $query->where('transaction_date', '>=', $startDate);
+                })
+                ->when($endDate, function ($query) use ($endDate) {
+                    $query->where('transaction_date', '<=', $endDate);
+                })
+                ->orderBy('transaction_date')
+                ->limit($limit)
+                ->get();
+        } catch (\Throwable $th) {
+            throw new RepositoryException();
+        }
+    }
+
     public function findByTransactionPlannedId(int $transactionPlannedId)
     {
         try {

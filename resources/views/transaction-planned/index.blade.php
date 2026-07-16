@@ -2,7 +2,7 @@
 
 @section('page_content')
     <div class="presentation">
-        <h1>{{__('Transaction Planned Entry')}}</h1>
+        <h1>{{__('Transactions Planned Entry')}}</h1>
     </div>
     <div class="presentation">
         <div class="col">

@@ -239,7 +239,8 @@
     "There Are No Wallets": "Não há Carteiras cadastradas",
     "Transactions By Wallet": "Transações por Carteira",
 
-    "Transaction Planned Entry": "Lançamentos Futuros",
+    "Transaction Planned Entry": "Lançamento Planejado",
+    "Transactions Planned Entry": "Lançamentos Planejados",
     "Frequency": "Frequencia",
     "once": "Única",
     "every_day": "Diária",
@@ -260,6 +261,7 @@
     "Notices": "Avisos",
     "All Notices (:qtd)": "Todos os aviso (:qtd)",
     "There Are No New Notices": "Não há novos avisos",
+    "Notice regarding transaction ':transaction_title', scheduled for ':transaction_date'.": "Aviso referente a transação ':transaction_title', prevista para o dia ':transaction_date'.",
 
     "": ""
 }
