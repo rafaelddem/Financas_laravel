@@ -12,7 +12,7 @@ use App\Enums\Relevance;
         <div class="flex-container">
             <div class="col">
                 @if($notices->count() == 0)
-                    <h4>{{__('There Are No Notices')}}</h4>
+                    <h4>{{__('There Are No New Notices')}}</h4>
                 @endif
                 <table>
                     @foreach($notices as $notice)
