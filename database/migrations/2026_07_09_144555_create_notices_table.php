@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('description', 255)->nullable(false);
             $table->string('link', 150)->nullable(true);
             $table->boolean('important')->default(false);
-            $table->boolean('read')->default(true);
+            $table->boolean('read')->default(false);
             $table->timestamps();
         });
     }

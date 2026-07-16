@@ -17,9 +17,9 @@ class NoticeRepository extends BaseRepository
         try {
             return $this->model
                 ->when($onlyUnread, function ($query) {
-                    $query->where('read', true);
+                    $query->where('read', false);
                 })
-                ->orderBy('read', 'desc')
+                ->orderBy('read')
                 ->orderBy('important', 'desc')
                 ->limit($limit)
                 ->get();

@@ -41,7 +41,7 @@ class NoticeService extends BaseService
         }
     }
 
-    public function read(int $id, bool $read = false)
+    public function read(int $id, bool $read = true)
     {
         try {
             return $this->repository->update($id, ['read' => $read]);

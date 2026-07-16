@@ -53,7 +53,7 @@ class NoticeController extends Controller
     public function read(int $id, Request $request)
     {
         try {
-            $read = !($request->get('read') == 'true');
+            $read = $request->get('read') != 'false';
             $this->service->read($id, $read);
 
             return redirect(route('notice.list'));

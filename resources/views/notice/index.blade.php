@@ -19,9 +19,9 @@ use App\Enums\Relevance;
                     <tr>
                         <td class="td-item">
                             @if ($notice->read)
-                                <span class="td-content"><b>{{ $notice->title }}</b></span>
-                            @else
                                 <span class="td-content">{{ $notice->title }}</span>
+                            @else
+                                <span class="td-content"><b>{{ $notice->title }}</b></span>
                             @endif
                             <form method="get" id="form-update-{{$notice->id}}" action="{{route('notice.access', ['id' => $notice->id])}}"></form>
                             <form method="post" id="form-update-read-{{$notice->id}}" action="{{route('notice.read', ['id' => $notice->id])}}"> @csrf @method('PUT') </form>
@@ -31,11 +31,11 @@ use App\Enums\Relevance;
                                     <button type="submit" form="form-update-{{$notice->id}}"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
                                 @endif
                                 @if ($notice->read)
-                                    <input type="hidden" form="form-update-read-{{$notice->id}}" name="read" value=true>
-                                    <button type="submit" form="form-update-read-{{$notice->id}}"><i class="fa-solid fa-envelope"></i></button>
-                                @else
                                     <input type="hidden" form="form-update-read-{{$notice->id}}" name="read" value=false>
                                     <button type="submit" form="form-update-read-{{$notice->id}}"><i class="fa-solid fa-envelope-open"></i></button>
+                                @else
+                                    <input type="hidden" form="form-update-read-{{$notice->id}}" name="read" value=true>
+                                    <button type="submit" form="form-update-read-{{$notice->id}}"><i class="fa-solid fa-envelope"></i></button>
                                 @endif
                                 <input type="hidden" form="form-delete-{{$notice->id}}" name="id" value={{$notice->id}}>
                                 <button type="submit" form="form-delete-{{$notice->id}}"><i class="fa-solid fa-trash"></i></button>
