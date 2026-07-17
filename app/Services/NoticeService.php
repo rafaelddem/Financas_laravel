@@ -55,7 +55,7 @@ class NoticeService extends BaseService
     public function generateNoticeByTransactionsPlannedForToday()
     {
         try {
-            $transactionsPlanned = $this->transactionRepository->listTransactionsToProcessing(Carbon::now()->startOfDay(), Carbon::now()->endOfDay());
+            $transactionsPlanned = $this->transactionRepository->listTransactionsToProcessing(Carbon::now()->startOfDay()->addDays(5), Carbon::now()->endOfDay()->addDays(5));
 
             foreach ($transactionsPlanned as $transactionPlanned) {
                 $this->repository->create([
