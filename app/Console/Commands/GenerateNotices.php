@@ -13,7 +13,7 @@ class GenerateNotices extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:notices {--log}';
+    protected $signature = 'generate:notices {--daily} {--log}';
 
     /**
      * The console command description.
@@ -30,7 +30,9 @@ class GenerateNotices extends Command
         try {
             $this->line(Carbon::now()->format('d/m/Y H:i:s') . ' - Preparing...');
 
-            app(NoticeService::class)->generateNoticeByTransactionsPlannedForToday();
+            if ($this->option('daily')) {
+                app(NoticeService::class)->generateNoticeByTransactionsPlannedForToday();
+            }
 
             $this->info(Carbon::now()->format('d/m/Y H:i:s') . ' - Generated notices');
         } catch (\Throwable $th) {
