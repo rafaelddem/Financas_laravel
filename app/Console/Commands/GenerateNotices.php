@@ -28,13 +28,13 @@ class GenerateNotices extends Command
     public function handle()
     {
         try {
-            $this->line(Carbon::now()->format('d/m/Y H:i:s') . ' - Preparing...');
+            $this->line(Carbon::now()->format('d/m/Y H:i:s') . ' - Generating notices...');
 
             if ($this->option('daily')) {
                 app(NoticeService::class)->generateNoticeByTransactionsPlannedForToday();
             }
 
-            $this->info(Carbon::now()->format('d/m/Y H:i:s') . ' - Generated notices');
+            $this->info(Carbon::now()->format('d/m/Y H:i:s') . ' - Notices successfully generated.');
         } catch (\Throwable $th) {
             $returnMessage = Carbon::now()->format('d/m/Y H:i:s') . ' - Failed to generate notices.';
 

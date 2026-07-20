@@ -48,6 +48,8 @@ class Prepare extends Command
                 $this->info(Carbon::now()->format('d/m/Y H:i:s') . ' - Existing data successfully added.');
             }
 
+            $this->call('generate:notices', ['--daily' => true]);
+
             $this->info(Carbon::now()->format('d/m/Y H:i:s') . ' - Database create successfully!');
         } catch (\Throwable $th) {
             $returnMessage = Carbon::now()->format('d/m/Y H:i:s') . ' - Failed to restore data.';
